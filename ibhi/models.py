@@ -102,8 +102,3 @@ class ShortInterest(models.Model):
     short_volume_ratio = models.FloatField(null=True, blank=True)
 
 
-
-
-
-
-
