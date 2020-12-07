@@ -14,9 +14,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from ibhi.views import IBHIReportView, IBHIInsightsView, IBHIBeliefsView, IBHIPitchView
+
+# The name parameter (like 'report_urlpattern)
+# is the reference to the path (like 'report/'
+# Whenever the path is to be referenced, it can be done
+# using the name parameter.
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('ibhi.urls')),
+
+    path('report/',
+         IBHIReportView.as_view(),
+         name='report_urlpattern'),
+
+    path('insights/',
+         IBHIInsightsView.as_view(),
+         name='insights_urlpattern'),
+
+    path('beliefs/',
+         IBHIBeliefsView.as_view(),
+         name='beliefs_urlpattern'),
+
+    path('pitch/',
+         IBHIPitchView.as_view(),
+         name='pitch_urlpattern'),
+
 ]
