@@ -7,22 +7,22 @@ class BwGeography(models.Model):
     hibcat_monitor = models.IntegerField(null=True, blank=True, verbose_name="HIBCAT Monitor")
 
 class Gender(models.Model):
-    days = models.DateTimeField(null=True, blank=True)
+    days = models.DateField(null=True, blank=True)
     male = models.IntegerField(null=True, blank=True, default=0)
     female = models.IntegerField(null=True, blank=True, default=0)
 
 class BwContentSources(models.Model):
-    days = models.DateTimeField(null=True, blank=True)
+    days = models.DateField(null=True, blank=True)
     blogs = models.IntegerField(null=True, blank=True, verbose_name="Blogs", default=0)
     twitter = models.IntegerField(null=True, blank=True, verbose_name="Twitter", default=0)
     reddit = models.IntegerField(null=True, blank=True, verbose_name="Reddit", default=0)
 
 class BwNetSentiment(models.Model):
-    days = models.DateTimeField(null=True, blank=True)
+    days = models.DateField(null=True, blank=True)
     hibcat_monitor = models.FloatField(null=True, blank=True, verbose_name="HIBCAT Monitor")
 
 class BwEmotions(models.Model):
-    days = models.DateTimeField(null=True, blank=True)
+    days = models.DateField(null=True, blank=True)
     anger = models.IntegerField(null=True, blank=True, verbose_name="Anger", default=0)
     fear = models.IntegerField(null=True, blank=True, verbose_name="Fear", default=0)
     disgust = models.IntegerField(null=True, blank=True, verbose_name="Disgust", default=0)
@@ -31,13 +31,13 @@ class BwEmotions(models.Model):
     sadness = models.IntegerField(null=True, blank=True, verbose_name="Sadness", default=0)
 
 class BwSentiments(models.Model):
-    days = models.DateTimeField(null=True, blank=True)
+    days = models.DateField(null=True, blank=True)
     positive = models.IntegerField(null=True, blank=True, default=0)
     neutral = models.IntegerField(null=True, blank=True, default=0)
     negative = models.IntegerField(null=True, blank=True, default=0)
 
 class BwVolume(models.Model):
-    days = models.DateTimeField(null=True, blank=True)
+    days = models.DateField(null=True, blank=True)
     hibcat_monitor = models.IntegerField(null=True, blank=True, verbose_name="HIBCAT Monitor")
 
 class ClineCenter(models.Model):
@@ -88,7 +88,7 @@ class ClineCenter(models.Model):
     country = models.TextField(null=True, blank=True)
 
 class YahooStockData(models.Model):
-    date = models.DateTimeField(null=True, blank=True, verbose_name="Date")
+    date = models.DateField(null=True, blank=True, verbose_name="Date")
     open = models.FloatField(null=True, blank=True, verbose_name="Open")
     high = models.FloatField(null=True, blank=True, verbose_name="High")
     low = models.FloatField(null=True, blank=True, verbose_name="Low")
