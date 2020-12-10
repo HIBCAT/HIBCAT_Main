@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'HIBCAT_Main.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'HIBCAT_Main_DB',
+        'USER': 'postgres',
+        'PASSWORD': '27guptamohit',
+        'HOST' : 'localhost',
+        'PORT' : '5432'
     }
 }
 
