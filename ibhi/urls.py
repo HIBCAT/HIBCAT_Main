@@ -13,14 +13,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path
-from ibhi.views import IBHIReportView, IBHIInsightsView, IBHIBeliefsView, IBHIPitchView
+from rest_framework.urlpatterns import format_suffix_patterns
+from ibhi.views import (IBHIReportView, IBHIInsightsView, IBHIBeliefsView,
+                        IBHIPitchView, SMOperations)
 
+
+# 1.
 # The name parameter (like 'report_urlpattern)
 # is the reference to the path (like 'report/'
 # Whenever the path is to be referenced, it can be done
 # using the name parameter.
+
+
+# 2. REST api
+# Step 1. serializers.py
+# Step 2. views.py : Run the desired python data analysis operations.
+# Step 3. urls.py : Register the link you want to broadcast your data on.
+
 
 urlpatterns = [
 
@@ -40,4 +50,8 @@ urlpatterns = [
          IBHIPitchView.as_view(),
          name='pitch_urlpattern'),
 
+    path('stock_api', SMOperations.as_view())
+
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
