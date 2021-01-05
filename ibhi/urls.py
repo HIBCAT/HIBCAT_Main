@@ -16,7 +16,7 @@ Including another URLconf
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from ibhi.views import (IBHIReportView, IBHIInsightsView, IBHIBeliefsView,
-                        IBHIPitchView, SMOperations)
+                        IBHIPitchView, BwVegaVisual1, BwVegaVisual2, BwVegaVisual3, BwVegaVisual4)
 
 
 # 1.
@@ -29,7 +29,7 @@ from ibhi.views import (IBHIReportView, IBHIInsightsView, IBHIBeliefsView,
 # 2. REST api
 # Step 1. serializers.py
 # Step 2. views.py : Run the desired python data analysis operations.
-# Step 3. urls.py : Register the link you want to broadcast your data on.
+# Step 3. urls.py : Register the link you want to broadcast your data onto.
 
 
 urlpatterns = [
@@ -50,8 +50,15 @@ urlpatterns = [
          IBHIPitchView.as_view(),
          name='pitch_urlpattern'),
 
-    path('stock_api', SMOperations.as_view())
+    path('visual_1.csv', BwVegaVisual1.as_view()),
+
+    path('visual_2.csv', BwVegaVisual2.as_view()),
+
+    path('visual_3.csv', BwVegaVisual3.as_view()),
+
+    path('visual_4.csv', BwVegaVisual4.as_view()),
 
 ]
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+# In case if you want suffixes at the end of url patterns.
+# urlpatterns = format_suffix_patterns(urlpatterns)

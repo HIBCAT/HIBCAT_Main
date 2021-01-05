@@ -3,8 +3,8 @@ from django.db import models
 # 1. Creating the database models over here.
 
 class BwGeography(models.Model):
-    countries = models.CharField(null=True, blank=True, max_length=100)
-    hibcat_monitor = models.IntegerField(null=True, blank=True, verbose_name="HIBCAT Monitor")
+    countries = models.TextField(null=True, blank=True)
+    geo_vol = models.IntegerField(null=True, blank=True, verbose_name="Geographic Volume")
 
 class Gender(models.Model):
     days = models.DateField(null=True, blank=True)
@@ -19,7 +19,7 @@ class BwContentSources(models.Model):
 
 class BwNetSentiment(models.Model):
     days = models.DateField(null=True, blank=True)
-    hibcat_monitor = models.FloatField(null=True, blank=True, verbose_name="HIBCAT Monitor")
+    net_sent_vol = models.FloatField(null=True, blank=True, verbose_name="Net Sentiment Volume")
 
 class BwEmotions(models.Model):
     days = models.DateField(null=True, blank=True)
@@ -38,7 +38,15 @@ class BwSentiments(models.Model):
 
 class BwVolume(models.Model):
     days = models.DateField(null=True, blank=True)
-    hibcat_monitor = models.IntegerField(null=True, blank=True, verbose_name="HIBCAT Monitor")
+    volume = models.IntegerField(null=True, blank=True, verbose_name="Activity Volume")
+
+class BwActivityDay(models.Model):
+    dayOfWeek = models.IntegerField(null=True, blank=True)
+    day_vol = models.BigIntegerField("Day Volume" ,null=True, blank=True)
+
+class BwActivityTime(models.Model):
+    hourOfDay = models.TimeField("Time", null=True, blank=True)
+    time_vol = models.BigIntegerField("Timely Volume", null=True, blank=True)
 
 class ClineCenter(models.Model):
     publication_date = models.DateField(null=True, blank=True)

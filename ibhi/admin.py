@@ -1,7 +1,9 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
-from .models import BwGeography, Gender, BwContentSources, BwNetSentiment, BwEmotions, BwSentiments, BwVolume, ClineCenter, YahooStockData, ShortInterest
+from .models import BwGeography, Gender, BwContentSources, BwNetSentiment, BwEmotions, BwSentiments, BwVolume, \
+    ClineCenter, YahooStockData, ShortInterest, BwActivityDay, BwActivityTime
+
 
 # Register your models here.
 # 1
@@ -11,7 +13,7 @@ class BwGeographyResource(resources.ModelResource):
         model = BwGeography
 
 class BwGeographyAdmin(ImportExportModelAdmin):
-    list_display = ('countries', 'hibcat_monitor')
+    list_display = ('countries', 'geo_vol')
     resource_class = BwGeographyResource
 
 admin.site.register(BwGeography, BwGeographyAdmin)
@@ -47,7 +49,7 @@ class BwNetSentimentResource(resources.ModelResource):
 
 
 class BwNetSentimentAdmin(ImportExportModelAdmin):
-    list_display = ('days', 'hibcat_monitor')
+    list_display = ('days', 'net_sent_vol')
     resource_class = BwNetSentimentResource
 
 admin.site.register(BwNetSentiment, BwNetSentimentAdmin)
@@ -84,12 +86,34 @@ class BwVolumeResource(resources.ModelResource):
 
 
 class BwVolumeAdmin(ImportExportModelAdmin):
-    list_display = ('days', 'hibcat_monitor')
+    list_display = ('days', 'volume')
     resource_class = BwVolumeResource
 
 admin.site.register(BwVolume, BwVolumeAdmin)
 
 # 8
+class BwActivityDayResource(resources.ModelResource):
+    class Meta:
+        model = BwActivityDay
+
+class BwActivityDayAdmin(ImportExportModelAdmin):
+    list_display = ('dayOfWeek', 'day_vol')
+    resource_class = BwActivityDayResource
+
+admin.site.register(BwActivityDay, BwActivityDayAdmin)
+
+# 9
+class BwActivityTimeResource(resources.ModelResource):
+    class Meta:
+        model = BwActivityTime
+
+class BwActivityTimeAdmin(ImportExportModelAdmin):
+    list_display = ('hourOfDay', 'time_vol')
+    resource_class = BwActivityTimeResource
+
+admin.site.register(BwActivityTime, BwActivityTimeAdmin)
+
+# 10
 class ClineCenterResource(resources.ModelResource):
     class Meta:
         model = ClineCenter
@@ -115,7 +139,7 @@ class ClineCenterAdmin(ImportExportModelAdmin):
 
 admin.site.register(ClineCenter, ClineCenterAdmin)
 
-# 9
+# 11
 class YahooStockDataResource(resources.ModelResource):
     class Meta:
         model = YahooStockData
@@ -128,7 +152,7 @@ class YahooStockDataAdmin(ImportExportModelAdmin):
 
 admin.site.register(YahooStockData, YahooStockDataAdmin)
 
-# 10
+# 12
 class ShortInterestResource(resources.ModelResource):
     class Meta:
         model = ShortInterest

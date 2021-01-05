@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import (BwGeography, Gender, BwContentSources,
                      BwNetSentiment, BwEmotions, BwSentiments, BwVolume,
-                     ClineCenter, YahooStockData, ShortInterest,)
+                     ClineCenter, YahooStockData, ShortInterest,
+                     BwActivityDay, BwActivityTime)
 
 
 class BwGeographySerializer(serializers.ModelSerializer):
@@ -51,6 +52,18 @@ class BwVolumeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BwVolume
+        fields = '__all__'
+
+class BwActivityDaySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BwActivityDay
+        fields = '__all__'
+
+class BwActivityTimeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BwActivityTime
         fields = '__all__'
 
 
