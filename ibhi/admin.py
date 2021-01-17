@@ -104,16 +104,15 @@ class BwActivityDayAdmin(ImportExportModelAdmin):
 admin.site.register(BwActivityDay, BwActivityDayAdmin)
 
 # 9
-class BwActivityTimeResource(resources.Resource):
+class BwActivityTimeResource(resources.ModelResource):
     class Meta:
         model = BwActivityTime
 
 class BwActivityTimeAdmin(ImportExportModelAdmin):
-    list_display = ('hourOfDay', 'time_vol')
+    list_display = ('hourOfDay' , 'time_vol',)
     resource_class = BwActivityTimeResource
 
 admin.site.register(BwActivityTime, BwActivityTimeAdmin)
-
 
 # 10
 class ClineCenterResource(resources.ModelResource):

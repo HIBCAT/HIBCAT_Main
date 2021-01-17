@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from ibhi.views import IBHIReportView, IBHIInsightsView, IBHIBeliefsView, IBHIPitchView
+from ibhi.views import BwVegaVisual1, BwVegaVisual2, BwVegaVisual3, BwVegaVisual4
+
 
 # The name parameter (like 'report_urlpattern)
 # is the reference to the path (like 'report/'
@@ -24,20 +25,28 @@ from ibhi.views import IBHIReportView, IBHIInsightsView, IBHIBeliefsView, IBHIPi
 
 urlpatterns = [
 
-    path('report/',
-         IBHIReportView.as_view(),
-         name='report_urlpattern'),
+    path('visual_1.csv', BwVegaVisual1.as_view()),
 
-    path('insights/',
-         IBHIInsightsView.as_view(),
-         name='insights_urlpattern'),
+    path('visual_2.csv', BwVegaVisual2.as_view()),
 
-    path('beliefs/',
-         IBHIBeliefsView.as_view(),
-         name='beliefs_urlpattern'),
+    path('visual_3.csv', BwVegaVisual3.as_view()),
 
-    path('pitch/',
-         IBHIPitchView.as_view(),
-         name='pitch_urlpattern'),
+    path('visual_4.csv', BwVegaVisual4.as_view()),
+
+    # path('report/',
+    #      IBHIReportView.as_view(),
+    #      name='report_urlpattern'),
+    #
+    # path('insights/',
+    #      IBHIInsightsView.as_view(),
+    #      name='insights_urlpattern'),
+    #
+    # path('beliefs/',
+    #      IBHIBeliefsView.as_view(),
+    #      name='beliefs_urlpattern'),
+    #
+    # path('pitch/',
+    #      IBHIPitchView.as_view(),
+    #      name='pitch_urlpattern'),
 
 ]
