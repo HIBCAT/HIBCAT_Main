@@ -3,8 +3,8 @@ from django.db import models
 # 1. Creating the database models over here.
 
 class BwGeography(models.Model):
-    countries = models.CharField(null=True, blank=True, max_length=100)
-    hibcat_monitor = models.IntegerField(null=True, blank=True, verbose_name="HIBCAT Monitor")
+    countries = models.TextField(null=True, blank=True)
+    geo_vol = models.IntegerField(null=True, blank=True, verbose_name="Geographic Volume")
 
 class Gender(models.Model):
     days = models.DateField(null=True, blank=True)
@@ -19,7 +19,7 @@ class BwContentSources(models.Model):
 
 class BwNetSentiment(models.Model):
     days = models.DateField(null=True, blank=True)
-    hibcat_monitor = models.FloatField(null=True, blank=True, verbose_name="HIBCAT Monitor")
+    net_sent_vol = models.FloatField(null=True, blank=True, verbose_name="Net Sentiment Volume")
 
 class BwEmotions(models.Model):
     days = models.DateField(null=True, blank=True)
@@ -38,21 +38,29 @@ class BwSentiments(models.Model):
 
 class BwVolume(models.Model):
     days = models.DateField(null=True, blank=True)
-    hibcat_monitor = models.IntegerField(null=True, blank=True, verbose_name="HIBCAT Monitor")
+    volume = models.IntegerField(null=True, blank=True, verbose_name="Activity Volume")
+
+class BwActivityDay(models.Model):
+    dayOfWeek = models.IntegerField(null=True, blank=True)
+    day_vol = models.BigIntegerField("Volume by Day", null=True, blank=True)
+
+class BwActivityTime(models.Model):
+    hourOfDay = models.TimeField("Time", null=True, blank=True)
+    time_vol = models.BigIntegerField("Volume by Time", null=True, blank=True)
 
 class ClineCenter(models.Model):
-    publication_date = models.DateTimeField(null=True, blank=True)
+    publication_date = models.DateField(null=True, blank=True)
     article_id = models.CharField(null=True, blank=True, verbose_name="_id", max_length=100)
-    aid = models.IntegerField(null=True, blank=True)
-    source_name = models.CharField(null=True, blank=True, max_length=100)
-    source_location = models.CharField(null=True, blank=True, max_length=100)
-    url = models.URLField(null=True, blank=True)
+    aid = models.TextField(null=True, blank=True)
+    source_name = models.TextField(null=True, blank=True)
+    source_location = models.TextField(null=True, blank=True)
+    url = models.TextField(null=True, blank=True)
     title = models.TextField(null=True, blank=True)
-    source_host = models.CharField(null=True, blank=True, max_length=100)
-    publisher = models.CharField(null=True, blank=True, max_length=100)
+    source_host = models.TextField(null=True, blank=True)
+    publisher = models.TextField(null=True, blank=True)
     pronouns = models.IntegerField(null=True, blank=True)
     other_metadata = models.TextField(null=True, blank=True)
-    original_language = models.CharField(null=True, blank=True, max_length=100)
+    original_language = models.TextField(null=True, blank=True)
     mf_harmvirtue = models.FloatField(null=True, blank=True)
     mf_purityvirtue = models.FloatField(null=True, blank=True)
     mf_purityvice = models.FloatField(null=True, blank=True)
