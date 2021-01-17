@@ -1,4 +1,5 @@
 from django.db import models
+import pandas as pd
 
 # 1. Creating the database models over here.
 
@@ -49,7 +50,9 @@ class BwActivityTime(models.Model):
     time_vol = models.BigIntegerField("Volume by Time", null=True, blank=True)
 
 class ClineCenter(models.Model):
-    publication_date = models.DateField(null=True, blank=True)
+    publication_date = models.TextField(null=True, blank=True)
+    publication_date_only = models.DateField(null=True, blank=True)
+    publication_time = models.TimeField(null=True, blank=True)
     article_id = models.CharField(null=True, blank=True, verbose_name="_id", max_length=100)
     aid = models.TextField(null=True, blank=True)
     source_name = models.TextField(null=True, blank=True)
@@ -94,6 +97,14 @@ class ClineCenter(models.Model):
     extracted_people = models.TextField(null=True, blank=True)
     extracted_locations = models.TextField(null=True, blank=True)
     country = models.TextField(null=True, blank=True)
+
+    def save(self):
+        date = pd.to_datetime(self.publication_date)
+        self.publication_date_only = date.date()
+        self.publication_time = date.time()
+
+        super(ClineCenter, self).save()
+
 
 class YahooStockData(models.Model):
     date = models.DateField(null=True, blank=True, verbose_name="Date")
