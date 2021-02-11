@@ -63,7 +63,7 @@
                             <span class="sr-only">Toggle nav</span>
                         </button>
                         <!--Note for myself(Mohit): Replace the href # to whatever link you want-->
-                        <a class="sidebar-brand img-responsive" href="#">
+                        <a class="sidebar-brand img-responsive" href="{% url 'overview_urlpattern' %}">
               <span style="padding-right:3px; padding-top: 3px; display: inline-block;">
                   <img src="{% static 'ibhi/assets/img/UOfI_logo.png' %}" height="50">
               </span>
@@ -74,13 +74,13 @@
                         <ul class="nav nav-pills nav-stacked flex-column">
                             <li class="nav-header">Dashboards</li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="#">Overview</a>
+                                <a class="nav-link active" href="{% url 'overview_urlpattern' %}">Overview</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link " href="#">Fluid layout</a>
+                                <a class="nav-link " href="{% url 'fluid_report_urlpattern' %}">Fluid layout</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link " href="#">Icon nav</a>
+                                <a class="nav-link " href="{% url 'icon_report_urlpattern' %}">Icon nav</a>
                             </li>
 
 

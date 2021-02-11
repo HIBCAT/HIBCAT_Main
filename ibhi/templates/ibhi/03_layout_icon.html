@@ -23,6 +23,17 @@
 
 
     <link href="{% static 'ibhi/assets/css/application.css' %}" rel="stylesheet">
+    <!--Vega-lite -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.17.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.17.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.12.2"></script>
+
+    <style media="screen">
+        /* Add space between Vega-Embed links  */
+        .vega-actions a {
+            margin-right: 5px;
+        }
+    </style>
 
     <style>
         /* note: this is a hack for ios iframe for bootstrap themes shopify page */
@@ -44,28 +55,28 @@
 
         <nav class="iconav">
             <!--Note for self(Mohit): Replace the href to the link where you want to direct the traffic to.-->
-            <a class="iconav-brand" href="">
+            <a class="iconav-brand" href="{% url 'overview_urlpattern' %}">
               <span style="padding-right:3px; padding-top: 3px; display: inline-block;">
                   <img src="{% static 'ibhi/assets/img/UOfI_logo.png' %}" height="50">
               </span> </a>
             <div class="iconav-slider">
                 <ul class="nav nav-pills iconav-nav flex-md-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="../index-light/index.html" title="Overview" data-toggle="tooltip"
+                        <a class="nav-link" href="{% url 'overview_urlpattern' %}" title="Overview" data-toggle="tooltip"
                            data-placement="right" data-container="body">
                             <span class="icon icon-home"></span>
                             <small class="iconav-nav-label hidden-md-up">Overview</small>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../fluid-light/index.html" title="Fluid layout" data-toggle="tooltip"
+                        <a class="nav-link" href="{% url 'fluid_report_urlpattern' %}" title="Fluid layout" data-toggle="tooltip"
                            data-placement="right" data-container="body">
                             <span class="icon icon-globe"></span>
                             <small class="iconav-nav-label hidden-md-up">Fluid layout</small>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="../icon-nav-light/index.html" title="Icon-nav"
+                        <a class="nav-link active" href="{% url 'icon_report_urlpattern' %}" title="Icon-nav"
                            data-toggle="tooltip" data-placement="right" data-container="body">
                             <span class="icon icon-area-graph"></span>
                             <small class="iconav-nav-label hidden-md-up">Icon nav</small>

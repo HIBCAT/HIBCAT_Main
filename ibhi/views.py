@@ -110,40 +110,41 @@ class BwVegaVisual4(PandasSimpleView):
 
 
 
-class IBHIReportView(View):
+class IBHITestView(View):
 
     def get(self, request):
 
         return render(request,
-                      'ibhi/report.html',
+                      'ibhi/test.html',
                       {}
                       )
 
-class IBHIInsightsView(View):
+class OverviewLayoutView(View):
 
     def get(self, request):
 
         return render(request,
+                      'ibhi/01_report.html',
                       {}
                       )
 
-class IBHIBeliefsView(View):
+class FluidLayoutView(View):
 
     def get(self, request):
 
 
         return render(request,
-                      'ibhi/beliefs.html',
+                      'ibhi/02_report.html',
                       {}
                       )
 
-class IBHIPitchView(View):
+class IconLayoutView(View):
 
     def get(self, request):
 
 
         return render(request,
-                      'ibhi/pitch.html',
+                      'ibhi/03_report.html',
                       {}
                       )
 
