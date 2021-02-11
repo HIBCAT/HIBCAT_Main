@@ -1,0 +1,132 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <title>
+
+        {% block title %}
+
+        {% endblock %}
+
+    </title>
+
+    <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
+
+    <link href="{% static 'ibhi/assets/css/toolkit-light.css' %}" rel="stylesheet">
+
+
+    <link href="{% static 'ibhi/assets/css/application.css' %}" rel="stylesheet">
+
+    <style>
+        /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+        /* this chunk of css is not part of the toolkit :) */
+        body {
+            width: 1px;
+            min-width: 100%;
+            *width: 100%;
+        }
+    </style>
+</head>
+
+
+<body class="with-top-navbar">
+<main>
+
+    <nav class="navbar navbar-toggleable-sm fixed-top navbar-light bg-light app-navbar">
+        <button
+                class="navbar-toggler navbar-toggler-right hidden-md-up"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarResponsive"
+                aria-controls="navbarResponsive"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--Note for myself(Mohit): Insert the link to the home page.-->
+        <a class="navbar-brand" href="#">
+              <span style="padding-right:3px; padding-top: 3px; display: inline-block;">
+                  <img src="{% static 'ibhi/assets/img/UOfI_logo.png' %}" height="50">
+              </span>
+        </a>
+
+        <div class="collapse navbar-collapse mr-auto" id="navbarResponsive">
+            <ul class="nav navbar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="">Overview</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="">Fluid layout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">Icon nav</a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <div class="container-fluid container-fluid-spacious">
+        <div class="dashhead mt-5">
+
+            <div class="dashhead-titles">
+                <h6 class="dashhead-subtitle">Dashboards</h6>
+                <h2 class="dashhead-title">Overview</h2>
+            </div>
+        </div>
+                <hr class="mt-0 mb-5">
+
+
+
+
+        {% block vis_div %}
+
+            <!--This will contain the header div-->
+
+
+        {% endblock %}
+
+        <script>
+
+            {% block script %}
+
+            {% endblock %}
+
+        </script>
+
+
+    </div>
+    </div>
+    </div>
+
+
+    </div>
+
+    <script src="{% static 'ibhi/assets/js/jquery.min.js' %}"></script>
+    <script src="{% static 'ibhi/assets/js/tether.min.js' %}"></script>
+    <script src="{% static 'ibhi/assets/js/chart.js' %}"></script>
+    <script src="{% static 'ibhi/assets/js/tablesorter.min.js' %}"></script>
+    <script src="{% static 'ibhi/assets/js/toolkit.js' %}"></script>
+    <script src="{% static 'ibhi/assets/js/application.js' %}"></script>
+    <script>
+        // execute/clear BS loaders for docs
+        $(function () {
+            while (window.BS && window.BS.loader && window.BS.loader.length) {
+                (window.BS.loader.pop())()
+            }
+        })
+    </script>
+</main>
+</body>
+</html>
+
