@@ -9,8 +9,8 @@ from functools import reduce
 from .models import (BwActivityTime, BwActivityDay, BwGeography,
                      BwVolume, BwSentiments, BwNetSentiment,
                      BwEmotions, Gender, BwContentSources,
-
-                     ClineCenter, YahooStockData, ShortInterest,)
+                     ClineCenter, YahooStockData, ShortInterest,
+                     CCEventTimeline)
 
 # 1. BwActivityDay object
 day_wise_vol_main = pd.DataFrame(BwActivityDay.objects.all().values())
