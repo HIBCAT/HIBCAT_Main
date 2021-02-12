@@ -4,7 +4,9 @@ from import_export import resources
 from .models import BwGeography, Gender, BwContentSources, \
     BwNetSentiment, BwEmotions, BwSentiments, \
     BwVolume, BwActivityDay, BwActivityTime, \
-    ClineCenter, YahooStockData, ShortInterest
+    ClineCenter, YahooStockData, ShortInterest, \
+    CCEventTimeline
+
 
 # Register your models here.
 # 1
@@ -121,7 +123,8 @@ class ClineCenterResource(resources.ModelResource):
 
 
 class ClineCenterAdmin(ImportExportModelAdmin):
-    list_display = ('publication_date', 'article_id', 'aid',
+    list_display = ('publication_date', 'publication_date_only', 'publication_time',
+                    'article_id', 'aid',
                     'source_name', 'source_location', 'url',
                     'title', 'source_host', 'publisher',
                     'pronouns', 'other_metadata', 'original_language',
@@ -165,3 +168,15 @@ class ShortInterestAdmin(ImportExportModelAdmin):
     resource_class = ShortInterestResource
 
 admin.site.register(ShortInterest, ShortInterestAdmin)
+
+# 13
+class CCEventTimelineResource(resources.ModelResource):
+    class Meta:
+        model = CCEventTimeline
+
+class CCEventTimelineAdmin(ImportExportModelAdmin):
+    list_display = ('start_date', 'end_date',
+                    'event_type', 'description')
+    resource_class = CCEventTimelineResource
+
+admin.site.register(CCEventTimeline, CCEventTimelineAdmin)

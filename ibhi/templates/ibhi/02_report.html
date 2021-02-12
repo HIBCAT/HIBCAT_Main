@@ -1,0 +1,552 @@
+{% extends 'ibhi/02_layout_fluid.html' %}
+
+{% block title %}
+Report
+{% endblock %}
+
+{% block vis_div %}
+    <div class="container">
+        <h1>Test Visualizations</h1>
+        <!-- Container for the visualization -->
+        <h3>1. Day wise activity volume:</h3>
+        <h4>The red line represents the median. Please scrub inside the area to see the median for selected area.</h4>
+        <div id="vis1"></div>
+
+        <h3>2. Time wise activity volume:</h3>
+        <h4>The red line represents the median. Please scrub inside the area to see the median for selected area.</h4>
+        <div id="vis2"></div>
+
+        <h3>3. Country wise activity volume:</h3>
+        <h4>The red line represents the median. Please scrub inside the area to see the median for selected area.</h4>
+        <div id="vis3"></div>
+
+        <h3>Visualizations 4 to 9(Connected):</h3>
+        <h4>Please scrub inside the First Graph. Rest of the graphs shows the details for the selected time frame.</h4>
+        <div id="vis4"></div>
+
+
+    </div>
+{% endblock %}
+
+{% block script %}
+
+
+
+          var vlSpec1 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "data": {"url": "http://127.0.0.1:7001/visual_1.csv"},
+  "width": 350,
+  "height" : 350,
+  "layer": [{
+    "selection": {
+      "brush": {
+        "type": "interval",
+        "encodings": ["x"]
+      }
+    },
+    "mark": {"type":"bar", "tooltip": true},
+    "encoding": {
+      "x": {
+        "timeUnit": "day",
+        "field": "dayOfWeek",
+        "type": "ordinal",
+        "title": "Day"
+      },
+      "y": {
+        "field": "day_vol",
+        "type": "quantitative",
+        "title": "Volume"
+      },
+      "color": {"value": "#A5A8AA"},
+      "opacity": {
+        "condition": {
+          "selection": "brush", "value": 1
+        },
+        "value": 0.7
+      }
+    }
+  }, {
+    "transform": [{
+      "filter": {"selection": "brush"}
+    }],
+    "mark": "rule",
+    "encoding": {
+      "y": {
+        "aggregate": "mean",
+        "field": "day_vol",
+        "type": "quantitative"
+      },
+      "color": {"value": "firebrick"},
+      "size": {"value": 3}
+    }
+  }]
+}
+;
+
+
+      var vlSpec2 = {
+   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+   "data": {"url": "http://127.0.0.1:7001/visual_2.csv"},
+   "width" : 350,
+   "height" : 350,
+   "layer": [{
+     "selection": {
+       "brush": {
+         "type": "interval",
+         "encodings": ["y"]
+       }
+     },
+     "mark": {"type":"bar", "tooltip": true},
+     "encoding": {
+       "y": {
+         "field": "hourOfDay",
+         "type": "ordinal",
+         "title": "Time"
+
+       },
+       "x": {
+         "aggregate": "median",
+         "field": "time_vol",
+         "type": "quantitative",
+         "title": "Volume"
+       },
+       "color": {
+       "field": "time_vol", "type": "nominal",
+       "scale": {"range": ["#E84A27"]},
+       "legend":null
+     },
+       "opacity": {
+         "condition": {
+           "selection": "brush", "value": 1
+         },
+         "value": 0.7
+       }
+     }
+   }, {
+     "transform": [{
+       "filter": {"selection": "brush"}
+     }],
+     "mark": {"type": "rule", "tooltip": true},
+     "encoding": {
+       "x": {
+         "aggregate": "mean",
+         "field": "time_vol",
+         "type": "quantitative",
+         "axis" : {"format" : "s"}
+
+       },
+       "color": {"value": "#1F4096"},
+       "size": {"value": 3}
+     }
+   }]
+ };
+
+
+      var vlSpec3 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "data": {"url": "http://127.0.0.1:7001/visual_3.csv"},
+  "transform": [{"filter": "datum.geo_vol > 50000"}],
+
+  "width" : 750,
+  "layer": [{
+    "selection": {
+      "brush": {
+        "type": "interval",
+        "encodings": ["y"]
+      }
+    },
+    "mark": {"type":"bar", "tooltip": true},
+    "encoding": {
+      "y": {
+        "field": "countries",
+        "type": "nominal",
+        "title": "Countries",
+        "sort": "-x"
+      },
+      "x": {
+        "aggregate": "median",
+        "field": "geo_vol",
+        "type": "quantitative",
+        "title": "Volume"
+      },
+      "color": {
+      "field": "geo_vol", "type": "nominal",
+      "scale": {"range": ["#E84A27"]},
+      "legend":null
+    },
+      "opacity": {
+        "condition": {
+          "selection": "brush", "value": 1
+        },
+        "value": 0.7
+      }
+    }
+  },
+
+  {
+    "transform": [{
+      "filter": {"selection": "brush"}
+    }],
+    "mark": {"type": "rule", "tooltip": true},
+    "encoding": {
+      "x": {
+        "aggregate": "mean",
+        "field": "geo_vol",
+        "type": "quantitative",
+        "axis" : {"format" : "s"}
+      },
+      "color": {"value": "#1F4096"},
+      "size": {"value": 3}
+    }
+  }]
+}
+;
+      var vlSpec4 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "title": "Visuals Three to Eight",
+  "data": {
+    "url": "http://127.0.0.1:7001/visual_4.csv"
+  },
+  "vconcat": [
+    {
+      "transform": [{"filter": "datum.variable == 'volume'"}],
+      "width": 1100,
+      "height": 100,
+      "mark": {"type": "area", "tooltip": true},
+      "selection": {"brush": {"type": "interval", "encodings": ["x"]}},
+      "encoding": {
+        "x": {"field": "days", "type": "temporal"},
+        "y": {
+          "field": "value",
+          "title":"Total Post Volume",
+          "type": "quantitative",
+          "axis": {"tickCount": 5, "grid": true, "format": "s"}
+        }
+      }
+    },
+    {
+      "width": 1100,
+      "height": 200,
+      "transform": [
+        {
+          "filter": {
+            "field": "variable",
+            "oneOf": [
+              "anger",
+              "fear",
+              "disgust",
+              "joy",
+              "surprise",
+              "sadness"
+            ]
+          }
+        }
+      ],
+      "encoding": {
+        "x": {
+          "field": "days",
+          "type": "temporal",
+          "scale": {"domain": {"selection": "brush"}}
+        }
+      },
+      "layer": [
+        {
+          "encoding": {
+            "color": {"field": "variable", "type": "nominal"},
+            "y": {
+              "field": "value",
+              "title": "Emotion wise Post Volume",
+              "type": "quantitative",
+              "axis": {"tickCount": 5, "grid": true, "format": "s"}
+            }
+          },
+          "layer": [
+            {"mark": "line"},
+            {"transform": [{"filter": {"selection": "hover"}}], "mark": "point"}
+          ]
+        },
+        {
+          "transform": [
+            {"pivot": "variable", "value": "value", "groupby": ["days"]}
+          ],
+          "mark": "rule",
+          "encoding": {
+            "opacity": {
+              "condition": {"value": 0.3, "selection": "hover"},
+              "value": 0
+            },
+            "tooltip": [
+
+              {"field": "anger", "type": "quantitative"},
+              {"field": "fear", "type": "quantitative"},
+              {"field": "disgust", "type": "quantitative"},
+              {"field": "joy", "type": "quantitative"},
+              {"field": "surprise", "type": "quantitative"},
+              {"field": "sadness", "type": "quantitative"},
+            ]
+          },
+          "selection": {
+            "hover": {
+              "type": "single",
+              "fields": ["days"],
+              "nearest": true,
+              "on": "mouseover",
+              "empty": "none",
+              "clear": "mouseout"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "width": 1100,
+      "height": 200,
+      "transform": [
+        {
+          "filter": {
+            "field": "variable",
+            "oneOf": ["positive", "neutral", "negative"]
+          }
+        }
+      ],
+      "encoding": {
+        "x": {
+          "field": "days",
+          "type": "temporal",
+          "scale": {"domain": {"selection": "brush"}}
+        }
+      },
+      "layer": [
+        {
+          "encoding": {
+            "color": {"field": "variable", "type": "nominal", "title": "Legend"},
+            "y": {
+              "field": "value",
+              "title": "Sentiment Wise Post Volume",
+              "type": "quantitative",
+              "axis": {"tickCount": 5, "grid": true, "format": "s"}
+            }
+          },
+          "layer": [
+            {"mark": "line"},
+            {"transform": [{"filter": {"selection": "hover"}}], "mark": "point"}
+          ]
+        },
+        {
+          "transform": [
+            {"pivot": "variable", "value": "value", "groupby": ["days"]}
+          ],
+          "mark": "rule",
+          "encoding": {
+            "opacity": {
+              "condition": {"value": 0.3, "selection": "hover"},
+              "value": 0
+            },
+            "tooltip": [
+              {"field": "negative", "type": "quantitative"},
+              {"field": "neutral", "type": "quantitative"},
+              {"field": "positive", "type": "quantitative"}
+            ]
+          },
+          "selection": {
+            "hover": {
+              "type": "single",
+              "fields": ["days"],
+              "nearest": true,
+              "on": "mouseover",
+              "empty": "none",
+              "clear": "mouseout"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "width": 1100,
+      "height": 200,
+      "transform": [
+        {"filter": {"field": "variable", "oneOf": ["net_sent_vol"]}}
+      ],
+      "encoding": {
+        "x": {
+          "field": "days",
+          "type": "temporal",
+          "scale": {"domain": {"selection": "brush"}}
+        }
+      },
+      "layer": [
+        {
+          "encoding": {
+            "color": {"field": "variable", "type": "nominal"},
+            "y": {
+              "field": "value",
+              "title": "Net Sentiment ( -5 to +5 )",
+              "type": "quantitative",
+              "axis": {"tickCount": 5, "grid": true, "format": "s"}
+            }
+          },
+          "layer": [
+            {"mark": "line"},
+            {"transform": [{"filter": {"selection": "hover"}}], "mark": "point"}
+          ]
+        },
+        {
+          "transform": [
+            {"pivot": "variable", "value": "value", "groupby": ["days"]}
+          ],
+          "mark": "rule",
+          "encoding": {
+            "opacity": {
+              "condition": {"value": 0.3, "selection": "hover"},
+              "value": 0
+            },
+            "tooltip": [{"field": "net_sent_vol", "type": "quantitative"}]
+          },
+          "selection": {
+            "hover": {
+              "type": "single",
+              "fields": ["days"],
+              "nearest": true,
+              "on": "mouseover",
+              "empty": "none",
+              "clear": "mouseout"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "width": 1100,
+      "height": 200,
+      "transform": [
+        {"filter": {"field": "variable", "oneOf": ["male", "female"]}}
+      ],
+      "encoding": {
+        "x": {
+          "field": "days",
+          "type": "temporal",
+          "scale": {"domain": {"selection": "brush"}}
+        }
+      },
+      "layer": [
+        {
+          "encoding": {
+            "color": {"field": "variable", "type": "nominal"},
+            "y": {
+              "field": "value",
+              "title": "Gender Wise Volume",
+              "type": "quantitative",
+              "axis": {"tickCount": 5, "grid": true, "format": "s"}
+            }
+          },
+          "layer": [
+            {"mark": "line"},
+            {"transform": [{"filter": {"selection": "hover"}}], "mark": "point"}
+          ]
+        },
+        {
+          "transform": [
+            {"pivot": "variable", "value": "value", "groupby": ["days"]}
+          ],
+          "mark": "rule",
+          "encoding": {
+            "opacity": {
+              "condition": {"value": 0.3, "selection": "hover"},
+              "value": 0
+            },
+            "tooltip": [
+              {"field": "male", "type": "quantitative"},
+              {"field": "female", "type": "quantitative"}
+            ]
+          },
+          "selection": {
+            "hover": {
+              "type": "single",
+              "fields": ["days"],
+              "nearest": true,
+              "on": "mouseover",
+              "empty": "none",
+              "clear": "mouseout"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "width": 1100,
+      "height": 200,
+      "transform": [
+        {
+          "filter": {
+            "field": "variable",
+            "oneOf": [
+              "reddit",
+              "blogs",
+              "twitter"
+            ]
+          }
+        }
+      ],
+      "encoding": {
+        "x": {
+          "field": "days",
+          "type": "temporal",
+          "scale": {"domain": {"selection": "brush"}}
+        }
+      },
+      "layer": [
+        {
+          "encoding": {
+            "color": {"field": "variable", "type": "nominal"},
+            "y": {
+              "field": "value",
+              "title": "Post Volume By Source",
+              "type": "quantitative",
+              "axis": {"tickCount": 5, "grid": true, "format": "s"}
+            }
+          },
+          "layer": [
+            {"mark": "line"},
+            {"transform": [{"filter": {"selection": "hover"}}], "mark": "point"}
+          ]
+        },
+        {
+          "transform": [
+            {"pivot": "variable", "value": "value", "groupby": ["days"]}
+          ],
+          "mark": "rule",
+          "encoding": {
+            "opacity": {
+              "condition": {"value": 0.3, "selection": "hover"},
+              "value": 0
+            },
+            "tooltip": [
+
+              {"field": "blogs", "type": "quantitative"},
+              {"field": "twitter", "type": "quantitative"},
+              {"field": "reddit", "type": "quantitative"},
+
+            ]
+          },
+          "selection": {
+            "hover": {
+              "type": "single",
+              "fields": ["days"],
+              "nearest": true,
+              "on": "mouseover",
+              "empty": "none",
+              "clear": "mouseout"
+            }
+          }
+        }
+      ]
+    }
+  ]
+};
+
+      vegaEmbed('#vis1', vlSpec1);
+      vegaEmbed('#vis2', vlSpec2);
+      vegaEmbed('#vis3', vlSpec3);
+      vegaEmbed('#vis4', vlSpec4);
+
+{% endblock %}

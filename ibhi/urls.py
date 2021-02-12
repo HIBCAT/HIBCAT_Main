@@ -16,8 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ibhi.views import (BwVegaVisual1, BwVegaVisual2, BwVegaVisual3,
-                        BwVegaVisual4, IBHIReportView, IBHIInsightsView,
-                        IBHIBeliefsView, IBHIPitchView)
+                        BwVegaVisual4, IBHITestView, OverviewLayoutView,
+                        FluidLayoutView, IconLayoutView)
 
 
 # The name parameter (like 'report_urlpattern)
@@ -35,20 +35,20 @@ urlpatterns = [
 
     path('visual_4.csv', BwVegaVisual4.as_view()),
 
-    path('report/',
-         IBHIReportView.as_view(),
+    path('test/',
+         IBHITestView.as_view(),
          name='report_urlpattern'),
 
-    path('insights/',
-         IBHIInsightsView.as_view(),
-         name='insights_urlpattern'),
+    path('overview_report/',
+         OverviewLayoutView.as_view(),
+         name='overview_urlpattern'),
 
-    path('beliefs/',
-         IBHIBeliefsView.as_view(),
-         name='beliefs_urlpattern'),
+    path('fluid_report/',
+         FluidLayoutView.as_view(),
+         name='fluid_report_urlpattern'),
 
-    path('pitch/',
-         IBHIPitchView.as_view(),
-         name='pitch_urlpattern'),
+    path('icon_report/',
+         IconLayoutView.as_view(),
+         name='icon_report_urlpattern'),
 
 ]

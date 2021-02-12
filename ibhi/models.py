@@ -120,4 +120,16 @@ class ShortInterest(models.Model):
     total_volume = models.IntegerField(null=True, blank=True)
     short_volume_ratio = models.FloatField(null=True, blank=True)
 
+class CCEventTimeline(models.Model):
+    MEDIA_TYPE_CHOICES = [
+        ('Positive Shock - Planned Activity', 'Positive Shock - Planned Activity'),
+        ('Positive Shock - Unplanned Activity', 'Positive Shock - Unplanned Activity'),
+        ('Negative Shock - Planned Activity', 'Negative Shock - Planned Activity'),
+        ('Negative Shock - Unplanned Activity', 'Negative Shock - Unplanned Activity'),
+    ]
+    start_date = models.DateField(null=True, blank=True, verbose_name="Event's Start Date")
+    end_date = models.DateField(null=True, blank=True, verbose_name="Event's End Date")
+    event_type = models.CharField(max_length=50, choices=MEDIA_TYPE_CHOICES, default='Positive Shock - Planned Activity', verbose_name="Event Type")
+    description = models.TextField(null=True, blank=True, verbose_name="Event Description")
+
 
