@@ -41,6 +41,7 @@ class BwSentiments(models.Model):
     neutral = models.IntegerField(null=True, blank=True, default=0)
     negative = models.IntegerField(null=True, blank=True, default=0)
     net_sentiment = models.FloatField(null=True, blank=True, verbose_name="Net Sentiment")
+    volume = models.IntegerField(null=True, blank=True, verbose_name="Volume (Pos+Neg)")
 
     def save(self):
         """
@@ -49,9 +50,9 @@ class BwSentiments(models.Model):
         :return:
         """
         difference = self.positive - self.negative
-        sum_1 = self.positive + self.negative
+        self.volume = self.positive + self.negative
         if difference != 0:
-            self.net_sentiment = difference/sum_1
+            self.net_sentiment = difference/self.volume
         else:
             self.net_sentiment = 0
 
@@ -131,7 +132,7 @@ class ClineCenter(models.Model):
         ZeroDivisionError: division by zero
 
         As some rows are having no values, they are NoneType,
-        thus I'm ignoring them.
+        thus I'm ignoring them by putting != None clause.
         :return:
         """
         date = pd.to_datetime(self.publication_date)

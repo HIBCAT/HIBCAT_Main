@@ -12,9 +12,13 @@ from .models import (BwActivityTime, BwActivityDay, BwGeography,
                      ClineCenter, YahooStockData, ShortInterest,
                      CCEventTimeline)
 
+# Feature 1
+
+
+
 # 1. BwActivityDay object
-day_wise_vol_main = pd.DataFrame(BwActivityDay.objects.all().values())
-day_wise_vol_main.drop(columns=['id'], inplace=True)
+#day_wise_vol_main = pd.DataFrame(BwSentiments.objects.all().values())
+#day_wise_vol_main.drop(columns=['id'], inplace=True)
 
 # 2. BwActivityTime object
 time_wise_vol_main = pd.DataFrame(BwActivityTime.objects.all().values())
