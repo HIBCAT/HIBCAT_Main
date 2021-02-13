@@ -139,6 +139,7 @@ class BwVegaVisual1(PandasSimpleView):
         # Inspiration:
         # https://school.stockcharts.com/doku.php?id=technical_indicators:vwap_intraday
         brandwatch_01['bw_vwas'] = brandwatch_01['cumulative_sen_vol'] / brandwatch_01['cumulative_vol']
+        brandwatch_01['event'] = 'Social Media'
 
         # Now dropping the unnecessary columns
         brandwatch_01.drop(columns=['sen_vol', 'cumulative_sen_vol',
@@ -154,7 +155,7 @@ class BwVegaVisual1(PandasSimpleView):
         # Part 2: Cline Center Dataset
 
         # Part 3: Event Timeline Dataset
-        return a
+        return brandwatch
 
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual1.write_data(self)
