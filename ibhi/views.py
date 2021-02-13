@@ -139,11 +139,23 @@ class BwVegaVisual1(PandasSimpleView):
         # Inspiration:
         # https://school.stockcharts.com/doku.php?id=technical_indicators:vwap_intraday
         brandwatch_01['bw_vwas'] = brandwatch_01['cumulative_sen_vol'] / brandwatch_01['cumulative_vol']
-        brandwatch_01['event'] = 'Social Media'
 
         # Now dropping the unnecessary columns
         brandwatch_01.drop(columns=['sen_vol', 'cumulative_sen_vol',
                                     'cumulative_vol'], inplace=True)
+        brandwatch_01.rename(columns={'days': 'date'}, inplace=True)
+
+        # Melting the columns
+        brandwatch_01 = pd.melt(brandwatch_01, id_vars=["date"],
+                                value_vars=["positive", "neutral", "negative",
+                                            "volume", "bw_net_senti_0_100",
+                                            "bw_std_vol_0_20", "bw_vwas"],
+                                var_name="attributes", value_name="values")
+
+        # Changing the datatype of attributes from 'str' to 'category'
+        # The dataset brandwatch_01 will consume only 1/5 times of the memory than the original
+        brandwatch_01["attributes"] = brandwatch_01["attributes"].astype("category")
+
         return brandwatch_01
 
 
