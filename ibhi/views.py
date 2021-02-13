@@ -29,8 +29,8 @@ volume_main = pd.DataFrame(BwVolume.objects.all().values())
 volume_main.drop(columns=['id'], inplace=True)
 
 # 5. BwSentiments object
-sentiments_main = pd.DataFrame(BwSentiments.objects.all().values())
-sentiments_main.drop(columns=['id'], inplace=True)
+#sentiments_main = pd.DataFrame(BwSentiments.objects.all().values())
+#sentiments_main.drop(columns=['id'], inplace=True)
 
 # 6. BwNetSentiment object
 net_sentiments_main = pd.DataFrame(BwNetSentiment.objects.all().values())

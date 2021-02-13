@@ -32,10 +32,32 @@ class BwEmotions(models.Model):
     sadness = models.IntegerField(null=True, blank=True, verbose_name="Sadness", default=0)
 
 class BwSentiments(models.Model):
+    """
+    The net sentiment is not normalized here.
+    Normalize it on the scale of 0 to 100.
+    """
     days = models.DateField(null=True, blank=True)
     positive = models.IntegerField(null=True, blank=True, default=0)
     neutral = models.IntegerField(null=True, blank=True, default=0)
     negative = models.IntegerField(null=True, blank=True, default=0)
+    net_sentiment = models.FloatField(null=True, blank=True, verbose_name="Net Sentiment")
+
+    def save(self):
+        """
+        Avoid the error:
+        ZeroDivisionError: division by zero
+        :return:
+        """
+        difference = self.positive - self.negative
+        sum_1 = self.positive + self.negative
+        if difference != 0:
+            self.net_sentiment = difference/sum_1
+        else:
+            self.net_sentiment = 0
+
+        super(BwSentiments, self).save()
+
+
 
 class BwVolume(models.Model):
     days = models.DateField(null=True, blank=True)
@@ -50,6 +72,10 @@ class BwActivityTime(models.Model):
     time_vol = models.BigIntegerField("Volume by Time", null=True, blank=True)
 
 class ClineCenter(models.Model):
+    """
+    The net sentiment is not normalized over here.
+    Do it on a scale of 0 to 100.
+    """
     publication_date = models.TextField(null=True, blank=True)
     publication_date_only = models.DateField(null=True, blank=True)
     publication_time = models.TimeField(null=True, blank=True)
@@ -84,6 +110,7 @@ class ClineCenter(models.Model):
     inquirer_neg = models.FloatField(null=True, blank=True)
     bing_liu_neg = models.FloatField(null=True, blank=True)
     bing_liu_pos = models.FloatField(null=True, blank=True)
+    bing_liu_net_sentiment = models.FloatField(null=True, blank=True, verbose_name="Bing Liu Net Sentiment")
     anew_valence = models.FloatField(null=True, blank=True)
     anew_arousal = models.FloatField(null=True, blank=True)
     anew_dominance = models.FloatField(null=True, blank=True)
@@ -99,9 +126,28 @@ class ClineCenter(models.Model):
     country = models.TextField(null=True, blank=True)
 
     def save(self):
+        """
+        Avoid:
+        ZeroDivisionError: division by zero
+
+        As some rows are having no values, they are NoneType,
+        thus I'm ignoring them.
+        :return:
+        """
         date = pd.to_datetime(self.publication_date)
         self.publication_date_only = date.date()
         self.publication_time = date.time()
+
+        if self.bing_liu_pos != None:
+            difference = self.bing_liu_pos - self.bing_liu_neg
+            sum_1 = self.bing_liu_pos + self.bing_liu_neg
+
+            if difference != 0:
+                self.bing_liu_net_sentiment = difference/sum_1
+            else:
+                self.bing_liu_net_sentiment = 0
+        else:
+            pass
 
         super(ClineCenter, self).save()
 

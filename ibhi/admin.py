@@ -77,7 +77,7 @@ class BwSentimentsResource(resources.ModelResource):
 
 
 class BwSentimentsAdmin(ImportExportModelAdmin):
-    list_display = ('days', 'positive', 'neutral', 'negative')
+    list_display = ('days', 'net_sentiment', 'positive', 'neutral', 'negative')
     resource_class = BwSentimentsResource
 
 admin.site.register(BwSentiments, BwSentimentsAdmin)
@@ -124,7 +124,7 @@ class ClineCenterResource(resources.ModelResource):
 
 class ClineCenterAdmin(ImportExportModelAdmin):
     list_display = ('publication_date', 'publication_date_only', 'publication_time',
-                    'article_id', 'aid',
+                    'bing_liu_net_sentiment', 'article_id', 'aid',
                     'source_name', 'source_location', 'url',
                     'title', 'source_host', 'publisher',
                     'pronouns', 'other_metadata', 'original_language',
