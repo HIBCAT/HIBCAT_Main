@@ -140,11 +140,10 @@ class ClineCenter(models.Model):
         self.publication_time = date.time()
 
         if self.bing_liu_pos != None:
-            difference = self.bing_liu_pos - self.bing_liu_neg
-            sum_1 = self.bing_liu_pos + self.bing_liu_neg
-
-            if difference != 0:
-                self.bing_liu_net_sentiment = difference/sum_1
+            if self.bing_liu_pos > self.bing_liu_neg:
+                self.bing_liu_net_sentiment = 1
+            elif self.bing_liu_neg > self.bing_liu_pos:
+                self.bing_liu_net_sentiment = -1
             else:
                 self.bing_liu_net_sentiment = 0
         else:
