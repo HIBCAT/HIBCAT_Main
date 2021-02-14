@@ -17,6 +17,8 @@ feature_1_bw = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive'
                                                               'negative', 'net_sentiment','volume'))
 feature_1_cc = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment'))
 
+feature_1_tl = pd.DataFrame(CCEventTimeline.objects.all().values('date', 'end_date', 'event_type', 'description'))
+
 
 
 # 1. BwActivityDay object
@@ -323,19 +325,39 @@ class BwVegaVisual1(PandasSimpleView):
 
         return clinecenter_02
 
+    def timeline_df(self):
+        # Part 3: Timeline Data
+        # Melting will be problematic. So I have to restructure the data.
+        # 1. Rename the start_date = date
+        # 2. Add empty columns 'attributes' and 'values'
+        timeline_01 = feature_1_tl.copy(deep=True)
+        timeline_01['date'] = pd.to_datetime(timeline_01['date'])
+        timeline_01['end_date'] = pd.to_datetime(timeline_01['end_date'])
+        timeline_01['end_date'] =  timeline_01['end_date'].dt.date
+        timeline_01['attributes'] = [None] * len(timeline_01)
+        timeline_01['values'] = [None] * len(timeline_01)
+        return timeline_01
+
     def write_data(self):
         # Now below is the full code for the part one of the Feature one:
         # Part 1: BrandWatch Dataset
         brand_watch = BwVegaVisual1.brand_watch_df(self)
+        brand_watch['end_date'] = [None] * len(brand_watch)
+        brand_watch['event_type'] = [None] * len(brand_watch)
+        brand_watch['description'] = [None] * len(brand_watch)
 
         # Part 2: Cline Center Dataset
         cline_center = BwVegaVisual1.cline_center_df(self)
+        cline_center['end_date'] = [None] * len(cline_center)
+        cline_center['event_type'] = [None] * len(cline_center)
+        cline_center['description'] = [None] * len(cline_center)
 
         # Part 3: Event Timeline Dataset
+        timeline = BwVegaVisual1.timeline_df(self)
 
         # Part 4: Merging the three datasets
-        feature_1_dataset = pd.concat([brand_watch, cline_center])
-        return feature_1_dataset.shape
+        feature_1_dataset = pd.concat([timeline, brand_watch, cline_center])
+        return feature_1_dataset
 
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual1.write_data(self)

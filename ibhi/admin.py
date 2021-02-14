@@ -175,7 +175,7 @@ class CCEventTimelineResource(resources.ModelResource):
         model = CCEventTimeline
 
 class CCEventTimelineAdmin(ImportExportModelAdmin):
-    list_display = ('start_date', 'end_date',
+    list_display = ('date', 'end_date',
                     'event_type', 'description')
     resource_class = CCEventTimelineResource
 

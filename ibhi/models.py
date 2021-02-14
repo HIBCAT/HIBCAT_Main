@@ -173,7 +173,7 @@ class CCEventTimeline(models.Model):
         ('Negative Shock - Planned Activity', 'Negative Shock - Planned Activity'),
         ('Negative Shock - Unplanned Activity', 'Negative Shock - Unplanned Activity'),
     ]
-    start_date = models.DateField(null=True, blank=True, verbose_name="Event's Start Date")
+    date = models.DateField(null=True, blank=True, verbose_name="Event's Start Date")
     end_date = models.DateField(null=True, blank=True, verbose_name="Event's End Date")
     event_type = models.CharField(max_length=50, choices=MEDIA_TYPE_CHOICES, default='Positive Shock - Planned Activity', verbose_name="Event Type")
     description = models.TextField(null=True, blank=True, verbose_name="Event Description")
