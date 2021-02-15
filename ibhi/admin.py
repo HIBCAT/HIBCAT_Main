@@ -7,6 +7,9 @@ from .models import BwGeography, Gender, BwContentSources, \
     ClineCenter, YahooStockData, ShortInterest, \
     CCEventTimeline
 
+admin.site.site_header = "HIBCAT Admin"
+admin.site.site_title = "HIBCAT Admin Portal"
+admin.site.index_title = "Welcome to HIBCAT Researcher Portal"
 
 # Register your models here.
 # 1
