@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <title>
+
+        {% block title %}
+
+        {% endblock %}
+
+    </title>
+
+    <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
+
+    <link href="{% static 'ibhi/assets/css/toolkit-light.css' %}" rel="stylesheet">
+
+
+    <link href="{% static 'ibhi/assets/css/application.css' %}" rel="stylesheet">
+    <!--Vega-lite -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.17.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.17.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.12.2"></script>
+
+    <style media="screen">
+        /* Add space between Vega-Embed links  */
+        .vega-actions a {
+            margin-right: 5px;
+        }
+    </style>
+
+    <style>
+        /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+        /* this chunk of css is not part of the toolkit :) */
+        body {
+            width: 1px;
+            min-width: 100%;
+            *width: 100%;
+        }
+    </style>
+</head>
+
+
+<body>
+<main>
+
+
+    <div class="with-iconav">
+
+        <nav class="iconav">
+            <!--Note for self(Mohit): Replace the href to the link where you want to direct the traffic to.-->
+            <a class="iconav-brand" href="{% url 'overview_urlpattern' %}">
+              <span style="padding-right:3px; padding-top: 3px; display: inline-block;">
+                  <img src="{% static 'ibhi/assets/img/UOfI_logo.png' %}" height="50">
+              </span> </a>
+            <div class="iconav-slider">
+                <ul class="nav nav-pills iconav-nav flex-md-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'overview_urlpattern' %}" title="Overview" data-toggle="tooltip"
+                           data-placement="right" data-container="body">
+                            <span class="icon icon-home"></span>
+                            <small class="iconav-nav-label hidden-md-up">Overview</small>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'fluid_report_urlpattern' %}" title="Fluid layout" data-toggle="tooltip"
+                           data-placement="right" data-container="body">
+                            <span class="icon icon-globe"></span>
+                            <small class="iconav-nav-label hidden-md-up">Fluid layout</small>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'icon_report_urlpattern' %}" title="Icon-nav"
+                           data-toggle="tooltip" data-placement="right" data-container="body">
+                            <span class="icon icon-area-graph"></span>
+                            <small class="iconav-nav-label hidden-md-up">Icon nav</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+        <div class="container">
+            <div class="dashhead">
+                <div class="dashhead-titles">
+                    <h6 class="dashhead-subtitle">Dashboards</h6>
+                    <h3 class="dashhead-title">Overview</h3>
+                </div>
+
+
+            </div>
+
+
+            <hr class="mt-0 mb-5">
+
+            {% block vis_div %}
+
+                <!--This will contain the header div-->
+
+
+            {% endblock %}
+
+            <script>
+
+                {% block script %}
+
+                {% endblock %}
+
+            </script>
+
+        </div>
+    </div>
+
+
+    <script src="{% static 'ibhi/assets/js/jquery.min.js' %}"></script>
+    <script src="{% static 'ibhi/assets/js/tether.min.js' %}"></script>
+    <script src="{% static 'ibhi/assets/js/chart.js' %}"></script>
+    <script src="{% static 'ibhi/assets/js/tablesorter.min.js' %}"></script>
+    <script src="{% static 'ibhi/assets/js/toolkit.js' %}"></script>
+    <script src="{% static 'ibhi/assets/js/application.js' %}"></script>
+    <script>
+        // execute/clear BS loaders for docs
+        $(function () {
+            while (window.BS && window.BS.loader && window.BS.loader.length) {
+                (window.BS.loader.pop())()
+            }
+        })
+    </script>
+</main>
+</body>
+</html>
+

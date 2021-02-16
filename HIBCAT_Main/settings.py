@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'import_export',
     'ibhi',
 ]
 
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'HIBCAT_Main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'ibhi/templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -77,11 +78,14 @@ WSGI_APPLICATION = 'HIBCAT_Main.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'hibcat_ibhi',
+        'USER': 'mohitg2',
+        'PASSWORD': 'HIBCATmohitg2',
+        'HOST' : 'database-1.csmnwlpezarn.us-east-2.rds.amazonaws.com',
+        'PORT' : '5432'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -120,3 +124,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000000
