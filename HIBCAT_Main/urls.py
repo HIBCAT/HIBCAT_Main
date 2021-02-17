@@ -15,8 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView, TemplateView
 
 urlpatterns = [
+
+    # Default page
+    path('', RedirectView.as_view(
+        pattern_name='home_urlpattern',
+        permanent=False
+    )),
+
+    # Home page
+    path('home/', TemplateView.as_view(
+        template_name='ibhi/01_layout_overview.html'),
+         name='home_urlpattern'
+         ),
+
     path('admin/', admin.site.urls),
     path('', include('ibhi.urls')),
 ]
