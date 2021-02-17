@@ -25,6 +25,8 @@ SECRET_KEY = 'xi2z#m(1=i5bp93y*^l-iqu(ei9#$kh+ac=)z=4=m5y!^jlq7k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# If DEBUG = TRUE, then it will not check the
+# allowed host list in the ALLOWED_HOSTS
 ALLOWED_HOSTS = []
 
 
@@ -56,7 +58,7 @@ ROOT_URLCONF = 'HIBCAT_Main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'ibhi/templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'ibhi/../../ibhi/templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -124,6 +126,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000000

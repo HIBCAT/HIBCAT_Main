@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView, TemplateView
+from ibhi.views import OverviewLayoutView
 
 urlpatterns = [
 
@@ -26,10 +27,9 @@ urlpatterns = [
     )),
 
     # Home page
-    path('home/', TemplateView.as_view(
-        template_name='ibhi/01_layout_overview.html'),
-         name='home_urlpattern'
-         ),
+    path('overview_report/',
+         OverviewLayoutView.as_view(),
+         name='home_urlpattern'),
 
     path('admin/', admin.site.urls),
     path('', include('ibhi.urls')),
