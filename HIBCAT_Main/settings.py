@@ -23,11 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'xi2z#m(1=i5bp93y*^l-iqu(ei9#$kh+ac=)z=4=m5y!^jlq7k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # If DEBUG = TRUE, then it will not check the
 # allowed host list in the ALLOWED_HOSTS
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '120.0.0.1', '3.239.249.80']
 
 
 # Application definition
@@ -126,6 +126,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '../static')
+STATIC_ROOT = os.path.join(BASE_DIR, '../PycharmProjects/HIBCAT_Main/../static')
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000000
