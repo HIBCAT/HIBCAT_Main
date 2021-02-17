@@ -1,5 +1,6 @@
-{% load static %}
 {% extends 'ibhi/03_layout_icon.html' %}
+{% load static %}
+
 
 {% block title %}
 Report
@@ -21,7 +22,7 @@ Report
 
         var vlSpec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-        "data": {"url": "http://3.239.249.80:8000/visual_1.csv"},
+        "data": {"url": "http://127.0.0.1:8000/visual_1.csv"},
         "vconcat": [
             <!--Graph 1-->
             {

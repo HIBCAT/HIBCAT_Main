@@ -11,13 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import mimetypes
-
-# As the css styles were not loading up, I am adding the below command.
-# I got to learn the below one line code from the below link:
-# https://forum.djangoproject.com/t/css-wont-load/2108/11
-# According to it, my python is missing the mimetype files
-mimetypes.add_type("text/css", ".css", True)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,11 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'xi2z#m(1=i5bp93y*^l-iqu(ei9#$kh+ac=)z=4=m5y!^jlq7k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # If DEBUG = TRUE, then it will not check the
 # allowed host list in the ALLOWED_HOSTS
-ALLOWED_HOSTS = ['localhost', '120.0.0.1', '3.239.249.80']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -133,7 +126,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATIC_ROOT = os.path.join(BASE_DIR, '../PycharmProjects/HIBCAT_Main/../static')
+STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000000
