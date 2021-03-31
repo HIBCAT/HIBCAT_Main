@@ -46,7 +46,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # Uncomment for production
     'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -132,4 +134,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000000
 
+# Uncomment for the production environment
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
