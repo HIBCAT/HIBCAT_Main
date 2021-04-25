@@ -4,26 +4,31 @@ import pandas as pd
 # 1. Creating the database models over here.
 
 class BwGeography(models.Model):
+    brand = models.TextField(null=True, blank=True)
     countries = models.TextField(null=True, blank=True)
     geo_vol = models.IntegerField(null=True, blank=True, verbose_name="Geographic Volume")
 
 class Gender(models.Model):
     days = models.DateField(null=True, blank=True)
+    brand = models.TextField(null=True, blank=True)
     male = models.IntegerField(null=True, blank=True, default=0)
     female = models.IntegerField(null=True, blank=True, default=0)
 
 class BwContentSources(models.Model):
     days = models.DateField(null=True, blank=True)
+    brand = models.TextField(null=True, blank=True)
     blogs = models.IntegerField(null=True, blank=True, verbose_name="Blogs", default=0)
     twitter = models.IntegerField(null=True, blank=True, verbose_name="Twitter", default=0)
     reddit = models.IntegerField(null=True, blank=True, verbose_name="Reddit", default=0)
 
 class BwNetSentiment(models.Model):
     days = models.DateField(null=True, blank=True)
+    brand = models.TextField(null=True, blank=True)
     net_sent_vol = models.FloatField(null=True, blank=True, verbose_name="Net Sentiment Volume")
 
 class BwEmotions(models.Model):
     days = models.DateField(null=True, blank=True)
+    brand = models.TextField(null=True, blank=True)
     anger = models.IntegerField(null=True, blank=True, verbose_name="Anger", default=0)
     fear = models.IntegerField(null=True, blank=True, verbose_name="Fear", default=0)
     disgust = models.IntegerField(null=True, blank=True, verbose_name="Disgust", default=0)
@@ -37,6 +42,7 @@ class BwSentiments(models.Model):
     Normalize it on the scale of 0 to 100.
     """
     days = models.DateField(null=True, blank=True)
+    brand = models.TextField(null=True, blank=True)
     positive = models.IntegerField(null=True, blank=True, default=0)
     neutral = models.IntegerField(null=True, blank=True, default=0)
     negative = models.IntegerField(null=True, blank=True, default=0)
@@ -62,14 +68,17 @@ class BwSentiments(models.Model):
 
 class BwVolume(models.Model):
     days = models.DateField(null=True, blank=True)
+    brand = models.TextField(null=True, blank=True)
     volume = models.IntegerField(null=True, blank=True, verbose_name="Activity Volume")
 
 class BwActivityDay(models.Model):
     dayOfWeek = models.IntegerField(null=True, blank=True)
+    brand = models.TextField(null=True, blank=True)
     day_vol = models.BigIntegerField("Volume by Day", null=True, blank=True)
 
 class BwActivityTime(models.Model):
     hourOfDay = models.TimeField("Time", null=True, blank=True)
+    brand = models.TextField(null=True, blank=True)
     time_vol = models.BigIntegerField("Volume by Time", null=True, blank=True)
 
 class ClineCenter(models.Model):
@@ -78,6 +87,7 @@ class ClineCenter(models.Model):
     Do it on a scale of 0 to 100.
     """
     publication_date = models.TextField(null=True, blank=True)
+    brand = models.TextField(null=True, blank=True)
     publication_date_only = models.DateField(null=True, blank=True)
     publication_time = models.TimeField(null=True, blank=True)
     article_id = models.CharField(null=True, blank=True, verbose_name="_id", max_length=100)
@@ -154,6 +164,7 @@ class ClineCenter(models.Model):
 
 class YahooStockData(models.Model):
     date = models.DateField(null=True, blank=True, verbose_name="Date")
+    brand = models.TextField(null=True, blank=True)
     open = models.FloatField(null=True, blank=True, verbose_name="Open")
     high = models.FloatField(null=True, blank=True, verbose_name="High")
     low = models.FloatField(null=True, blank=True, verbose_name="Low")
@@ -162,6 +173,7 @@ class YahooStockData(models.Model):
 
 class ShortInterest(models.Model):
     date = models.ForeignKey(YahooStockData, related_name="shortinterests", on_delete=models.PROTECT)
+    brand = models.TextField(null=True, blank=True)
     short_volume = models.IntegerField(null=True, blank=True)
     total_volume = models.IntegerField(null=True, blank=True)
     short_volume_ratio = models.FloatField(null=True, blank=True)
@@ -173,6 +185,7 @@ class CCEventTimeline(models.Model):
         ('Negative Shock - Planned Activity', 'Negative Shock - Planned Activity'),
         ('Negative Shock - Unplanned Activity', 'Negative Shock - Unplanned Activity'),
     ]
+    brand = models.TextField(null=True, blank=True)
     date = models.DateField(null=True, blank=True, verbose_name="Event's Start Date")
     end_date = models.DateField(null=True, blank=True, verbose_name="Event's End Date")
     event_type = models.CharField(max_length=50, choices=MEDIA_TYPE_CHOICES, default='Positive Shock - Planned Activity', verbose_name="Event Type")

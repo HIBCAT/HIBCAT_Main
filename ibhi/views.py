@@ -15,50 +15,15 @@ from .models import (BwActivityTime, BwActivityDay, BwGeography,
 # Feature 1
 feature_1_bw = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral',
                                                               'negative', 'net_sentiment','volume'))
+
 feature_1_cc = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment'))
+feature_1_cc_2 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'title'))
+
 
 feature_1_tl = pd.DataFrame(CCEventTimeline.objects.all().values('date', 'end_date', 'event_type', 'description'))
 
 
-
-# 1. BwActivityDay object
-#day_wise_vol_main = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment'))
-#day_wise_vol_main.drop(columns=['id'], inplace=True)
-
-# 2. BwActivityTime object
-time_wise_vol_main = pd.DataFrame(BwActivityTime.objects.all().values())
-time_wise_vol_main.drop(columns=['id'], inplace=True)
-
-# 3. BwGeography object
-geo_vol_main = pd.DataFrame(BwGeography.objects.all().values())
-geo_vol_main.drop(columns=['id'], inplace=True)
-
-# 4. BwVolume object
-volume_main = pd.DataFrame(BwVolume.objects.all().values())
-volume_main.drop(columns=['id'], inplace=True)
-
-# 5. BwSentiments object
-#sentiments_main = pd.DataFrame(BwSentiments.objects.all().values())
-#sentiments_main.drop(columns=['id'], inplace=True)
-
-# 6. BwNetSentiment object
-net_sentiments_main = pd.DataFrame(BwNetSentiment.objects.all().values())
-net_sentiments_main.drop(columns=['id'], inplace=True)
-
-# 7. BwEmotions object
-emotions_main = pd.DataFrame(BwEmotions.objects.all().values())
-emotions_main.drop(columns=['id'], inplace=True)
-
-# 8. Gender object
-gender_main = pd.DataFrame(Gender.objects.all().values())
-gender_main.drop(columns=['id'], inplace=True)
-
-# 9. BwContentSources object
-content_sources_main = pd.DataFrame(BwContentSources.objects.all().values())
-content_sources_main.drop(columns=['id'], inplace=True)
-
-
-# Visual 1
+# Feature 1
 class BwVegaVisual1(PandasSimpleView):
 
     def brand_watch_df(self):
@@ -161,6 +126,12 @@ class BwVegaVisual1(PandasSimpleView):
         # Changing the datatype of attributes from 'str' to 'category'
         # The dataset brandwatch_01 will consume only 1/5 times of the memory than the original
         brandwatch_01["attributes"] = brandwatch_01["attributes"].astype("category")
+
+        # 5 Adding extra columns so that timeline dataset can be concatenated easily
+
+        brandwatch_01['end_date'] = [None] * len(brandwatch_01)
+        brandwatch_01['event_type'] = [None] * len(brandwatch_01)
+        brandwatch_01['description'] = [None] * len(brandwatch_01)
 
         return brandwatch_01
 
@@ -323,7 +294,27 @@ class BwVegaVisual1(PandasSimpleView):
                                              "cc_std_vol_0_20", "cc_vwas"],
                                  var_name="attributes", value_name="values")
 
-        return clinecenter_02
+        # 3 Add the news article data over here.
+        # 3.1 Creating another field for news article title.
+        clinecenter_03 = feature_1_cc_2.copy(deep=True)
+        clinecenter_03['publication_date_only'] = pd.to_datetime(clinecenter_03['publication_date_only'])
+        clinecenter_03.sort_values(by='publication_date_only', ascending=False, inplace=True)
+        clinecenter_03.reset_index(inplace=True, drop=True)
+        clinecenter_03.rename(columns={'publication_date_only': 'date', 'title': 'Title'}, inplace=True)
+
+        # 3.2 Now melting the columns
+        clinecenter_03 = pd.melt(clinecenter_03, id_vars=["date"],
+                                 value_vars=["Title"],
+                                 var_name="attributes", value_name="values")
+
+        # 3.3 Now appending the column melted in the step # 2.8 and # 3.2
+        clinecenter_04 = clinecenter_02.append(clinecenter_03, ignore_index=True)
+
+        # 3.4 Adding extra columns so that timeline dataset can be concatenated easily
+        clinecenter_04['end_date'] = [None] * len(clinecenter_04)
+        clinecenter_04['event_type'] = [None] * len(clinecenter_04)
+        clinecenter_04['description'] = [None] * len(clinecenter_04)
+        return clinecenter_04
 
     def timeline_df(self):
         # Part 3: Timeline Data
@@ -340,115 +331,242 @@ class BwVegaVisual1(PandasSimpleView):
 
     def write_data(self):
         # Now below is the full code for the part one of the Feature one:
-        # Part 1: BrandWatch Dataset
-        brand_watch = BwVegaVisual1.brand_watch_df(self)
-        brand_watch['end_date'] = [None] * len(brand_watch)
-        brand_watch['event_type'] = [None] * len(brand_watch)
-        brand_watch['description'] = [None] * len(brand_watch)
-
-        # Part 2: Cline Center Dataset
-        cline_center = BwVegaVisual1.cline_center_df(self)
-        cline_center['end_date'] = [None] * len(cline_center)
-        cline_center['event_type'] = [None] * len(cline_center)
-        cline_center['description'] = [None] * len(cline_center)
-
-        # Part 3: Event Timeline Dataset
-        timeline = BwVegaVisual1.timeline_df(self)
-
-        # Part 4: Merging the three datasets
-        feature_1_dataset = pd.concat([timeline, brand_watch, cline_center])
-        return feature_1_dataset
+        return pd.concat([BwVegaVisual1.timeline_df(self),
+                          BwVegaVisual1.brand_watch_df(self),
+                          BwVegaVisual1.cline_center_df(self)])
 
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual1.write_data(self)
 
-# Visual 2
+
+# Feature 2
 class BwVegaVisual2(PandasSimpleView):
 
+    def bw_cc_df(self):
+
+        # Preparing the clinecenter data first.
+
+        # Part 1:
+        f2_clinecenter_01 = feature_1_cc.copy(deep=True)
+        f2_clinecenter_01['publication_date_only'] = pd.to_datetime(f2_clinecenter_01['publication_date_only'])
+        f2_clinecenter_01.sort_values(by='publication_date_only', ascending=False, inplace=True)
+        f2_clinecenter_01.reset_index(inplace=True, drop=True)
+
+        # Now creating the main dataframe : clinecenter_02
+        f2_clinecenter_02 = pd.DataFrame({"date":
+                                              list(set(f2_clinecenter_01['publication_date_only']))
+                                          })
+        f2_clinecenter_02['date'] = pd.to_datetime(f2_clinecenter_02['date'])
+        f2_clinecenter_02.sort_values(by='date', ascending=False, inplace=True)
+        f2_clinecenter_02['cc_positive'] = 0
+        f2_clinecenter_02['cc_negative'] = 0
+        f2_clinecenter_02['cc_neutral'] = 0
+        f2_clinecenter_02.reset_index(inplace=True, drop=True)
+
+        # Now calculating the volume of the posts:
+        # I will be ignoring the None type values in bing_liu_net_sentiment
+
+        unique_index = pd.Index(f2_clinecenter_02['date'])
+
+        for i in range(len(f2_clinecenter_01)):
+
+            # Finding the matching index of dates in the main dataframes indexes
+            index_match = unique_index.get_loc(f2_clinecenter_01['publication_date_only'][i])
+
+            if f2_clinecenter_01['bing_liu_net_sentiment'][i] == 1:
+                f2_clinecenter_02['cc_positive'][index_match] += 1
+            elif f2_clinecenter_01['bing_liu_net_sentiment'][i] == 0:
+                f2_clinecenter_02['cc_neutral'][index_match] += 1
+            elif f2_clinecenter_01['bing_liu_net_sentiment'][i] < 0:
+                f2_clinecenter_02['cc_negative'][index_match] += 1
+            else:
+                pass
+
+        f2_clinecenter_02['cc_volume'] = f2_clinecenter_02['cc_negative'] + f2_clinecenter_02['cc_neutral'] + \
+                                         f2_clinecenter_02['cc_positive']
+
+        # Part 2: Preparing BrandWatch Dataset
+
+        f2_brandwatch_01 = feature_1_bw.copy(deep=True)
+        f2_brandwatch_01.drop(columns=['net_sentiment'], inplace=True)
+        f2_brandwatch_01['days'] = pd.to_datetime(f2_brandwatch_01['days'])
+        f2_brandwatch_01.sort_values(by='days', ascending=False, inplace=True)
+        f2_brandwatch_01.reset_index(inplace=True, drop=True)
+        f2_brandwatch_01.rename(columns={'days': 'date',
+                                         'positive': 'bw_positive',
+                                         'neutral': 'bw_neutral',
+                                         'negative': 'bw_negative',
+                                         'volume': 'bw_volume'}, inplace=True)
+
+        # Part 3: Appending the datasets in part 1 and part 2:
+        f2_cc_bw = pd.merge(f2_brandwatch_01, f2_clinecenter_02, on="date", how="inner")
+
+        # Now filling the 3 month's moving average of all the columns
+
+        flag = len(f2_cc_bw) - 89
+
+        bw_3ma_positive = [None] * len(f2_cc_bw)
+        bw_3ma_negative = [None] * len(f2_cc_bw)
+        bw_3ma_neutral = [None] * len(f2_cc_bw)
+        bw_3ma_volume = [None] * len(f2_cc_bw)
+
+        cc_3ma_positive = [None] * len(f2_cc_bw)
+        cc_3ma_negative = [None] * len(f2_cc_bw)
+        cc_3ma_neutral = [None] * len(f2_cc_bw)
+        cc_3ma_volume = [None] * len(f2_cc_bw)
+
+        for i in range(len(f2_cc_bw)):
+            if i != flag:
+
+                bw_3ma_positive[i] = (sum(f2_cc_bw['bw_positive'][i:i + 90]) / 90)
+                bw_3ma_negative[i] = (sum(f2_cc_bw['bw_negative'][i:i + 90]) / 90)
+                bw_3ma_neutral[i] = (sum(f2_cc_bw['bw_neutral'][i:i + 90]) / 90)
+                bw_3ma_volume[i] = (sum(f2_cc_bw['bw_volume'][i:i + 90]) / 90)
+
+                cc_3ma_positive[i] = (sum(f2_cc_bw['cc_positive'][i:i + 90]) / 90)
+                cc_3ma_negative[i] = (sum(f2_cc_bw['cc_negative'][i:i + 90]) / 90)
+                cc_3ma_neutral[i] = (sum(f2_cc_bw['cc_neutral'][i:i + 90]) / 90)
+                cc_3ma_volume[i] = (sum(f2_cc_bw['cc_volume'][i:i + 90]) / 90)
+
+            else:
+                break
+
+        f2_cc_bw['bw_3ma_positive'] = bw_3ma_positive
+        f2_cc_bw['bw_3ma_negative'] = bw_3ma_negative
+        f2_cc_bw['bw_3ma_neutral'] = bw_3ma_neutral
+        f2_cc_bw['bw_3ma_volume'] = bw_3ma_volume
+
+        f2_cc_bw['cc_3ma_positive'] = cc_3ma_positive
+        f2_cc_bw['cc_3ma_negative'] = cc_3ma_negative
+        f2_cc_bw['cc_3ma_neutral'] = cc_3ma_neutral
+        f2_cc_bw['cc_3ma_volume'] = cc_3ma_volume
+
+        # Now normalizing all the columns on a scale of 0 to 100.
+        # Then standardizing all the normalized values.
+
+        f2_cc_bw['bw_std_positive'] = [None] * len(f2_cc_bw)
+        f2_cc_bw['bw_std_negative'] = [None] * len(f2_cc_bw)
+        f2_cc_bw['bw_std_neutral'] = [None] * len(f2_cc_bw)
+        f2_cc_bw['bw_std_volume'] = [None] * len(f2_cc_bw)
+
+        f2_cc_bw['cc_std_positive'] = [None] * len(f2_cc_bw)
+        f2_cc_bw['cc_std_negative'] = [None] * len(f2_cc_bw)
+        f2_cc_bw['cc_std_neutral'] = [None] * len(f2_cc_bw)
+        f2_cc_bw['cc_std_volume'] = [None] * len(f2_cc_bw)
+
+        columns = ['bw_positive', 'bw_neutral', 'bw_negative', 'bw_volume',
+                   'cc_positive', 'cc_negative', 'cc_neutral', 'cc_volume',
+
+                   'bw_3ma_positive', 'bw_3ma_neutral', 'bw_3ma_negative', 'bw_3ma_volume',
+                   'cc_3ma_positive', 'cc_3ma_negative', 'cc_3ma_neutral', 'cc_3ma_volume',
+                   ]
+
+        # Creating columns on the go
+        for i in columns:
+            # 1. Standardized volume
+            # x : value to be standardized
+            # bw_vol_mean = mean of the range
+            # bw_vol_std = standard deviation of the range
+
+            f2_cc_bw_mean = f2_cc_bw[i].mean()
+            f2_cc_bw_std = f2_cc_bw[i].std()
+            f2_cc_bw[f'{i}_std_0_100'] = (f2_cc_bw[i] - f2_cc_bw_mean) / f2_cc_bw_std
+
+            # 2. Normalizing the columns on a scale of 0 to 100.
+            # Normalization: (b-a) * [(x-y)/(z-y)] + a
+            # (a,b): Range of normalized score
+            # (0, 100)
+            # x : Value to be normalized
+            # y : Min value from the range
+            # z : Max value from the range
+
+            a = 0
+            b = 100
+            y = f2_cc_bw[f'{i}_std_0_100'].min()
+            z = f2_cc_bw[f'{i}_std_0_100'].max()
+            f2_cc_bw[f'{i}_std_0_100'] = (b - a) * ((f2_cc_bw[f'{i}_std_0_100'] - y) / (z - y)) + a
+            # For loop ends over here. Beware
+
+        # Now melt all the columns to get the final dataset for the feature 2
+        f2_cc_bw = pd.melt(f2_cc_bw, id_vars=["date"],
+                              value_vars=['bw_positive', 'bw_neutral', 'bw_negative', 'bw_volume',
+                                           'cc_positive', 'cc_negative', 'cc_neutral', 'cc_volume',
+                                           'bw_3ma_positive', 'bw_3ma_negative', 'bw_3ma_neutral', 'bw_3ma_volume',
+                                           'cc_3ma_positive', 'cc_3ma_negative', 'cc_3ma_neutral', 'cc_3ma_volume',
+                                           'bw_std_positive', 'bw_std_negative', 'bw_std_neutral', 'bw_std_volume',
+                                           'cc_std_positive', 'cc_std_negative', 'cc_std_neutral', 'cc_std_volume',
+                                           'bw_positive_std_0_100', 'bw_neutral_std_0_100',
+                                           'bw_negative_std_0_100', 'bw_volume_std_0_100', 'cc_positive_std_0_100',
+                                           'cc_negative_std_0_100', 'cc_neutral_std_0_100', 'cc_volume_std_0_100',
+                                           'bw_3ma_positive_std_0_100', 'bw_3ma_neutral_std_0_100',
+                                           'bw_3ma_negative_std_0_100', 'bw_3ma_volume_std_0_100',
+                                           'cc_3ma_positive_std_0_100', 'cc_3ma_negative_std_0_100',
+                                           'cc_3ma_neutral_std_0_100', 'cc_3ma_volume_std_0_100'], var_name="attributes", value_name="values")
+
+        f2_cc_bw.dropna(inplace=True)
+        return f2_cc_bw
+
     def write_data(self):
-        df = time_wise_vol_main.copy(deep=True)
-        return df
+        return BwVegaVisual2.bw_cc_df(self)
 
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual2.write_data(self)
 
-# Visual 3
+# Feature 3
 class BwVegaVisual3(PandasSimpleView):
 
+    def recovery_cost(self):
+
+        # Part 1: Downloading the simple data
+        f2_brandwatch_01 = feature_1_bw.copy(deep=True)
+        f2_brandwatch_01.drop(columns=['net_sentiment'], inplace=True)
+        f2_brandwatch_01['days'] = pd.to_datetime(f2_brandwatch_01['days'])
+        f2_brandwatch_01.sort_values(by='days', ascending=False, inplace=True)
+        f2_brandwatch_01.reset_index(inplace=True, drop=True)
+        f2_brandwatch_01.rename(columns={'days': 'date',
+                                         'positive': 'bw_positive',
+                                         'neutral': 'bw_neutral',
+                                         'negative': 'bw_negative',
+                                         'volume': 'bw_volume'}, inplace=True)
+
+        # According to the research done on @anindianpoet instagram account:
+        # 5784 people are reached for every USD 1 spend.
+        # Out of those 5784 people, a median of 3.38 % react in terms of positive+negative reactions
+
+        # According to negative bias theory, for every negative comment, a person has to hear five positive comments
+        # to neutralize the negative effect.
+        # This 'pos_reach required represents the number of reactions we will require. It is
+        # 3.38 % of the total people reached.
+        f2_brandwatch_01['pos_reach_req'] = f2_brandwatch_01['bw_negative'] * 5
+
+        # Out of 100 people reached, how many people react positively or negatively
+        median_reaction = 3.38
+        f2_brandwatch_01['total_reach_req'] = (f2_brandwatch_01['pos_reach_req']*100)/median_reaction
+
+        # Dividing the people reached per dollar to know the investment required per day
+        people_per_usd = 5784
+        f2_brandwatch_01['investment_estimate'] = f2_brandwatch_01['total_reach_req']/people_per_usd
+
+        f2_brandwatch_01.drop(columns=['pos_reach_req', 'total_reach_req'], inplace=True)
+
+        return f2_brandwatch_01
+
+
     def write_data(self):
-        df = geo_vol_main.copy(deep=True)
-        return df
+        return BwVegaVisual3.recovery_cost(self)
 
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual3.write_data(self)
 
-# Visual 4
-class BwVegaVisual4(PandasSimpleView):
 
-    def write_data(self):
-        volume = volume_main.copy(deep=True)
-        sentiments = sentiments_main.copy(deep=True)
-        net_sentiments = net_sentiments_main.copy(deep=True)
-        emotions = emotions_main.copy(deep=True)
-        content_sources = content_sources_main.copy(deep=True)
-        gender = gender_main.copy(deep=True)
-
-        data_frame = [volume, sentiments, net_sentiments,
-                      emotions, content_sources, gender]
-
-        df_merged = reduce(lambda left, right: pd.merge(left, right, on=['days'],
-                                                        how='outer'), data_frame).fillna('void')
-
-        columns = ['volume', 'positive', 'neutral', 'negative', 'net_sent_vol',
-                   'anger', 'fear', 'disgust', 'joy', 'surprise', 'sadness', "male",
-                   "female", "blogs", "twitter", "reddit"]
-
-        df_melted = pd.melt(df_merged, id_vars=['days'],
-                            value_vars=columns)
-
-        return df_melted
-
-    def get_data(self, request, *args, **kwargs):
-        return BwVegaVisual4.write_data(self)
-
-
-
-class IBHITestView(View):
-
-    def get(self, request):
-
-        return render(request,
-                      'ibhi/test.html',
-                      {}
-                      )
-
-class OverviewLayoutView(View):
-
-    def get(self, request):
-
-        return render(request,
-                      'ibhi/01_report.html',
-                      {}
-                      )
 
 class FluidLayoutView(View):
 
     def get(self, request):
-
-
         return render(request,
                       'ibhi/02_report.html',
                       {}
                       )
 
-class IconLayoutView(View):
-
-    def get(self, request):
-
-
-        return render(request,
-                      'ibhi/03_report.html',
-                      {}
-                      )
 
 
