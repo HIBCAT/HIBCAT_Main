@@ -44,6 +44,7 @@
             min-width: 100%;
             *width: 100%;
         }
+
     </style>
 </head>
 
@@ -63,7 +64,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <!--Note for myself(Mohit): Insert the link to the home page.-->
-        <a class="navbar-brand" href="{%  url 'fluid_report_urlpattern' %}">
+        <a class="navbar-brand" href="{% url 'fluid_report_urlpattern' %}">
               <span style="padding-right:3px; padding-top: 3px; display: inline-block;">
                   <img src="{% static 'ibhi/assets/img/UOfI_logo.png' %}" height="50">
               </span>
@@ -84,22 +85,52 @@
     <div class="container-fluid container-fluid-spacious">
         <div class="dashhead mt-5">
 
-            <div class="dashhead-titles">
-                <h6 class="dashhead-subtitle">Dashboards</h6>
-                <h2 class="dashhead-title">Overview</h2>
-            </div>
+            <ul class="nav nav-pills nav-fill">
+                <li class="nav-item navbar-dark">
+                    <a class="nav-link btn-secondary active" href="#visual1" role="tab" data-toggle="tab">Visual One</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-secondary" href="#visual2" role="tab" data-toggle="tab">Visual Two</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-secondary" href="#visual3" role="tab" data-toggle="tab">Visual Three</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-secondary" href="#visual4" role="tab" data-toggle="tab">Visual Four</a>
+                </li>
+            </ul>
         </div>
-                <hr class="mt-0 mb-5">
+        <hr class="mt-0 mb-5">
+
+        <div class="tab-content">
+
+            <div role="tabpanel" class="tab-pane active" id="visual1">
+                {% block visual_one %}
+
+                {% endblock %}
+            </div>
+
+            <div role="tabpanel" class="tab-pane active" id="visual2">
+                {% block visual_two %}
+
+                {% endblock %}
+            </div>
+
+            <div role="tabpanel" class="tab-pane active" id="visual3">
+                {% block visual_three %}
+
+                {% endblock %}
+            </div>
+
+            <div role="tabpanel" class="tab-pane active" id="visual4">
+                {% block visual_four %}
+
+                {% endblock %}
+            </div>
+
+        </div>
 
 
-
-
-        {% block vis_div %}
-
-            <!--This will contain the header div-->
-
-
-        {% endblock %}
 
         <script>
 

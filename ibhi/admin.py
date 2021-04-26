@@ -19,7 +19,7 @@ class BwGeographyResource(resources.ModelResource):
         model = BwGeography
 
 class BwGeographyAdmin(ImportExportModelAdmin):
-    list_display = ('countries', 'geo_vol')
+    list_display = ('countries', 'brand', 'geo_vol')
     resource_class = BwGeographyResource
 
 admin.site.register(BwGeography, BwGeographyAdmin)
@@ -31,7 +31,7 @@ class GenderResource(resources.ModelResource):
 
 
 class GenderAdmin(ImportExportModelAdmin):
-    list_display = ('days', 'male', 'female')
+    list_display = ('days', 'male','brand', 'female')
     resource_class = GenderResource
 
 admin.site.register(Gender, GenderAdmin)
@@ -43,7 +43,7 @@ class BwContentSourcesResource(resources.ModelResource):
 
 
 class BwContentSourcesAdmin(ImportExportModelAdmin):
-    list_display = ('days', 'blogs', 'twitter', 'reddit')
+    list_display = ('days','brand', 'blogs', 'twitter', 'reddit')
     resource_class = BwContentSourcesResource
 
 admin.site.register(BwContentSources, BwContentSourcesAdmin)
@@ -55,7 +55,7 @@ class BwNetSentimentResource(resources.ModelResource):
 
 
 class BwNetSentimentAdmin(ImportExportModelAdmin):
-    list_display = ('days', 'net_sent_vol')
+    list_display = ('days', 'brand','net_sent_vol')
     resource_class = BwNetSentimentResource
 
 admin.site.register(BwNetSentiment, BwNetSentimentAdmin)
@@ -67,7 +67,7 @@ class BwEmotionsResource(resources.ModelResource):
 
 
 class BwEmotionsAdmin(ImportExportModelAdmin):
-    list_display = ('days', 'anger', 'fear',
+    list_display = ('days','brand', 'anger', 'fear',
                     'disgust', 'joy', 'surprise', 'sadness')
     resource_class = BwEmotionsResource
 
@@ -80,7 +80,7 @@ class BwSentimentsResource(resources.ModelResource):
 
 
 class BwSentimentsAdmin(ImportExportModelAdmin):
-    list_display = ('days', 'net_sentiment', 'positive', 'neutral', 'negative')
+    list_display = ('days', 'brand','net_sentiment', 'positive', 'neutral', 'negative')
     resource_class = BwSentimentsResource
 
 admin.site.register(BwSentiments, BwSentimentsAdmin)
@@ -92,7 +92,7 @@ class BwVolumeResource(resources.ModelResource):
 
 
 class BwVolumeAdmin(ImportExportModelAdmin):
-    list_display = ('days', 'volume')
+    list_display = ('days', 'brand','volume')
     resource_class = BwVolumeResource
 
 admin.site.register(BwVolume, BwVolumeAdmin)
@@ -103,7 +103,7 @@ class BwActivityDayResource(resources.ModelResource):
         model = BwActivityDay
 
 class BwActivityDayAdmin(ImportExportModelAdmin):
-    list_display = ('dayOfWeek' , 'day_vol')
+    list_display = ('dayOfWeek' ,'brand', 'day_vol')
     resource_class = BwActivityDayResource
 
 admin.site.register(BwActivityDay, BwActivityDayAdmin)
@@ -114,7 +114,7 @@ class BwActivityTimeResource(resources.ModelResource):
         model = BwActivityTime
 
 class BwActivityTimeAdmin(ImportExportModelAdmin):
-    list_display = ('hourOfDay' , 'time_vol',)
+    list_display = ('hourOfDay' , 'brand','time_vol')
     resource_class = BwActivityTimeResource
 
 admin.site.register(BwActivityTime, BwActivityTimeAdmin)
@@ -126,7 +126,7 @@ class ClineCenterResource(resources.ModelResource):
 
 
 class ClineCenterAdmin(ImportExportModelAdmin):
-    list_display = ('publication_date', 'publication_date_only', 'publication_time',
+    list_display = ('publication_date', 'brand','publication_date_only', 'publication_time',
                     'bing_liu_net_sentiment', 'article_id', 'aid',
                     'source_name', 'source_location', 'url',
                     'title', 'source_host', 'publisher',
@@ -153,7 +153,7 @@ class YahooStockDataResource(resources.ModelResource):
 
 
 class YahooStockDataAdmin(ImportExportModelAdmin):
-    list_display = ('date', 'open', 'high', 'low',
+    list_display = ('date', 'brand','open', 'high', 'low',
                     'close', 'adj_close')
     resource_class = YahooStockDataResource
 
@@ -166,7 +166,7 @@ class ShortInterestResource(resources.ModelResource):
 
 
 class ShortInterestAdmin(ImportExportModelAdmin):
-    list_display = ('date', 'short_volume',
+    list_display = ('date', 'brand','short_volume',
                     'total_volume', 'short_volume_ratio')
     resource_class = ShortInterestResource
 
@@ -178,7 +178,7 @@ class CCEventTimelineResource(resources.ModelResource):
         model = CCEventTimeline
 
 class CCEventTimelineAdmin(ImportExportModelAdmin):
-    list_display = ('date', 'end_date',
+    list_display = ('date', 'brand','end_date',
                     'event_type', 'description')
     resource_class = CCEventTimelineResource
 

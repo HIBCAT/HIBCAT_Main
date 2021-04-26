@@ -14,20 +14,19 @@ from .models import (BwActivityTime, BwActivityDay, BwGeography,
 
 # Feature 1
 feature_1_bw = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral',
-                                                              'negative', 'net_sentiment','volume'))
-
-feature_1_cc = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment'))
-feature_1_cc_2 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'title'))
-
-
-feature_1_tl = pd.DataFrame(CCEventTimeline.objects.all().values('date', 'end_date', 'event_type', 'description'))
+                                                              'negative', 'net_sentiment','volume', 'brand'))
+feature_1_cc = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment', 'brand'))
+feature_1_cc_2 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'title', 'brand'))
+# feature_1_tl = pd.DataFrame(CCEventTimeline.objects.all().values('date', 'end_date', 'event_type', 'description', 'brand'))
 
 
 # Feature 1
 class BwVegaVisual1(PandasSimpleView):
 
-    def brand_watch_df(self):
+    def brand_watch_df(self, brand_name):
         brandwatch_01 = feature_1_bw.copy(deep=True)
+        brandwatch_01 = brandwatch_01[brandwatch_01['brand']==brand_name]
+        brandwatch_01.drop(columns=['brand'], inplace=True)
         brandwatch_01['days'] = pd.to_datetime(brandwatch_01['days'])
         brandwatch_01.sort_values(by='days', ascending=False, inplace=True)
 
@@ -132,10 +131,11 @@ class BwVegaVisual1(PandasSimpleView):
         brandwatch_01['end_date'] = [None] * len(brandwatch_01)
         brandwatch_01['event_type'] = [None] * len(brandwatch_01)
         brandwatch_01['description'] = [None] * len(brandwatch_01)
+        brandwatch_01['brand'] = brand_name
 
         return brandwatch_01
 
-    def cline_center_df(self):
+    def cline_center_df(self, brand_name):
         # Feature one:
         # Part 2: Cline Center
 
@@ -146,6 +146,8 @@ class BwVegaVisual1(PandasSimpleView):
 
         # 1:
         clinecenter_01 = feature_1_cc.copy(deep=True)
+        clinecenter_01 = clinecenter_01[clinecenter_01['brand']==brand_name]
+        clinecenter_01.drop(columns=['brand'], inplace=True)
         clinecenter_01['publication_date_only'] = pd.to_datetime(clinecenter_01['publication_date_only'])
         clinecenter_01.sort_values(by='publication_date_only', ascending=False, inplace=True)
         clinecenter_01.reset_index(inplace=True, drop=True)
@@ -314,26 +316,44 @@ class BwVegaVisual1(PandasSimpleView):
         clinecenter_04['end_date'] = [None] * len(clinecenter_04)
         clinecenter_04['event_type'] = [None] * len(clinecenter_04)
         clinecenter_04['description'] = [None] * len(clinecenter_04)
+        clinecenter_04['brand'] = brand_name
+
         return clinecenter_04
 
-    def timeline_df(self):
-        # Part 3: Timeline Data
-        # Melting will be problematic. So I have to restructure the data.
-        # 1. Rename the start_date = date
-        # 2. Add empty columns 'attributes' and 'values'
-        timeline_01 = feature_1_tl.copy(deep=True)
-        timeline_01['date'] = pd.to_datetime(timeline_01['date'])
-        timeline_01['end_date'] = pd.to_datetime(timeline_01['end_date'])
-        timeline_01['end_date'] =  timeline_01['end_date'].dt.date
-        timeline_01['attributes'] = [None] * len(timeline_01)
-        timeline_01['values'] = [None] * len(timeline_01)
-        return timeline_01
+    # def timeline_df(self, brand_name):
+    #     # Part 3: Timeline Data
+    #     # Melting will be problematic. So I have to restructure the data.
+    #     # 1. Rename the start_date = date
+    #     # 2. Add empty columns 'attributes' and 'values'
+    #     timeline_01 = feature_1_tl.copy(deep=True)
+    #     timeline_01 = timeline_01[timeline_01['brand']==brand_name]
+    #     timeline_01['date'] = pd.to_datetime(timeline_01['date'])
+    #     timeline_01['end_date'] = pd.to_datetime(timeline_01['end_date'])
+    #     timeline_01['end_date'] =  timeline_01['end_date'].dt.date
+    #     timeline_01['attributes'] = [None] * len(timeline_01)
+    #     timeline_01['values'] = [None] * len(timeline_01)
+    #     return timeline_01
+
+
+    def merged_data(self):
+        final_df = pd.DataFrame()
+        brands = pd.DataFrame(ClineCenter.objects.all().values('brand'))
+
+        for brand_name in brands['brand'].unique():
+            df1 = BwVegaVisual1.brand_watch_df(self, brand_name)
+            df2 = BwVegaVisual1.cline_center_df(self, brand_name)
+            # df3 = BwVegaVisual1.timeline_df(self, brand_name)
+            # df3 needs to be added in the next line
+            final_df = pd.concat([final_df, df1, df2])
+            final_df.reset_index(inplace=True, drop=True)
+
+        return final_df
+
+
 
     def write_data(self):
         # Now below is the full code for the part one of the Feature one:
-        return pd.concat([BwVegaVisual1.timeline_df(self),
-                          BwVegaVisual1.brand_watch_df(self),
-                          BwVegaVisual1.cline_center_df(self)])
+        return BwVegaVisual1.merged_data(self)
 
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual1.write_data(self)
@@ -342,12 +362,14 @@ class BwVegaVisual1(PandasSimpleView):
 # Feature 2
 class BwVegaVisual2(PandasSimpleView):
 
-    def bw_cc_df(self):
+    def bw_cc_df(self, brand_name):
 
         # Preparing the clinecenter data first.
 
         # Part 1:
         f2_clinecenter_01 = feature_1_cc.copy(deep=True)
+        f2_clinecenter_01 = f2_clinecenter_01[f2_clinecenter_01['brand']==brand_name]
+        f2_clinecenter_01.drop(columns=['brand'], inplace=True)
         f2_clinecenter_01['publication_date_only'] = pd.to_datetime(f2_clinecenter_01['publication_date_only'])
         f2_clinecenter_01.sort_values(by='publication_date_only', ascending=False, inplace=True)
         f2_clinecenter_01.reset_index(inplace=True, drop=True)
@@ -388,7 +410,8 @@ class BwVegaVisual2(PandasSimpleView):
         # Part 2: Preparing BrandWatch Dataset
 
         f2_brandwatch_01 = feature_1_bw.copy(deep=True)
-        f2_brandwatch_01.drop(columns=['net_sentiment'], inplace=True)
+        f2_brandwatch_01 = f2_brandwatch_01[f2_brandwatch_01['brand']==brand_name]
+        f2_brandwatch_01.drop(columns=['net_sentiment', 'brand'], inplace=True)
         f2_brandwatch_01['days'] = pd.to_datetime(f2_brandwatch_01['days'])
         f2_brandwatch_01.sort_values(by='days', ascending=False, inplace=True)
         f2_brandwatch_01.reset_index(inplace=True, drop=True)
@@ -504,10 +527,23 @@ class BwVegaVisual2(PandasSimpleView):
                                            'cc_3ma_neutral_std_0_100', 'cc_3ma_volume_std_0_100'], var_name="attributes", value_name="values")
 
         f2_cc_bw.dropna(inplace=True)
+        f2_cc_bw['brand'] = brand_name
         return f2_cc_bw
 
+    def merged_data(self):
+        final_df = pd.DataFrame()
+        brands = pd.DataFrame(ClineCenter.objects.all().values('brand'))
+
+        for brand_name in brands['brand'].unique():
+            df1 = BwVegaVisual2.bw_cc_df(self, brand_name)
+            final_df = pd.concat([final_df, df1])
+            final_df.reset_index(inplace=True, drop=True)
+
+        return final_df
+
+
     def write_data(self):
-        return BwVegaVisual2.bw_cc_df(self)
+        return BwVegaVisual2.merged_data(self)
 
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual2.write_data(self)
