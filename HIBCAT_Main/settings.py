@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'HIBCAT_Main.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'IBHI_Test_1',
-        'USER': 'postgres',
-        'PASSWORD': 'mohitg2',
-        'HOST' : 'localhost',
-        'PORT' : '5432'
+        'NAME': 'hibcat_ibhi_2',
+        'USER': 'mohitg2',
+        'PASSWORD': 'HIBCATmohitg2',
+        'HOST': 'database-2.csmnwlpezarn.us-east-2.rds.amazonaws.com',
+        'PORT': '5432'
     }
 }
 
