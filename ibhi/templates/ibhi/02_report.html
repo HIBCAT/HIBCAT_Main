@@ -7,18 +7,21 @@
 {% block visual_one %}
 
     <!-- Container for the visualization -->
-    <div id="vis1"></div>
+    <div id="vis3"></div>
 
 {% endblock %}
 
 {% block visual_two %}
 
     <!-- Container for the visualization -->
-    <div id="vis2"></div>
+    <div id="vis1"></div>
 
 {% endblock %}
 
 {% block visual_three %}
+
+        <!-- Container for the visualization -->
+    <div id="vis2"></div>
 
 {% endblock %}
 
@@ -1554,12 +1557,113 @@
     };
 
 
+
+        var vlSpec3 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "description": "Drag a rectangular brush to show (first 100) selected points in a table.",
+        "data": {"url": "http://127.0.0.1:7001/visual_3.csv"},
+        "transform": [{
+            "window": [{"op": "row_number", "as": "row_number"}]
+        }],
+        "vconcat": [
+
+            {
+                "width": 1500,
+                "height": 500,
+                "params": [{
+                    "name": "brush",
+                    "select": "interval"
+                }],
+                "mark": {"type": "circle", "tooltip": true, "clip": true},
+                "encoding": {
+                    "x": {"field": "publication_date_only", "type": "temporal", "title": "Date"},
+                    "y": {"field": "bing_liu_pos", "type": "quantitative", "aggregate": "count"},
+                    "size": {"value": 150},
+                    "color": {
+                        "condition": {
+                            "param": "brush",
+                            "field": "bing_liu_net_sentiment",
+                            "type": "ordinal",
+                            "title": "Net Sentiment"
+                        },
+                        "value": "lightgray"
+                    }
+                }
+            },
+
+
+            {
+
+                "transform": [
+                    {"filter": {"param": "brush"}},
+                    {"window": [{"op": "rank", "as": "rank"}]},
+                    {"filter": {"field": "rank", "lt": 100}}
+                ],
+
+
+                "hconcat": [
+
+
+                    {
+                        "width": 100,
+                        "title": "Date",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "publication_date_only", "type": "temporal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    },
+
+                    {
+                        "width": 1200,
+                        "title": "News Headline",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "title", "type": "nominal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    },
+
+
+                    {
+                        "width": 70,
+                        "title": "% Positive",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "bing_liu_pos", "type": "nominal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    },
+                    {
+                        "width": 70,
+                        "title": "% Negative",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "bing_liu_neg", "type": "nominal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    }
+                ]
+            }
+
+        ],
+        "resolve": {"legend": {"color": "independent"}}
+    };
+
+
+
+
+
     // Embed the visualization in the container with id `vis`
     vegaEmbed('#vis1', vlSpec1, {'actions': true});
 
 
     // Embed the visualization in the container with id `vis`
     vegaEmbed('#vis2', vlSpec2, {'actions': true});
+
+
+        // Embed the visualization in the container with id `vis`
+    vegaEmbed('#vis3', vlSpec3, {'actions': true});
 
 
 {% endblock %}

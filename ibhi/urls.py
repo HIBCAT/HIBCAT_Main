@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ibhi.views import (BwVegaVisual1, BwVegaVisual2, BwVegaVisual3,
-                        FluidLayoutView)
+                        FluidLayoutView, BwVegaVisual4)
 
 
 # The name parameter (like 'report_urlpattern)
@@ -32,6 +32,8 @@ urlpatterns = [
     path('visual_2.csv', BwVegaVisual2.as_view()),
 
     path('visual_3.csv', BwVegaVisual3.as_view()),
+
+    path('visual_4.csv', BwVegaVisual4.as_view()),
 
     path('fluid_report/',
          FluidLayoutView.as_view(),

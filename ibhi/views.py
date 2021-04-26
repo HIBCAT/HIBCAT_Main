@@ -358,7 +358,6 @@ class BwVegaVisual1(PandasSimpleView):
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual1.write_data(self)
 
-
 # Feature 2
 class BwVegaVisual2(PandasSimpleView):
 
@@ -548,8 +547,8 @@ class BwVegaVisual2(PandasSimpleView):
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual2.write_data(self)
 
-# Feature 3
-class BwVegaVisual3(PandasSimpleView):
+# Feature 4
+class BwVegaVisual4(PandasSimpleView):
 
     def recovery_cost(self):
 
@@ -589,11 +588,19 @@ class BwVegaVisual3(PandasSimpleView):
 
 
     def write_data(self):
-        return BwVegaVisual3.recovery_cost(self)
+        return BwVegaVisual4.recovery_cost(self)
+
+    def get_data(self, request, *args, **kwargs):
+        return BwVegaVisual4.write_data(self)
+
+# Feature 3
+class BwVegaVisual3(PandasSimpleView):
+
+    def write_data(self):
+        return pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'brand', 'bing_liu_net_sentiment', 'bing_liu_pos', 'bing_liu_neg','title'))
 
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual3.write_data(self)
-
 
 
 class FluidLayoutView(View):

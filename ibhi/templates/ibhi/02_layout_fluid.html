@@ -24,10 +24,15 @@
     <link href="{% static 'ibhi/assets/css/toolkit-light.css' %}" rel="stylesheet">
 
     <link href="{% static 'ibhi/assets/css/application.css' %}" rel="stylesheet">
-    <!--Vega-lite -->
+    <!--Vega-lite v4.json-->
     <script src="https://cdn.jsdelivr.net/npm/vega@5.17.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.17.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.12.2"></script>
+
+    <!--Vega-lite v5.json-->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
 
     <style media="screen">
         /* Add space between Vega-Embed links  */
@@ -87,16 +92,13 @@
 
             <ul class="nav nav-pills nav-fill">
                 <li class="nav-item navbar-dark">
-                    <a class="nav-link btn-secondary active" href="#visual1" role="tab" data-toggle="tab">Visual One</a>
+                    <a class="nav-link btn-secondary active" href="#visual1" role="tab" data-toggle="tab">News Explorer</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link btn-secondary" href="#visual2" role="tab" data-toggle="tab">Visual Two</a>
+                    <a class="nav-link btn-secondary" href="#visual2" role="tab" data-toggle="tab">Net Sentiment Explorer</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link btn-secondary" href="#visual3" role="tab" data-toggle="tab">Visual Three</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn-secondary" href="#visual4" role="tab" data-toggle="tab">Visual Four</a>
+                    <a class="nav-link btn-secondary" href="#visual3" role="tab" data-toggle="tab">Sentiment Trends</a>
                 </li>
             </ul>
         </div>
@@ -129,7 +131,6 @@
             </div>
 
         </div>
-
 
 
         <script>
