@@ -1,4 +1,5 @@
 """HIBCAT_Main URL Configuration
+
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
 Examples:
@@ -13,23 +14,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from django.views.generic import RedirectView, TemplateView
-from ibhi.views import FluidLayoutView
+from django.urls import path
+from ibhi.views import (BwVegaVisual1, BwVegaVisual2, BwVegaVisual3,
+                        FluidLayoutView, BwVegaVisual4)
+
+
+# The name parameter (like 'report_urlpattern)
+# is the reference to the path (like 'report/'
+# Whenever the path is to be referenced, it can be done
+# using the name parameter.
 
 urlpatterns = [
 
-    # Default page
-    path('', RedirectView.as_view(
-        pattern_name='home_urlpattern',
-        permanent=False
-    )),
+    # API
+    path('visual_1.csv', BwVegaVisual1.as_view()),
 
-    # Home page
+    path('visual_2.csv', BwVegaVisual2.as_view()),
+
+    path('visual_3.csv', BwVegaVisual3.as_view()),
+
+    path('visual_4.csv', BwVegaVisual4.as_view()),
+
     path('fluid_report/',
          FluidLayoutView.as_view(),
-         name='home_urlpattern'),
+         name='fluid_report_urlpattern'),
 
-    path('admin/', admin.site.urls),
-    path('', include('ibhi.urls')),
+
 ]
