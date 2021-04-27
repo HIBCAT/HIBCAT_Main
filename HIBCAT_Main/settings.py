@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # WhiteNoise Middleware above all but below Security
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -126,3 +128,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000000
 
+# To put the static files in static files storage folder STATIC_ROOT while deploying it on aws
+# To enable the gzip storage functionality
+# To enable compression and caching support
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
