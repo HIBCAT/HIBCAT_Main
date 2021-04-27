@@ -13,10 +13,9 @@ from .models import (BwActivityTime, BwActivityDay, BwGeography,
                      CCEventTimeline)
 
 # Feature 1
-feature_1_bw = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral',
-                                                              'negative', 'net_sentiment','volume', 'brand'))
-feature_1_cc = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment', 'brand'))
-feature_1_cc_2 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'title', 'brand'))
+#feature_1_bw = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral','negative', 'net_sentiment','volume', 'brand'))
+#feature_1_cc = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment', 'brand'))
+#feature_1_cc_2 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'title', 'brand'))
 # feature_1_tl = pd.DataFrame(CCEventTimeline.objects.all().values('date', 'end_date', 'event_type', 'description', 'brand'))
 
 
@@ -24,7 +23,8 @@ feature_1_cc_2 = pd.DataFrame(ClineCenter.objects.all().values('publication_date
 class BwVegaVisual1(PandasSimpleView):
 
     def brand_watch_df(self, brand_name):
-        brandwatch_01 = feature_1_bw.copy(deep=True)
+        brandwatch_01 = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral',
+                                                              'negative', 'net_sentiment','volume', 'brand'))
         brandwatch_01 = brandwatch_01[brandwatch_01['brand']==brand_name]
         brandwatch_01.drop(columns=['brand'], inplace=True)
         brandwatch_01['days'] = pd.to_datetime(brandwatch_01['days'])
@@ -145,7 +145,7 @@ class BwVegaVisual1(PandasSimpleView):
         # 3. Melt the columns
 
         # 1:
-        clinecenter_01 = feature_1_cc.copy(deep=True)
+        clinecenter_01 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment', 'brand'))
         clinecenter_01 = clinecenter_01[clinecenter_01['brand']==brand_name]
         clinecenter_01.drop(columns=['brand'], inplace=True)
         clinecenter_01['publication_date_only'] = pd.to_datetime(clinecenter_01['publication_date_only'])
@@ -298,7 +298,7 @@ class BwVegaVisual1(PandasSimpleView):
 
         # 3 Add the news article data over here.
         # 3.1 Creating another field for news article title.
-        clinecenter_03 = feature_1_cc_2.copy(deep=True)
+        clinecenter_03 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'title', 'brand'))
         clinecenter_03['publication_date_only'] = pd.to_datetime(clinecenter_03['publication_date_only'])
         clinecenter_03.sort_values(by='publication_date_only', ascending=False, inplace=True)
         clinecenter_03.reset_index(inplace=True, drop=True)
@@ -325,7 +325,7 @@ class BwVegaVisual1(PandasSimpleView):
     #     # Melting will be problematic. So I have to restructure the data.
     #     # 1. Rename the start_date = date
     #     # 2. Add empty columns 'attributes' and 'values'
-    #     timeline_01 = feature_1_tl.copy(deep=True)
+    #     timeline_01 = pd.DataFrame(CCEventTimeline.objects.all().values('date', 'end_date', 'event_type', 'description', 'brand'))
     #     timeline_01 = timeline_01[timeline_01['brand']==brand_name]
     #     timeline_01['date'] = pd.to_datetime(timeline_01['date'])
     #     timeline_01['end_date'] = pd.to_datetime(timeline_01['end_date'])
@@ -366,7 +366,7 @@ class BwVegaVisual2(PandasSimpleView):
         # Preparing the clinecenter data first.
 
         # Part 1:
-        f2_clinecenter_01 = feature_1_cc.copy(deep=True)
+        f2_clinecenter_01 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment', 'brand'))
         f2_clinecenter_01 = f2_clinecenter_01[f2_clinecenter_01['brand']==brand_name]
         f2_clinecenter_01.drop(columns=['brand'], inplace=True)
         f2_clinecenter_01['publication_date_only'] = pd.to_datetime(f2_clinecenter_01['publication_date_only'])
@@ -408,7 +408,8 @@ class BwVegaVisual2(PandasSimpleView):
 
         # Part 2: Preparing BrandWatch Dataset
 
-        f2_brandwatch_01 = feature_1_bw.copy(deep=True)
+        f2_brandwatch_01 = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral',
+                                                              'negative', 'net_sentiment','volume', 'brand'))
         f2_brandwatch_01 = f2_brandwatch_01[f2_brandwatch_01['brand']==brand_name]
         f2_brandwatch_01.drop(columns=['net_sentiment', 'brand'], inplace=True)
         f2_brandwatch_01['days'] = pd.to_datetime(f2_brandwatch_01['days'])
@@ -547,13 +548,93 @@ class BwVegaVisual2(PandasSimpleView):
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual2.write_data(self)
 
+# Feature 3
+class BwVegaVisual3(PandasSimpleView):
+
+    def date_df(self, brand_name):
+
+        # Part 1:
+        f3_clinecenter_01 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment', 'brand'))
+        f3_clinecenter_01 = f3_clinecenter_01[f3_clinecenter_01['brand'] == brand_name]
+        f3_clinecenter_01.drop(columns=['brand'], inplace=True)
+        f3_clinecenter_01['publication_date_only'] = pd.to_datetime(f3_clinecenter_01['publication_date_only'])
+        f3_clinecenter_01.sort_values(by='publication_date_only', ascending=False, inplace=True)
+        f3_clinecenter_01.reset_index(inplace=True, drop=True)
+
+        # Now creating the main dataframe : clinecenter_02
+        f3_clinecenter_02 = pd.DataFrame({"publication_date_only":
+                                              list(set(f3_clinecenter_01['publication_date_only']))
+                                          })
+        f3_clinecenter_02['publication_date_only'] = pd.to_datetime(f3_clinecenter_02['publication_date_only'])
+        f3_clinecenter_02.sort_values(by='publication_date_only', ascending=False, inplace=True)
+        f3_clinecenter_02['cc_positive'] = 0
+        f3_clinecenter_02['cc_negative'] = 0
+        f3_clinecenter_02['cc_neutral'] = 0
+        f3_clinecenter_02.reset_index(inplace=True, drop=True)
+
+        # Now calculating the volume of the posts:
+        # I will be ignoring the None type values in bing_liu_net_sentiment
+
+        unique_index = pd.Index(f3_clinecenter_02['publication_date_only'])
+
+        for i in range(len(f3_clinecenter_01)):
+
+            # Finding the matching index of dates in the main dataframes indexes
+            index_match = unique_index.get_loc(f3_clinecenter_01['publication_date_only'][i])
+
+            if f3_clinecenter_01['bing_liu_net_sentiment'][i] == 1:
+                f3_clinecenter_02['cc_positive'][index_match] += 1
+            elif f3_clinecenter_01['bing_liu_net_sentiment'][i] == 0:
+                f3_clinecenter_02['cc_neutral'][index_match] += 1
+            elif f3_clinecenter_01['bing_liu_net_sentiment'][i] < 0:
+                f3_clinecenter_02['cc_negative'][index_match] += 1
+            else:
+                pass
+
+        f3_clinecenter_02['cc_volume'] = f3_clinecenter_02['cc_negative'] + f3_clinecenter_02['cc_neutral'] + \
+                                         f3_clinecenter_02['cc_positive']
+
+
+        f3_clinecenter_02.reset_index(inplace=True, drop=True)
+
+
+        return f3_clinecenter_02
+
+    def merged_data(self):
+        final_df = pd.DataFrame()
+        brands = pd.DataFrame(ClineCenter.objects.all().values('brand'))
+
+        for brand_name in brands['brand'].unique():
+            df1 = BwVegaVisual3.date_df(self, brand_name)
+            final_df = pd.concat([final_df, df1])
+            final_df.reset_index(inplace=True, drop=True)
+
+        final_df_02 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'brand', 'bing_liu_net_sentiment', 'bing_liu_pos', 'bing_liu_neg','title'))
+        final_df_02['publication_date_only'] = pd.to_datetime(final_df_02['publication_date_only'])
+        final_df_02.sort_values(by='publication_date_only', ascending=False, inplace=True)
+        final_df_02.reset_index(inplace=True, drop=True)
+
+        final_df_03 = pd.merge(left=final_df, right=final_df_02, left_on='publication_date_only', right_on='publication_date_only')
+
+        final_df_03.reset_index(inplace=True, drop=True)
+
+        return final_df_03
+
+    def write_data(self):
+        return BwVegaVisual3.merged_data(self)
+
+
+    def get_data(self, request, *args, **kwargs):
+        return BwVegaVisual3.write_data(self)
+
 # Feature 4
 class BwVegaVisual4(PandasSimpleView):
 
     def recovery_cost(self):
 
         # Part 1: Downloading the simple data
-        f2_brandwatch_01 = feature_1_bw.copy(deep=True)
+        f2_brandwatch_01 = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral',
+                                                              'negative', 'net_sentiment','volume', 'brand'))
         f2_brandwatch_01.drop(columns=['net_sentiment'], inplace=True)
         f2_brandwatch_01['days'] = pd.to_datetime(f2_brandwatch_01['days'])
         f2_brandwatch_01.sort_values(by='days', ascending=False, inplace=True)
@@ -593,14 +674,12 @@ class BwVegaVisual4(PandasSimpleView):
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual4.write_data(self)
 
-# Feature 3
-class BwVegaVisual3(PandasSimpleView):
 
-    def write_data(self):
-        return pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'brand', 'bing_liu_net_sentiment', 'bing_liu_pos', 'bing_liu_neg','title'))
-
+<<<<<<< HEAD
+=======
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual3.write_data(self)
+>>>>>>> 1b4463bfcd68ac5402f04cf853caee3188e45c0b
 
 
 class FluidLayoutView(View):

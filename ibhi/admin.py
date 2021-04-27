@@ -80,7 +80,7 @@ class BwSentimentsResource(resources.ModelResource):
 
 
 class BwSentimentsAdmin(ImportExportModelAdmin):
-    list_display = ('days', 'brand','net_sentiment', 'positive', 'neutral', 'negative')
+    list_display = ('days', 'brand','net_sentiment', 'positive', 'neutral', 'negative', 'volume')
     resource_class = BwSentimentsResource
 
 admin.site.register(BwSentiments, BwSentimentsAdmin)

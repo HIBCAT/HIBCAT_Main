@@ -1565,10 +1565,30 @@
         "transform": [{
             "window": [{"op": "row_number", "as": "row_number"}]
         }],
+
         "vconcat": [
 
             {
-                "width": 1500,
+                "width": 1301,
+                "height": 100,
+                "mark": {"type": "line", "tooltip": true, "color": "#e84a27"},
+                "selection": {"brush_volume": {"type": "interval", "encodings": ["x"]}},
+                "encoding": {
+                    "x": {
+                        "field": "publication_date_only",
+                        "type": "temporal",
+                        "title": "       Volume of Daily Posts (Orange: News Media)"
+                    },
+                    "y": {
+                        "field": "cc_volume",
+                        "type": "quantitative",
+                        "axis": {"tickCount": 3, "grid": false}
+                    }
+                }
+            },
+
+            {
+                "width": 1301,
                 "height": 500,
                 "params": [{
                     "name": "brush",
@@ -1576,7 +1596,10 @@
                 }],
                 "mark": {"type": "circle", "tooltip": true, "clip": true},
                 "encoding": {
-                    "x": {"field": "publication_date_only", "type": "temporal", "title": "Date"},
+                    "x": {
+                        "field": "publication_date_only", "type": "temporal", "title": "Date",
+                        "scale": {"domain": {"selection": "brush_volume"}},
+                    },
                     "y": {"field": "bing_liu_pos", "type": "quantitative", "aggregate": "count"},
                     "size": {"value": 150},
                     "color": {
@@ -1615,7 +1638,7 @@
                     },
 
                     {
-                        "width": 1200,
+                        "width": 1000,
                         "title": "News Headline",
                         "mark": "text",
                         "encoding": {

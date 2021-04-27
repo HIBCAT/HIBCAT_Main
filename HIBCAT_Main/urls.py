@@ -26,10 +26,9 @@ urlpatterns = [
     )),
 
     # Home page
-    path('fluid_report/',
+    path('home/',
          FluidLayoutView.as_view(),
          name='home_urlpattern'),
 
     path('admin/', admin.site.urls),
     path('', include('ibhi.urls')),
-]
