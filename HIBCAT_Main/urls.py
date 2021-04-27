@@ -26,7 +26,7 @@ urlpatterns = [
     )),
 
     # Home page
-    path('fluid_report/',
+    path('home/',
          FluidLayoutView.as_view(),
          name='home_urlpattern'),
 
