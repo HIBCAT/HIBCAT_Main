@@ -27,13 +27,13 @@ from ibhi.views import (BwVegaVisual1, BwVegaVisual2, BwVegaVisual3,
 urlpatterns = [
 
     # API
-    path('visual_1.csv', BwVegaVisual1.as_view()),
+    path('visual_1.csv/', BwVegaVisual1.as_view()),
 
-    path('visual_2.csv', BwVegaVisual2.as_view()),
+    path('visual_2.csv/', BwVegaVisual2.as_view()),
 
-    path('visual_3.csv', BwVegaVisual3.as_view()),
+    path('visual_3.csv/', BwVegaVisual3.as_view()),
 
-    path('visual_4.csv', BwVegaVisual4.as_view()),
+    path('visual_4.csv/', BwVegaVisual4.as_view()),
 
     path('fluid_report/',
          FluidLayoutView.as_view(),
