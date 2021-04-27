@@ -440,7 +440,6 @@ class BwVegaVisual2(PandasSimpleView):
         for i in range(len(f2_cc_bw)):
             if i != flag:
 
-                # Remove 30 days with 90, I made changes for testing purpose
                 bw_3ma_positive[i] = (sum(f2_cc_bw['bw_positive'][i:i + 90]) / 90)
                 bw_3ma_negative[i] = (sum(f2_cc_bw['bw_negative'][i:i + 90]) / 90)
                 bw_3ma_neutral[i] = (sum(f2_cc_bw['bw_neutral'][i:i + 90]) / 90)
@@ -599,7 +598,6 @@ class BwVegaVisual3(PandasSimpleView):
 
     def write_data(self):
         return pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'brand', 'bing_liu_net_sentiment', 'bing_liu_pos', 'bing_liu_neg','title'))
-
 
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual3.write_data(self)
