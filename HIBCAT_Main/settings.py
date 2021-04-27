@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'import_export',
     'ibhi',
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'HIBCAT_Main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'ibhi/templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'ibhi/../../ibhi/templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
