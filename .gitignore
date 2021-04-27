@@ -3,3 +3,5 @@
 __pycache__
 /static
 .DS_Store
+/.idea/workspace.xml
+db.sqlite3

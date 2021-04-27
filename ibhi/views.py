@@ -441,7 +441,6 @@ class BwVegaVisual2(PandasSimpleView):
         for i in range(len(f2_cc_bw)):
             if i != flag:
 
-                # Remove 30 days with 90, I made changes for testing purpose
                 bw_3ma_positive[i] = (sum(f2_cc_bw['bw_positive'][i:i + 90]) / 90)
                 bw_3ma_negative[i] = (sum(f2_cc_bw['bw_negative'][i:i + 90]) / 90)
                 bw_3ma_neutral[i] = (sum(f2_cc_bw['bw_neutral'][i:i + 90]) / 90)
@@ -676,6 +675,11 @@ class BwVegaVisual4(PandasSimpleView):
         return BwVegaVisual4.write_data(self)
 
 
+<<<<<<< HEAD
+=======
+    def get_data(self, request, *args, **kwargs):
+        return BwVegaVisual3.write_data(self)
+>>>>>>> 1b4463bfcd68ac5402f04cf853caee3188e45c0b
 
 
 class FluidLayoutView(View):
