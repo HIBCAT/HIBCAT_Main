@@ -131,5 +131,5 @@ STATIC_URL = '/static/'
 # To enable compression and caching support
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000000
