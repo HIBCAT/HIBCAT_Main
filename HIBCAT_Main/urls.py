@@ -1,5 +1,5 @@
-"""HIBCAT_Main URL Configuration
 
+"""HIBCAT_Main URL Configuration
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
 Examples:
@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView, TemplateView
-from ibhi.views import OverviewLayoutView
+from ibhi.views import FluidLayoutView
 
 urlpatterns = [
 
@@ -27,12 +27,10 @@ urlpatterns = [
     )),
 
     # Home page
-    path('overview_report/',
-         OverviewLayoutView.as_view(),
+    path('home/',
+         FluidLayoutView.as_view(),
          name='home_urlpattern'),
 
     path('admin/', admin.site.urls),
     path('', include('ibhi.urls')),
-]
-
-
+    ]

@@ -23,11 +23,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'xi2z#m(1=i5bp93y*^l-iqu(ei9#$kh+ac=)z=4=m5y!^jlq7k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # If DEBUG = TRUE, then it will not check the
 # allowed host list in the ALLOWED_HOSTS
-ALLOWED_HOSTS = ['3.239.249.80', 'localhost', '127.0.0.0']
+## When Debug = True
+## ALLOWED_HOSTS = []
+
+## When Debug = False
+ALLOWED_HOSTS = ['18.218.151.244']
 
 
 # Application definition
@@ -84,10 +88,10 @@ WSGI_APPLICATION = 'HIBCAT_Main.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hibcat_ibhi',
+        'NAME': 'hibcat_ibhi_2',
         'USER': 'mohitg2',
         'PASSWORD': 'HIBCATmohitg2',
-        'HOST' : 'database-1.csmnwlpezarn.us-east-2.rds.amazonaws.com',
+        'HOST' : 'database-2.csmnwlpezarn.us-east-2.rds.amazonaws.com',
         'PORT' : '5432'
     }
 }

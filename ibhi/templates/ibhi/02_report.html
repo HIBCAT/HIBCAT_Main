@@ -1,387 +1,123 @@
 {% extends 'ibhi/02_layout_fluid.html' %}
 {% load static %}
 
-
 {% block title %}
-Report
+    Report
 {% endblock %}
 
-{% block vis_div %}
-    <div class="container">
-        <h1>Feature One</h1>
+{% block visual_one %}
+
+    <!-- Container for the visualization -->
+    <div id="vis3"></div>
+
+{% endblock %}
+
+{% block visual_two %}
+
+    <!-- Container for the visualization -->
+    <div id="vis1"></div>
+
+{% endblock %}
+
+{% block visual_three %}
+
         <!-- Container for the visualization -->
-        <div id="vis1"></div>
+    <div id="vis2"></div>
+
+{% endblock %}
+
+{% block visual_four %}
+
+    <!-- Container for the visualization -->
 
 
-
-    </div>
 {% endblock %}
 
 {% block script %}
 
-        var vlSpec1 = {
+
+    var vlSpec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-        "data": {"url": "http://3.239.249.80:8000/visual_1.csv"},
+        "data": {"url": "http://18.218.151.244:8000/visual_1.csv"},
+        "transform": [{"window": [{"op": "row_number", "as": "row_number"}]}],
         "vconcat": [
-            <!--Graph 1-->
             {
                 "layer": [
-                    <!--Event Details-->
                     {
-                        "mark": "rect",
-                        "transform": [
-                            {
-                                "filter": {
-                                    "field": "event_type",
-                                    "oneOf": [
-                                        "Positive Shock - Planned Activity",
-                                        "Positive Shock - Unplanned Activity",
-                                        "Negative Shock - Planned Activity",
-                                        "Negative Shock - Unplanned Activity"
-                                    ]
-                                }
-                            }
-                        ],
-                        "encoding": {
-                            "color": {
-                                "field": "event_type", "type": "nominal",
-                                "title": "Legend",
-                                "scale": {
-                                    "domain": [
-                                        "Positive Shock - Planned Activity",
-                                        "Positive Shock - Unplanned Activity",
-                                        "Negative Shock - Planned Activity",
-                                        "Negative Shock - Unplanned Activity"
-                                    ],
-                                    "range": [
-                                        "#106700",
-                                        "#6bf352",
-                                        "#fcd600",
-                                        "#f92800"
-                                    ]
-                                }
-
-                            },
-                            "x": {
-                                "field": "date",
-                                "type": "temporal"
-                            },
-                            "x2": {
-                                "field": "end_date",
-                                "type": "temporal"
-                            }
-                        }
-                    },
-
-                    <!--Main 1-->
-                    {
-                        "width": 1100,
+                        "title": {"text": "Step 1: Please click and drag inside the first graph's area", "fontSize": 15, "anchor": "start"},
+                        "width": 1500,
                         "height": 100,
-                        "mark": {
-                            "type": "area",
-                            "tooltip": true,
-                            "color": "#000080"
-                        },
+                        "mark": {"type": "line", "strokeWidth": 1.5, "tooltip": true, "color": "#000080"},
                         "transform": [
-                            {
-                                "filter": {
-                                    "field": "attributes",
-                                    "oneOf": ["bw_std_vol_0_20"]
-                                }
-                            }
+                            {"filter": {"field": "attributes", "oneOf": ["bw_std_vol_0_20"]}}
                         ],
                         "encoding": {
-                            "x": {
-                                "field": "date",
-                                "type": "temporal",
-                                "title": "Date"
-                            },
+                            "x": {"field": "date", "type": "temporal", "title": "Date"},
                             "y": {
-                                "field": "values", "type": "quantitative",
+                                "field": "values",
+                                "type": "quantitative",
                                 "axis": {
-                                    "tickCount": 3, "grid": false,
+                                    "tickCount": 3,
+                                    "grid": false,
                                     "title": "Standardized Volume"
                                 }
                             }
                         }
                     },
                     {
-                        "width": 1100,
+                        "width": 1500,
                         "height": 100,
-                        "mark": {
-                            "type": "area",
-                            "tooltip": true,
-                            "color": "#e84a27",
-                        },
+                        "mark": {"type": "line", "strokeWidth": 1.5, "tooltip": true, "color": "#e84a27"},
                         "transform": [
-                            {
-                                "filter": {
-                                    "field": "attributes",
-                                    "oneOf": ["cc_std_vol_0_20"]
-                                }
-                            }
+                            {"filter": {"field": "attributes", "oneOf": ["cc_std_vol_0_20"]}}
                         ],
-                        "selection": {
-                            "brush": {"type": "interval", "encodings": ["x"]}
-                        },
+                        "selection": {"brush": {"type": "interval", "encodings": ["x"]}},
                         "encoding": {
-                            "x": {
-                                "field": "date",
-                                "type": "temporal",
-                                "title": "year (year)"
-                            },
+                            "x": {"field": "date", "type": "temporal", "title": "       Standardized Volume of Daily Posts(0 to 20) (Orange: News Media | Blue: Social Media)"},
                             "y": {
-                                "field": "values", "type": "quantitative",
+                                "field": "values",
+                                "type": "quantitative",
                                 "axis": {"tickCount": 3, "grid": false}
-                            },
+                            }
                         }
                     }
                 ]
             },
-
-            <!--Graph 2-->
             {
                 "layer": [
-
-                    <!--Event Details-->
                     {
-                        "mark": "rect",
-                        "transform": [
-                            {
-                                "filter": {
-                                    "field": "event_type",
-                                    "oneOf": [
-                                        "Positive Shock - Planned Activity",
-                                        "Positive Shock - Unplanned Activity",
-                                        "Negative Shock - Planned Activity",
-                                        "Negative Shock - Unplanned Activity"
-                                    ]
-                                }
-                            }
-                        ],
-                        "encoding": {
-                            "color": {
-                                "field": "event_type", "type": "nominal",
-                                "title": "Legend",
-
-                                "scale": {
-                                    "domain": [
-                                        "Positive Shock - Planned Activity",
-                                        "Positive Shock - Unplanned Activity",
-                                        "Negative Shock - Planned Activity",
-                                        "Negative Shock - Unplanned Activity"
-                                    ],
-                                    "range": [
-                                        "#106700",
-                                        "#6bf352",
-                                        "#fcd600",
-                                        "#f92800"
-                                    ]
-                                }
-
-                            },
-                            "x": {
-                                "field": "date",
-                                "type": "temporal"
-                            },
-                            "x2": {
-                                "field": "end_date",
-                                "type": "temporal"
-                            }
-                        }
-                    },
-
-                    <!--Main 2-->
-                    {
-                        "width": 1100,
+                        "width": 1500,
                         "height": 100,
-                        "mark": {
-                            "type": "area",
-                            "tooltip": true,
-                            "color": "#e84a27"
-                        },
+                        "mark": {"type": "line", "strokeWidth": 1.5, "tooltip": true, "color": "#e84a27"},
                         "transform": [
-                            {
-                                "filter": {
-                                    "field": "attributes",
-                                    "oneOf": ["cc_volume"]
-                                }
-                            }
+                            {"filter": {"field": "attributes", "oneOf": ["cc_volume"]}}
                         ],
-
                         "encoding": {
                             "x": {
                                 "field": "date",
                                 "type": "temporal",
                                 "scale": {"domain": {"selection": "brush"}},
-                                "axis": {"title": "ClineCenter: News Media Post Volume"}
-
-                            },
-                            "y": {
-                                "field": "values",
-                                "type": "quantitative",
-                                "axis": {
-                                    "tickCount": 3, "grid": false,
-                                    "title": "Post Volume"
-                                }
-
-
-                            }
-
-                        }
-                    }
-                ]
-            },
-
-
-            <!--Graph 3-->
-            {
-                "layer": [
-                    <!--Event Details-->
-                    {
-                        "mark": "rect",
-                        "transform": [
-                            {
-                                "filter": {
-                                    "field": "event_type",
-                                    "oneOf": [
-                                        "Positive Shock - Planned Activity",
-                                        "Positive Shock - Unplanned Activity",
-                                        "Negative Shock - Planned Activity",
-                                        "Negative Shock - Unplanned Activity"
-                                    ]
-                                }
-                            }
-                        ],
-                        "encoding": {
-                            "color": {
-                                "field": "event_type", "type": "nominal",
-                                "title": "Legend",
-
-                                "scale": {
-                                    "domain": [
-                                        "Positive Shock - Planned Activity",
-                                        "Positive Shock - Unplanned Activity",
-                                        "Negative Shock - Planned Activity",
-                                        "Negative Shock - Unplanned Activity"
-                                    ],
-                                    "range": [
-                                        "#106700",
-                                        "#6bf352",
-                                        "#fcd600",
-                                        "#f92800"
-                                    ]
-                                }
-
-                            },
-                            "x": {
-                                "field": "date",
-                                "type": "temporal"
-                            },
-                            "x2": {
-                                "field": "end_date",
-                                "type": "temporal"
-                            }
-                        }
-                    },
-
-                    <!--Main 3-->
-                    {
-                        "width": 1100,
-                        "height": 100,
-                        "mark": {
-                            "type": "area",
-                            "tooltip": true,
-                            "color": "#000080"
-                        },
-                        "transform": [
-                            {
-                                "filter": {
-                                    "field": "attributes",
-                                    "oneOf": ["bw_volume"]
-                                }
-                            }
-                        ],
-
-                        "encoding": {
-                            "x": {
-                                "field": "date",
-                                "type": "temporal",
-                                "axis": {"title": "BrandWatch: Social Media Post Volume"},
-
-                                "scale": {"domain": {"selection": "brush"}}
-
+                                "axis": {"title": "Date,      True Volume: ClineCenter | News Media Posts"}
                             },
                             "y": {
                                 "field": "values",
                                 "type": "quantitative",
                                 "axis": {"tickCount": 3, "grid": false, "title": "Post Volume"}
                             }
-
                         }
                     }
                 ]
             },
-
-
-            <!--Graph 4-->
             {
                 "layer": [
-                    <!--Event Details-->
-                    {
-                        "mark": "rect",
-                        "transform": [
-                            {
-                                "filter": {
-                                    "field": "event_type",
-                                    "oneOf": [
-                                        "Positive Shock - Planned Activity",
-                                        "Positive Shock - Unplanned Activity",
-                                        "Negative Shock - Planned Activity",
-                                        "Negative Shock - Unplanned Activity"
-                                    ]
-                                }
-                            }
-                        ],
-                        "encoding": {
-                            "color": {
-                                "field": "event_type", "type": "nominal",
-                                "scale": {
-                                    "domain": [
-                                        "Positive Shock - Planned Activity",
-                                        "Positive Shock - Unplanned Activity",
-                                        "Negative Shock - Planned Activity",
-                                        "Negative Shock - Unplanned Activity"
-                                    ],
-                                    "range": [
-                                        "#106700",
-                                        "#6bf352",
-                                        "#fcd600",
-                                        "#f92800"
-                                    ]
-                                }
-
-                            },
-                            "x": {
-                                "field": "date",
-                                "type": "temporal"
-                            },
-                            "x2": {
-                                "field": "end_date",
-                                "type": "temporal"
-                            }
-                        }
-                    },
-
-                    <!--Main 4-->
                     {
                         "layer": [
-
                             {
-                                "width": 1100,
+                                "width": 1500,
                                 "height": 400,
                                 "mark": {
-                                    "type": "line", "interpolate": "monotone",
+                                    "type": "line", "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
                                     "tooltip": true,
                                     "color": "#e84a27"
                                 },
@@ -400,25 +136,24 @@ Report
                                         "scale": {"domain": {"selection": "brush"}},
                                         "axis": {"title": ""}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Net Sentiment"}
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Net Sentiment"
+                                    }
                                 }
-
                             },
                             {
-                                "width": 1100,
+                                "width": 1500,
                                 "height": 400,
                                 "mark": {
-                                    "type": "line", "interpolate": "monotone",
+                                    "type": "line", "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
                                     "tooltip": true,
                                     "color": "#95A5A6"
                                 },
                                 "transform": [
-                                    {
-                                        "filter": {
-                                            "field": "attributes",
-                                            "oneOf": ["cc_vwas"]
-                                        }
-                                    }
+                                    {"filter": {"field": "attributes", "oneOf": ["cc_vwas"]}}
                                 ],
                                 "encoding": {
                                     "x": {
@@ -427,14 +162,22 @@ Report
                                         "scale": {"domain": {"selection": "brush"}},
                                         "axis": {"title": ""}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Net Sentiment"}
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Net Sentiment"
+                                    }
                                 }
-
                             },
                             {
-                                "width": 1100,
+                                "width": 1500,
                                 "height": 400,
-                                "mark": {"type": "bar", "opacity": 0.2, "color": "#000080", "tooltip": true},
+                                "mark": {
+                                    "type": "bar",
+                                    "opacity": 0.2,
+                                    "color": "#000080",
+                                    "tooltip": true
+                                },
                                 "transform": [
                                     {
                                         "filter": {
@@ -448,81 +191,56 @@ Report
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "ClineCenter ( Blue: Net Sentiment | Grey: Volumetric Weighted Avg Sentiment Score )"}
+                                        "axis": {
+                                            "title": "Date,        ClineCenter: News Media ( Orange: Net Sentiment | Grey: Volumetric Weighted Avg Sentiment Score )"
+                                        }
                                     },
                                     "y": {
-                                        "field": "values", "type": "quantitative",
-                                        "title": "Standardized Volume(Green Bar)"
-                                    },
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Standardized Volume(Blue Bar)"
+                                    }
                                 }
-                            },
-
-
+                            }
                         ]
                     }
                 ]
             },
-
-
-            <!--Graph 5-->
             {
                 "layer": [
-
-                    <!--Event Details-->
                     {
-                        "mark": "rect",
+                        "width": 1500,
+                        "height": 100,
+                        "mark": {"type": "line", "strokeWidth": 1.5, "tooltip": true, "color": "#000080"},
                         "transform": [
-                            {
-                                "filter": {
-                                    "field": "event_type",
-                                    "oneOf": [
-                                        "Positive Shock - Planned Activity",
-                                        "Positive Shock - Unplanned Activity",
-                                        "Negative Shock - Planned Activity",
-                                        "Negative Shock - Unplanned Activity"
-                                    ]
-                                }
-                            }
+                            {"filter": {"field": "attributes", "oneOf": ["bw_volume"]}}
                         ],
                         "encoding": {
-                            "color": {
-                                "field": "event_type", "type": "nominal",
-                                "scale": {
-                                    "domain": [
-                                        "Positive Shock - Planned Activity",
-                                        "Positive Shock - Unplanned Activity",
-                                        "Negative Shock - Planned Activity",
-                                        "Negative Shock - Unplanned Activity"
-                                    ],
-                                    "range": [
-                                        "#106700",
-                                        "#6bf352",
-                                        "#fcd600",
-                                        "#f92800"
-                                    ]
-                                }
-
-                            },
                             "x": {
                                 "field": "date",
-                                "type": "temporal"
+                                "type": "temporal",
+                                "axis": {"title": "Date,      True Volume: Social Media Posts"},
+                                "scale": {"domain": {"selection": "brush"}}
                             },
-                            "x2": {
-                                "field": "end_date",
-                                "type": "temporal"
+                            "y": {
+                                "field": "values",
+                                "type": "quantitative",
+                                "axis": {"tickCount": 3, "grid": false, "title": "Post Volume"}
                             }
                         }
-                    },
-
-                    <!--Main 5-->
+                    }
+                ]
+            },
+            {
+                "layer": [
                     {
                         "layer": [
-
                             {
-                                "width": 1100,
+                                "width": 1500,
                                 "height": 400,
                                 "mark": {
-                                    "type": "line", "interpolate": "monotone",
+                                    "type": "line", "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
                                     "tooltip": true,
                                     "color": "#000080"
                                 },
@@ -541,25 +259,24 @@ Report
                                         "scale": {"domain": {"selection": "brush"}},
                                         "axis": {"title": ""}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Net Sentiment"}
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Net Sentiment"
+                                    }
                                 }
-
                             },
                             {
-                                "width": 1100,
+                                "width": 1500,
                                 "height": 400,
                                 "mark": {
-                                    "type": "line", "interpolate": "monotone",
+                                    "type": "line", "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
                                     "tooltip": true,
-                                    "color": "#95A5A6",
+                                    "color": "#95A5A6"
                                 },
                                 "transform": [
-                                    {
-                                        "filter": {
-                                            "field": "attributes",
-                                            "oneOf": ["bw_vwas"]
-                                        }
-                                    }
+                                    {"filter": {"field": "attributes", "oneOf": ["bw_vwas"]}}
                                 ],
                                 "encoding": {
                                     "x": {
@@ -568,14 +285,22 @@ Report
                                         "scale": {"domain": {"selection": "brush"}},
                                         "axis": {"title": ""}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Net Sentiment"}
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Net Sentiment"
+                                    }
                                 }
-
                             },
                             {
-                                "width": 1100,
+                                "width": 1500,
                                 "height": 400,
-                                "mark": {"type": "bar", "opacity": 0.2, "color": "#000080", "tooltip": true},
+                                "mark": {
+                                    "type": "bar",
+                                    "opacity": 0.2,
+                                    "color": "#000080",
+                                    "tooltip": true
+                                },
                                 "transform": [
                                     {
                                         "filter": {
@@ -591,28 +316,1386 @@ Report
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "BrandWatch ( Blue: Net Sentiment | Grey: Volumetric Weighted Avg Sentiment Score )"}
+                                        "axis": {
+                                            "title": "Date,      BrandWatch ( Blue: Net Sentiment | Grey: Volumetric Weighted Avg Sentiment Score )"
+                                        }
                                     },
                                     "y": {
-                                        "field": "values", "type": "quantitative",
-                                        "title": "Standardized Volume(Green Bar)"
-                                    },
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Standardized Volume(Blue Bar)"
+                                    }
                                 }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+
+
+        var vlSpec2 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+        "data": {"url": "http://18.218.151.244:8000/visual_2.csv"},
+
+        "transform": [{
+            "window": [{"op": "row_number", "as": "row_number"}]
+        }],
+        "vconcat": [
+            <!--Graph 1-->
+            {
+                "layer": [
+                    <!--Event Details-->
+                    <!--Main 1-->
+                    {
+                        "title": {"text": "Step 1: Please click and drag inside the first graph's area", "fontSize": 15, "anchor": "start"},
+                        "width": 1500,
+                        "height": 100,
+                        "mark": {
+                            "type": "line",
+                            "strokeWidth": 1.5,
+                            "tooltip": true,
+                            "color": "#000080"
+
+                        },
+                        "transform": [
+                            {
+                                "filter": {
+                                    "field": "attributes",
+                                    "oneOf": ["bw_3ma_volume_std_0_100"]
+                                }
+                            }
+                        ],
+                        "encoding": {
+                            "x": {
+                                "field": "date",
+                                "type": "temporal",
+                                "title": "Standardized Volume of Daily Posts: Orange: News Media | Blue: Social Media | Date"
+                            },
+                            "y": {
+                                "field": "values", "type": "quantitative",
+                                "axis": {
+                                    "tickCount": 3, "grid": false,
+                                    "title": "Standardized Volume"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "width": 1500,
+                        "height": 100,
+                        "mark": {
+                            "type": "line",
+                            "strokeWidth": 1.5,
+
+                            "tooltip": true,
+                            "color": "#e84a27",
+                        },
+                        "transform": [
+                            {
+                                "filter": {
+                                    "field": "attributes",
+                                    "oneOf": ["cc_3ma_volume_std_0_100"]
+                                }
+                            }
+                        ],
+                        "selection": {
+                            "brush": {"type": "interval", "encodings": ["x"]}
+                        },
+                        "encoding": {
+                            "x": {
+                                "field": "date",
+                                "type": "temporal",
+                            },
+                            "y": {
+                                "field": "values", "type": "quantitative",
+                                "axis": {"tickCount": 3, "grid": false}
+                            },
+                        }
+                    }
+                ]
+            },
+
+            <!--Graph 3-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#008000"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "News Media Signals | Green: Positive | Red: Negative | Grey: Neutral | Blue: Volume"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Post Volume"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#DC143C"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
                             },
 
 
                         ]
                     }
                 ]
-            }
+            },
+
+            <!--Graph 8-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "News Media Posts Volume | Green: Positive | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#008000"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            }
 
 
-        ]
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 9-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "News Media Posts Volume | Blue: Neutral | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 10-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "News Media Posts Volume | Red: Negative | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#DC143C"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 11-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "News Media Posts Volume | Blue: Total Volume | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 12-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_positive_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Social Media | Green: News Media"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#008000"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_positive_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 13-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_neutral_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Social Media | Blue: News Media"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_neutral_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 14-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_negative_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Social Media | Red: News Media"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#DC143C"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_negative_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 15-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_volume_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Social Media | Blue: News Media"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_volume_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                }
+
+                            }
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 2-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#008000"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Social Media Signals | Green: Positive | Red: Negative | Grey: Neutral | Blue: Volume"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Post Volume"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#DC143C"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
+                            },
+
+
+                        ]
+                    }
+                ]
+            },
+
+
+            <!--Graph 4-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Social Media Posts Volume | Green: Positive | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#008000"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            }
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 5-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Social Media Posts Volume | Blue: Neutral | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            }
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 6-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Social Media Posts Volume | Red: Negative | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#DC143C"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume"}
+                                }
+
+                            }
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 7-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Social Media Posts Volume | Blue: Total Volume | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            }
+
+
+                        ]
+                    }
+                ]
+            },
+
+
+        ],
+
+        "resolve": {"legend": {"color": "independent"}}
     };
 
 
+
+        var vlSpec3 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "description": "Drag a rectangular brush to show (first 100) selected points in a table.",
+        "data": {"url": "http://18.218.151.244:8000/visual_3.csv"},
+        "transform": [{
+            "window": [{"op": "row_number", "as": "row_number"}]
+        }],
+
+        "vconcat": [
+
+            {
+                "title": {"text": "Step 1: Please click and drag inside the first graph's area", "fontSize": 15, "anchor": "start"},
+                "width": 1301,
+                "height": 100,
+                "mark": {"type": "line", "tooltip": true, "color": "#e84a27"},
+                "selection": {"brush_volume": {"type": "interval", "encodings": ["x"]}},
+                "encoding": {
+                    "x": {
+                        "field": "publication_date_only",
+                        "type": "temporal",
+                        "title": "       Volume of Daily Posts (Orange: News Media)"
+                    },
+                    "y": {
+                        "field": "cc_volume",
+                        "type": "quantitative",
+                        "axis": {"tickCount": 3, "grid": false}
+                    }
+                }
+            },
+
+            {
+                "title": {"text": "Step 2: Please click and drag inside the second graph's area", "fontSize": 15, "anchor": "start"},
+
+                "width": 1301,
+                "height": 500,
+                "params": [{
+                    "name": "brush",
+                    "select": "interval"
+                }],
+                "mark": {"type": "circle", "tooltip": true, "clip": true},
+                "encoding": {
+                    "x": {
+                        "field": "publication_date_only", "type": "temporal", "title": "Date",
+                        "scale": {"domain": {"selection": "brush_volume"}},
+                    },
+                    "y": {"field": "bing_liu_pos", "type": "quantitative", "aggregate": "count"},
+                    "size": {"value": 150},
+                    "color": {
+                        "condition": {
+                            "param": "brush",
+                            "field": "bing_liu_net_sentiment",
+                            "type": "ordinal",
+                            "title": "Net Sentiment"
+                        },
+                        "value": "lightgray"
+                    }
+                }
+            },
+
+
+            {
+
+                "transform": [
+                    {"filter": {"param": "brush"}},
+                    {"window": [{"op": "rank", "as": "rank"}]},
+                    {"filter": {"field": "rank", "lt": 100}}
+                ],
+
+
+                "hconcat": [
+
+
+                    {
+                        "width": 100,
+                        "title": "Date",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "publication_date_only", "type": "temporal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    },
+
+                    {
+                        "width": 1000,
+                        "title": "News Headline",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "title", "type": "nominal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    },
+
+
+                    {
+                        "width": 70,
+                        "title": "% Positive",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "bing_liu_pos", "type": "nominal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    },
+                    {
+                        "width": 70,
+                        "title": "% Negative",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "bing_liu_neg", "type": "nominal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    }
+                ]
+            }
+
+        ],
+        "resolve": {"legend": {"color": "independent"}}
+    };
+
+
+
+
+
     // Embed the visualization in the container with id `vis`
-    vegaEmbed('#vis1', vlSpec1, {'actions': false});
+    vegaEmbed('#vis1', vlSpec1, {'actions': true});
+
+
+    // Embed the visualization in the container with id `vis`
+    vegaEmbed('#vis2', vlSpec2, {'actions': true});
+
+
+        // Embed the visualization in the container with id `vis`
+    vegaEmbed('#vis3', vlSpec3, {'actions': true});
+
 
 {% endblock %}
+
+
 
