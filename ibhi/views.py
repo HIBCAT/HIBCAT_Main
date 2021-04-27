@@ -12,7 +12,7 @@ from .models import (BwActivityTime, BwActivityDay, BwGeography,
                      ClineCenter, YahooStockData, ShortInterest,
                      CCEventTimeline)
 
-# Feature 1
+#
 #feature_1_bw = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral','negative', 'net_sentiment','volume', 'brand'))
 #feature_1_cc = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment', 'brand'))
 #feature_1_cc_2 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'title', 'brand'))
@@ -675,11 +675,8 @@ class BwVegaVisual4(PandasSimpleView):
         return BwVegaVisual4.write_data(self)
 
 
-<<<<<<< HEAD
-=======
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual3.write_data(self)
->>>>>>> 1b4463bfcd68ac5402f04cf853caee3188e45c0b
 
 
 class FluidLayoutView(View):
