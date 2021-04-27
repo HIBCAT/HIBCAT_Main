@@ -57,7 +57,7 @@ openpyxl==3.0.5
 packaging==20.8
 pandas==1.2.0
 pandocfilters==1.4.3
-parso==0.7.0
+parso
 pexpect==4.8.0
 pickleshare==0.7.5
 pillow==8.1.0
