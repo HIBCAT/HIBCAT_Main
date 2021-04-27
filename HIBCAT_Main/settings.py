@@ -125,7 +125,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static')
 
 # To put the static files in static files storage folder STATIC_ROOT while deploying it on aws
 # To enable the gzip storage functionality
