@@ -37,7 +37,7 @@
 
     var vlSpec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-        "data": {"url": "http://127.0.0.1:7001/visual_1.csv"},
+        "data": {"url": "http://18.218.151.244:8000/visual_1.csv"},
         "transform": [{"window": [{"op": "row_number", "as": "row_number"}]}],
         "vconcat": [
             {
@@ -336,7 +336,7 @@
 
         var vlSpec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-        "data": {"url": "http://127.0.0.1:7001/visual_2.csv"},
+        "data": {"url": "http://18.218.151.244:8000/visual_2.csv"},
 
         "transform": [{
             "window": [{"op": "row_number", "as": "row_number"}]
@@ -1563,7 +1563,7 @@
         var vlSpec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "description": "Drag a rectangular brush to show (first 100) selected points in a table.",
-        "data": {"url": "http://127.0.0.1:7001/visual_3.csv"},
+        "data": {"url": "http://18.218.151.244:8000/visual_3.csv"},
         "transform": [{
             "window": [{"op": "row_number", "as": "row_number"}]
         }],
