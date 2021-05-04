@@ -674,10 +674,6 @@ class BwVegaVisual4(PandasSimpleView):
         return BwVegaVisual4.write_data(self)
 
 
-    def get_data(self, request, *args, **kwargs):
-        return BwVegaVisual3.write_data(self)
-
-
 class FluidLayoutView(View):
 
     def get(self, request):
