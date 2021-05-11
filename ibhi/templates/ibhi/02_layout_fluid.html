@@ -106,6 +106,9 @@
                 <li class="nav-item">
                     <a class="nav-link btn-secondary" href="#visual3" role="tab" data-toggle="tab">Sentiment Trends</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-secondary" href="#visual5" role="tab" data-toggle="tab">Word Cloud</a>
+                </li>
 
             </ul>
         </div>
@@ -133,6 +136,18 @@
 
             <div role="tabpanel" class="tab-pane active" id="visual4">
                 {% block visual_four %}
+
+                {% endblock %}
+            </div>
+
+
+            <div role="tabpanel" class="tab-pane active" id="visual5">
+                {% block visual_five %}
+
+                        <span style="padding-right:3px; padding-top: 3px; display: inline-block;">
+                  <img src="{% static 'ibhi/assets/img/wordcloud_test.svg' %}">
+    </span>
+
 
                 {% endblock %}
             </div>

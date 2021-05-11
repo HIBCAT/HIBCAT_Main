@@ -5,6 +5,10 @@ from django.views import View
 import pandas as pd
 from rest_pandas import PandasSimpleView
 from functools import reduce
+import os
+from sklearn.feature_extraction.text import TfidfVectorizer
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
 
 from .models import (BwActivityTime, BwActivityDay, BwGeography,
                      BwVolume, BwSentiments, BwNetSentiment,
@@ -673,6 +677,83 @@ class BwVegaVisual4(PandasSimpleView):
     def get_data(self, request, *args, **kwargs):
         return BwVegaVisual4.write_data(self)
 
+
+class FeatureWordCloud(PandasSimpleView):
+
+    def AggregateDailyUniqueEntity(df):
+        '''
+        Process a dataframe to aggregate the extracted entities onto daily levels, making entities for each day unique
+        '''
+        # convert NaN to empty string
+        df.fillna('', inplace=True)
+
+        # aggregate entities on daily level (if one entity appears in more than one reports on a day, only count it once)
+        # concatenate the string
+        df_daily = df[['publication_date_only']]
+        df_daily['extracted_organizations'] = df.groupby(['publication_date_only'])['extracted_organizations'].transform(lambda x: '|'.join(x))
+        df_daily['extracted_people'] = df.groupby(['publication_date_only'])['extracted_people'].transform(lambda x: '|'.join(x))
+
+        # drop duplicate data
+        df_daily = df_daily.drop_duplicates()
+
+        return (df_daily)
+
+    def KeepUniqueEntity(string):
+        with_repetition = string.split("|")
+        unique_list = list(set(with_repetition))
+        return ("|".join(unique_list))
+
+    def WordCloudGenerator(aggregation="article", use_idf=False, NER_type="organization"):
+
+        data = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'extracted_organizations', 'extracted_people'))
+
+        ################################## aggregation (optional) ##########################################
+        # aggregate the entities onto daily level if specified,
+        # with **AggregateDailyUniqueEntity** and **KeepUniqueEntity** externally defined
+        # this may take some time
+        if aggregation == "daily" or use_idf:
+            data = FeatureWordCloud.AggregateDailyUniqueEntity(data)
+            if aggregation == "daily":  # only keep unique list of entities every day
+                data['extracted_organizations'].apply(FeatureWordCloud.KeepUniqueEntity)
+                data['extracted_people'].apply(FeatureWordCloud.KeepUniqueEntity)
+
+        ################################### create word frequency dictionary #################################
+
+        # create a dictionary for the entities and their count
+        ## combine the non-null rows into a string for the selected entity type
+        if NER_type == "organization":
+            entity_string = "|".join(data.extracted_organizations.dropna())
+            if use_idf:
+                corpus = list(data.extracted_organizations.dropna())
+        elif NER_type == "people":
+            entity_string = "|".join(data.extracted_people.dropna())
+            if use_idf:
+                corpus = list(data.extracted_people.dropna())
+        elif NER_type == "all":
+            entity_string = "|".join(pd.concat([data.extracted_organizations.dropna(),
+                                                data.extracted_people.dropna()]))
+            if use_idf:
+                corpus = list(data.extracted_organizations.dropna()) + list(data.extracted_people.dropna())
+
+        else:
+            print("Please check Named Entity type.")
+            return
+
+        ## split the string into a list
+        entity_list = entity_string.split("|")
+        ## frequency dictionary
+        word_freq = dict()
+        for i in entity_list:
+            word_freq[i] = word_freq.get(i, 0) + 1
+
+        ######################################## create visualization#################################
+        wordcloud = WordCloud(max_font_size=50, max_words=100, background_color="white").generate_from_frequencies(word_freq)
+
+        plt.imshow(wordcloud, interpolation="bilinear")
+        plt.axis("off")
+        plt.savefig("ibhi/media/wordcloud/wordcloud_test.svg", format="svg", dpi=1000)
+
+FeatureWordCloud.WordCloudGenerator("daily", "organization")
 
 class FluidLayoutView(View):
 
