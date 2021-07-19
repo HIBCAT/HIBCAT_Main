@@ -1,0 +1,361 @@
+{% extends 'ibhi/base.html' %}
+
+{% block title %}
+    Report
+{% endblock %}
+
+{% block content %}
+
+    <!--This will contain the header div-->
+    {% block content-header %}
+
+    {% endblock %}
+
+    <!-- This will contain the visualizations from the analyzed data-->
+
+    <section class="jumbotron text-center" style="background: #fdab95">
+        <div class="container">
+            <h1 class="jumbotron-heading">Another Heading</h1>
+            <p class="lead text-muted">Another content for the bottom</p>
+            <p>
+
+            </p>
+        </div>
+    </section>
+
+    <section class="jumbotron text-center" style="background: #ffffff">
+
+        {% block visual %}
+
+            <!-- Container for the visualization -->
+            <div id="net_sentiment_visual"></div>
+            
+        {% endblock %}
+    </section>
+
+
+
+
+
+    <!--This will contain the table-->
+    {% block content-table %}
+
+    {% endblock %}
+
+{% endblock %}
+
+{% block script %}
+
+
+    var vlSpecNetSentimentVis = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+        "data": {"url": "http://127.0.0.1:7001/net_sentiment_explorer.csv"},
+        "transform": [{"window": [{"op": "row_number", "as": "row_number"}]}],
+        "vconcat": [
+            {
+                "layer": [
+                    {
+                        "title": {"text": "Step 1: Please click and drag inside the first graph's area", "fontSize": 15, "anchor": "start"},
+                        "width": 1500,
+                        "height": 100,
+                        "mark": {"type": "line", "strokeWidth": 1.5, "tooltip": true, "color": "#000080"},
+                        "transform": [
+                            {"filter": {"field": "attributes", "oneOf": ["bw_std_vol_0_20"]}}
+                        ],
+                        "encoding": {
+                            "x": {"field": "date", "type": "temporal", "title": "Date"},
+                            "y": {
+                                "field": "values",
+                                "type": "quantitative",
+                                "axis": {
+                                    "tickCount": 3,
+                                    "grid": false,
+                                    "title": "Standardized Volume"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "width": 1500,
+                        "height": 100,
+                        "mark": {"type": "line", "strokeWidth": 1.5, "tooltip": true, "color": "#e84a27"},
+                        "transform": [
+                            {"filter": {"field": "attributes", "oneOf": ["cc_std_vol_0_20"]}}
+                        ],
+                        "selection": {"brush": {"type": "interval", "encodings": ["x"]}},
+                        "encoding": {
+                            "x": {"field": "date", "type": "temporal", "title": "       Standardized Volume of Daily Posts(0 to 20) (Orange: News Media | Blue: Social Media)"},
+                            "y": {
+                                "field": "values",
+                                "type": "quantitative",
+                                "axis": {"tickCount": 3, "grid": false}
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "layer": [
+                    {
+                        "width": 1500,
+                        "height": 100,
+                        "mark": {"type": "line", "strokeWidth": 1.5, "tooltip": true, "color": "#e84a27"},
+                        "transform": [
+                            {"filter": {"field": "attributes", "oneOf": ["cc_volume"]}}
+                        ],
+                        "encoding": {
+                            "x": {
+                                "field": "date",
+                                "type": "temporal",
+                                "scale": {"domain": {"selection": "brush"}},
+                                "axis": {"title": "Date,      True Volume: ClineCenter | News Media Posts"}
+                            },
+                            "y": {
+                                "field": "values",
+                                "type": "quantitative",
+                                "axis": {"tickCount": 3, "grid": false, "title": "Post Volume"}
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "layer": [
+                    {
+                        "layer": [
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#e84a27"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_net_senti_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Net Sentiment"
+                                    }
+                                }
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {"filter": {"field": "attributes", "oneOf": ["cc_vwas"]}}
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Net Sentiment"
+                                    }
+                                }
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "bar",
+                                    "opacity": 0.2,
+                                    "color": "#000080",
+                                    "tooltip": true
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_std_vol_0_20"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {
+                                            "title": "Date,        ClineCenter: News Media ( Orange: Net Sentiment | Grey: Volumetric Weighted Avg Sentiment Score )"
+                                        }
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Standardized Volume(Blue Bar)"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "layer": [
+                    {
+                        "width": 1500,
+                        "height": 100,
+                        "mark": {"type": "line", "strokeWidth": 1.5, "tooltip": true, "color": "#000080"},
+                        "transform": [
+                            {"filter": {"field": "attributes", "oneOf": ["bw_volume"]}}
+                        ],
+                        "encoding": {
+                            "x": {
+                                "field": "date",
+                                "type": "temporal",
+                                "axis": {"title": "Date,      True Volume: Social Media Posts"},
+                                "scale": {"domain": {"selection": "brush"}}
+                            },
+                            "y": {
+                                "field": "values",
+                                "type": "quantitative",
+                                "axis": {"tickCount": 3, "grid": false, "title": "Post Volume"}
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "layer": [
+                    {
+                        "layer": [
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#000080"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_net_senti_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Net Sentiment"
+                                    }
+                                }
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {"filter": {"field": "attributes", "oneOf": ["bw_vwas"]}}
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Net Sentiment"
+                                    }
+                                }
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "bar",
+                                    "opacity": 0.2,
+                                    "color": "#000080",
+                                    "tooltip": true
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_std_vol_0_20"]
+                                        },
+                                        "calculate": "{'bw_std_vol_0_20': 'Social Media Standard Volume (Scale 0 to 20)'}[datum.attributes]",
+                                        "as": "attributes"
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {
+                                            "title": "Date,      BrandWatch ( Blue: Net Sentiment | Grey: Volumetric Weighted Avg Sentiment Score )"
+                                        }
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Standardized Volume(Blue Bar)"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+
+
+
+
+    // Embed the visualization in the container with id `vis`
+    vegaEmbed('#net_sentiment_visual', vlSpecNetSentimentVis, {'actions': true});
+
+
+
+
+
+{% endblock %}
+
+
+

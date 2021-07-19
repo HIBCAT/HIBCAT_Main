@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from ibhi.views import (BwVegaVisual1, BwVegaVisual2, BwVegaVisual3,
-                        FluidLayoutView, BwVegaVisual4)
+from ibhi.views import (BwVegaAdInvestmentVis, AdInvestmentView,
+                        BwNewsExplorerVis, NewsExplorerView,
+                        BwNetSentimentExplorerVis, NetSentimentExplorerView,
+                        BwSentimentTrendVis, SentimentTrendView, WordCloudView)
 
 
 # The name parameter (like 'report_urlpattern)
@@ -26,19 +28,37 @@ from ibhi.views import (BwVegaVisual1, BwVegaVisual2, BwVegaVisual3,
 
 urlpatterns = [
 
-    # API
+    # API urls
 
-    path('visual_3.csv', BwVegaVisual3.as_view()),
+    path('ad_investment.csv', BwVegaAdInvestmentVis.as_view()),
 
-    path('visual_1.csv', BwVegaVisual1.as_view()),
+    path('news_explorer.csv', BwNewsExplorerVis.as_view()),
 
-    path('visual_2.csv', BwVegaVisual2.as_view()),
+    path('net_sentiment_explorer.csv', BwNetSentimentExplorerVis.as_view()),
 
-    path('visual_4.csv', BwVegaVisual4.as_view()),
+    path('sentiment_trend.csv', BwSentimentTrendVis.as_view()),
 
-    path('fluid_report/',
-         FluidLayoutView.as_view(),
-         name='fluid_report_urlpattern'),
+    # Visualization urls
+
+    path('ad_investment/',
+         AdInvestmentView.as_view(),
+         name='ad_investment_urlpattern'),
+
+    path('news_explorer/',
+         NewsExplorerView.as_view(),
+         name='news_explorer_urlpattern'),
+
+    path('net_sentiment_explorer/',
+         NetSentimentExplorerView.as_view(),
+         name='net_sentiment_explorer_urlpattern'),
+
+    path('sentiment_trend/',
+         SentimentTrendView.as_view(),
+         name='sentiment_trend_urlpattern'),
+
+    path('word_cloud/',
+         WordCloudView.as_view(),
+         name='word_cloud_urlpattern'),
 
 
 ]

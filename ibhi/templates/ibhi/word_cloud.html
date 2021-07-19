@@ -1,0 +1,54 @@
+{% extends 'ibhi/base.html' %}
+{% load static %}
+
+{% block title %}
+    Report
+{% endblock %}
+
+{% block content %}
+
+    <!--This will contain the header div-->
+    {% block content-header %}
+
+    {% endblock %}
+
+    <!-- This will contain the visualizations from the analyzed data-->
+
+    <section class="jumbotron text-center" style="background: #fdab95">
+        <div class="container">
+            <h1 class="jumbotron-heading">Another Heading</h1>
+            <p class="lead text-muted">Another content for the bottom</p>
+            <p>
+
+            </p>
+        </div>
+    </section>
+
+    <section class="jumbotron text-center" style="background: #ffffff">
+
+        {% block visual %}
+
+            <!-- Container for the visualization -->
+
+            <span style="padding-right:3px; padding-top: 3px; display: inline-block;">
+                  <img src="{% static 'ibhi/assets/img/wordcloud_test.svg' %}" width="1280px" height="720px">
+            </span>
+
+
+        {% endblock %}
+
+
+    </section>
+
+
+
+    <!--This will contain the table-->
+    {% block content-table %}
+
+    {% endblock %}
+
+{% endblock %}
+
+
+
+

@@ -23,7 +23,7 @@ from .models import (BwActivityTime, BwActivityDay, BwGeography,
 # feature_1_tl = pd.DataFrame(CCEventTimeline.objects.all().values('date', 'end_date', 'event_type', 'description', 'brand'))
 
 # Feature 3
-class BwVegaVisual3(PandasSimpleView):
+class BwNewsExplorerVis(PandasSimpleView):
 
     def date_df(self, brand_name):
 
@@ -79,7 +79,7 @@ class BwVegaVisual3(PandasSimpleView):
         brands = pd.DataFrame(ClineCenter.objects.all().values('brand'))
 
         for brand_name in brands['brand'].unique():
-            df1 = BwVegaVisual3.date_df(self, brand_name)
+            df1 = BwNewsExplorerVis.date_df(self, brand_name)
             final_df = pd.concat([final_df, df1])
             final_df.reset_index(inplace=True, drop=True)
 
@@ -95,14 +95,14 @@ class BwVegaVisual3(PandasSimpleView):
         return final_df_03
 
     def write_data(self):
-        return BwVegaVisual3.merged_data(self)
+        return BwNewsExplorerVis.merged_data(self)
 
 
     def get_data(self, request, *args, **kwargs):
-        return BwVegaVisual3.write_data(self)
+        return BwNewsExplorerVis.write_data(self)
 
 # Feature 1
-class BwVegaVisual1(PandasSimpleView):
+class BwNetSentimentExplorerVis(PandasSimpleView):
 
     def brand_watch_df(self, brand_name):
         brandwatch_01 = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral',
@@ -422,9 +422,9 @@ class BwVegaVisual1(PandasSimpleView):
         brands = pd.DataFrame(ClineCenter.objects.all().values('brand'))
 
         for brand_name in brands['brand'].unique():
-            df1 = BwVegaVisual1.brand_watch_df(self, brand_name)
-            df2 = BwVegaVisual1.cline_center_df(self, brand_name)
-            # df3 = BwVegaVisual1.timeline_df(self, brand_name)
+            df1 = BwNetSentimentExplorerVis.brand_watch_df(self, brand_name)
+            df2 = BwNetSentimentExplorerVis.cline_center_df(self, brand_name)
+            # df3 = BwNetSentimentExplorerVis.timeline_df(self, brand_name)
             # df3 needs to be added in the next line
             final_df = pd.concat([final_df, df1, df2])
             final_df.reset_index(inplace=True, drop=True)
@@ -435,13 +435,13 @@ class BwVegaVisual1(PandasSimpleView):
 
     def write_data(self):
         # Now below is the full code for the part one of the Feature one:
-        return BwVegaVisual1.merged_data(self)
+        return BwNetSentimentExplorerVis.merged_data(self)
 
     def get_data(self, request, *args, **kwargs):
-        return BwVegaVisual1.write_data(self)
+        return BwNetSentimentExplorerVis.write_data(self)
 
 # Feature 2
-class BwVegaVisual2(PandasSimpleView):
+class BwSentimentTrendVis(PandasSimpleView):
 
     def bw_cc_df(self, brand_name):
 
@@ -617,7 +617,7 @@ class BwVegaVisual2(PandasSimpleView):
         brands = pd.DataFrame(ClineCenter.objects.all().values('brand'))
 
         for brand_name in brands['brand'].unique():
-            df1 = BwVegaVisual2.bw_cc_df(self, brand_name)
+            df1 = BwSentimentTrendVis.bw_cc_df(self, brand_name)
             final_df = pd.concat([final_df, df1])
             final_df.reset_index(inplace=True, drop=True)
 
@@ -625,13 +625,13 @@ class BwVegaVisual2(PandasSimpleView):
 
 
     def write_data(self):
-        return BwVegaVisual2.merged_data(self)
+        return BwSentimentTrendVis.merged_data(self)
 
     def get_data(self, request, *args, **kwargs):
-        return BwVegaVisual2.write_data(self)
+        return BwSentimentTrendVis.write_data(self)
 
 # Feature 4
-class BwVegaVisual4(PandasSimpleView):
+class BwVegaAdInvestmentVis(PandasSimpleView):
 
     def recovery_cost(self):
 
@@ -672,10 +672,10 @@ class BwVegaVisual4(PandasSimpleView):
 
 
     def write_data(self):
-        return BwVegaVisual4.recovery_cost(self)
+        return BwVegaAdInvestmentVis.recovery_cost(self)
 
     def get_data(self, request, *args, **kwargs):
-        return BwVegaVisual4.write_data(self)
+        return BwVegaAdInvestmentVis.write_data(self)
 
 
 class FeatureWordCloud(PandasSimpleView):
@@ -755,11 +755,43 @@ class FeatureWordCloud(PandasSimpleView):
 
 FeatureWordCloud.WordCloudGenerator("daily", "organization")
 
-class FluidLayoutView(View):
+class AdInvestmentView(View):
 
     def get(self, request):
         return render(request,
-                      'ibhi/02_report.html',
+                      'ibhi/ad_investment.html',
+                      {}
+                      )
+
+class NewsExplorerView(View):
+
+    def get(self, request):
+        return render(request,
+                      'ibhi/news_explorer.html',
+                      {}
+                      )
+
+class NetSentimentExplorerView(View):
+
+    def get(self, request):
+        return render(request,
+                      'ibhi/net_sentiment_explorer.html',
+                      {}
+                      )
+
+class SentimentTrendView(View):
+
+    def get(self, request):
+        return render(request,
+                      'ibhi/sentiment_trend.html',
+                      {}
+                      )
+
+class WordCloudView(View):
+
+    def get(self, request):
+        return render(request,
+                      'ibhi/word_cloud.html',
                       {}
                       )
 
