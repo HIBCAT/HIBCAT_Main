@@ -13,13 +13,20 @@
 
     <!-- This will contain the visualizations from the analyzed data-->
 
-    <section class="jumbotron text-center" style="background: #fdab95">
+    <section class="jumbotron text-center" style="background: #ffffff">
         <div class="container">
-            <h1 class="jumbotron-heading">Another Heading</h1>
-            <p class="lead text-muted">Another content for the bottom</p>
+            <h1 class="jumbotron-heading">Net Sentiment Explorer</h1>
+            <p class="lead text-muted">Public's net sentiment trend in shared media, and earned media for a given brand.</p>
             <p>
-
+                Weighted volumetric average of public's net sentiment reflected in the shared media, and the earned media.
             </p>
+                <li>
+            The post volume in the shared media, and the earned media
+                    <br>are scaled down in the same range for visual comparison in the first graph.
+        </li>
+            <li>
+                Please click and drag the desired area in the first graph.
+            </li>
         </div>
     </section>
 
@@ -84,7 +91,7 @@
                         ],
                         "selection": {"brush": {"type": "interval", "encodings": ["x"]}},
                         "encoding": {
-                            "x": {"field": "date", "type": "temporal", "title": "       Standardized Volume of Daily Posts(0 to 20) (Orange: News Media | Blue: Social Media)"},
+                            "x": {"field": "date", "type": "temporal", "title": "       Standardized Volume of Daily Posts(0 to 20) (Orange: Earned Media | Blue: Shared Media)"},
                             "y": {
                                 "field": "values",
                                 "type": "quantitative",
@@ -108,7 +115,7 @@
                                 "field": "date",
                                 "type": "temporal",
                                 "scale": {"domain": {"selection": "brush"}},
-                                "axis": {"title": "Date,      True Volume: ClineCenter | News Media Posts"}
+                                "axis": {"title": "Date,      True Volume:  Earned Media Posts"}
                             },
                             "y": {
                                 "field": "values",
@@ -203,7 +210,7 @@
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
                                         "axis": {
-                                            "title": "Date,        ClineCenter: News Media ( Orange: Net Sentiment | Grey: Volumetric Weighted Avg Sentiment Score )"
+                                            "title": "Date,        Earned Media ( Orange: Net Sentiment | Grey: Volumetric Weighted Avg Sentiment Score )"
                                         }
                                     },
                                     "y": {
@@ -230,7 +237,7 @@
                             "x": {
                                 "field": "date",
                                 "type": "temporal",
-                                "axis": {"title": "Date,      True Volume: Social Media Posts"},
+                                "axis": {"title": "Date,      True Volume: Shared Media Posts"},
                                 "scale": {"domain": {"selection": "brush"}}
                             },
                             "y": {
@@ -318,7 +325,7 @@
                                             "field": "attributes",
                                             "oneOf": ["bw_std_vol_0_20"]
                                         },
-                                        "calculate": "{'bw_std_vol_0_20': 'Social Media Standard Volume (Scale 0 to 20)'}[datum.attributes]",
+                                        "calculate": "{'bw_std_vol_0_20': 'Shared Media Standard Volume (Scale 0 to 20)'}[datum.attributes]",
                                         "as": "attributes"
                                     }
                                 ],

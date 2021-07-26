@@ -1,3 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView
+from .utils import PageLinksMixin
+
+
 from django.shortcuts import render
 from django.http.response import HttpResponse
 from django.template import loader
@@ -14,7 +22,10 @@ from .models import (BwActivityTime, BwActivityDay, BwGeography,
                      BwVolume, BwSentiments, BwNetSentiment,
                      BwEmotions, Gender, BwContentSources,
                      ClineCenter, YahooStockData, ShortInterest,
-                     CCEventTimeline)
+                     CCEventTimeline,
+                     ResearchPapers, APIDataDictionary,
+                     RawDataDictionary, InternalLinks, Ideas
+                     )
 
 #
 #feature_1_bw = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral','negative', 'net_sentiment','volume', 'brand'))
@@ -794,6 +805,31 @@ class WordCloudView(View):
                       'ibhi/word_cloud.html',
                       {}
                       )
+
+class ResearchPapersList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
+    paginate_by = 2
+    model = ResearchPapers
+    permission_required = 'ibhi.view_researchpapers'
+
+class APIDataDictionaryList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
+    paginate_by = 2
+    model = APIDataDictionary
+    permission_required = 'ibhi.view_apidatadictionary'
+
+class RawDataDictionaryList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
+    paginate_by = 2
+    model = RawDataDictionary
+    permission_required = 'ibhi.view_rawdatadictionary'
+
+class InternalLinksList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
+    paginate_by = 2
+    model = InternalLinks
+    permission_required = 'ibhi.view_internallinks'
+
+class IdeasList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
+    paginate_by = 2
+    model = Ideas
+    permission_required = 'ibhi.view_ideas'
 
 
 

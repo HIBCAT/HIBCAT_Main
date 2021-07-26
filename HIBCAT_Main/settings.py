@@ -131,3 +131,6 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000000
 # To enable the gzip storage functionality
 # To enable compression and caching support
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+LOGIN_REDIRECT_URL = 'about_urlpattern'
+LOGOUT_REDIRECT_URL = 'login_urlpattern'

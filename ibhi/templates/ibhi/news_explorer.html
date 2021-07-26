@@ -13,12 +13,19 @@
 
     <!-- This will contain the visualizations from the analyzed data-->
 
-    <section class="jumbotron text-center" style="background: #fdab95">
+    <section class="jumbotron text-center" style="background: #ffffff">
         <div class="container">
-            <h1 class="jumbotron-heading">Another Heading</h1>
-            <p class="lead text-muted">Another content for the bottom</p>
+            <h1 class="jumbotron-heading">News Article Explorer</h1>
+            <p class="lead text-muted">Quick news headline explorer based on specific dates</p>
             <p>
-
+            Visually scan through the earned media trends on a particular date. <br>
+                Get a quick idea about the event type pertaining on a day of high activity in the earned media.
+                <li>
+            Click and drag desired area in the first graph.
+        </li>
+            <li>
+                Then click and drag the desired area in the second graph.
+            </li>
             </p>
         </div>
     </section>
@@ -27,8 +34,8 @@
         {% block visual %}
 
             <!-- Container for the visualization -->
-            <div id="news_explorer_visual"></div>
-            
+            <div class="container-fluid" id="news_explorer_visual"></div>
+
         {% endblock %}
 
 
@@ -57,7 +64,7 @@
 
             {
                 "title": {"text": "Step 1: Please click and drag inside the first graph's area", "fontSize": 15, "anchor": "start"},
-                "width": 1301,
+                "width": 1550,
                 "height": 100,
                 "mark": {"type": "line", "tooltip": true, "color": "#e84a27"},
                 "selection": {"brush_volume": {"type": "interval", "encodings": ["x"]}},
@@ -65,7 +72,7 @@
                     "x": {
                         "field": "publication_date_only",
                         "type": "temporal",
-                        "title": "       Volume of Daily Posts (Orange: News Media)"
+                        "title": "       Volume of Daily Posts (Orange: Earned Media)"
                     },
                     "y": {
                         "field": "cc_volume",
@@ -78,7 +85,7 @@
             {
                 "title": {"text": "Step 2: Please click and drag inside the second graph's area", "fontSize": 15, "anchor": "start"},
 
-                "width": 1301,
+                "width": 1550,
                 "height": 500,
                 "params": [{
                     "name": "brush",
@@ -118,7 +125,7 @@
 
 
                     {
-                        "width": 100,
+                        "width": 90,
                         "title": "Date",
                         "mark": "text",
                         "encoding": {
@@ -127,19 +134,10 @@
                         }
                     },
 
-                    {
-                        "width": 1000,
-                        "title": "News Headline",
-                        "mark": "text",
-                        "encoding": {
-                            "text": {"field": "title", "type": "nominal"},
-                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
-                        }
-                    },
 
 
                     {
-                        "width": 70,
+                        "width": 60,
                         "title": "% Positive",
                         "mark": "text",
                         "encoding": {
@@ -148,14 +146,26 @@
                         }
                     },
                     {
-                        "width": 70,
+                        "width": 60,
                         "title": "% Negative",
                         "mark": "text",
                         "encoding": {
                             "text": {"field": "bing_liu_neg", "type": "nominal"},
                             "y": {"field": "row_number", "type": "ordinal", "axis": null}
                         }
+                    },
+
+                     {
+                        "width": 1450,
+                        "title": "News Headline",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "title", "type": "nominal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
                     }
+
+
                 ]
             }
 

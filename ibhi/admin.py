@@ -5,7 +5,9 @@ from .models import BwGeography, Gender, BwContentSources, \
     BwNetSentiment, BwEmotions, BwSentiments, \
     BwVolume, BwActivityDay, BwActivityTime, \
     ClineCenter, YahooStockData, ShortInterest, \
-    CCEventTimeline
+    CCEventTimeline, ResearchPapers, APIDataDictionary, \
+    RawDataDictionary, InternalLinks, Ideas
+
 
 admin.site.site_header = "HIBCAT Admin"
 admin.site.site_title = "HIBCAT Admin Portal"
@@ -183,3 +185,58 @@ class CCEventTimelineAdmin(ImportExportModelAdmin):
     resource_class = CCEventTimelineResource
 
 admin.site.register(CCEventTimeline, CCEventTimelineAdmin)
+
+# 14
+class ResearchPapersResource(resources.ModelResource):
+    class Meta:
+        model = ResearchPapers
+
+class ResearchPapersAdmin(ImportExportModelAdmin):
+    list_display = ('date', 'added_by_person', 'entry_type', 'title', 'link', 'description')
+    resource_class = ResearchPapersResource
+
+admin.site.register(ResearchPapers, ResearchPapersAdmin)
+
+# 15
+class APIDataDictionaryResource(resources.ModelResource):
+    class Meta:
+        model = APIDataDictionary
+
+class APIDataDictionaryAdmin(ImportExportModelAdmin):
+    list_display = ('api_name', 'field_name', 'field_data_type', 'description')
+    resource_class = APIDataDictionaryResource
+
+admin.site.register(APIDataDictionary, APIDataDictionaryAdmin)
+
+# 16
+class RawDataDictionaryResource(resources.ModelResource):
+    class Meta:
+        model = RawDataDictionary
+
+class RawDataDictionaryAdmin(ImportExportModelAdmin):
+    list_display = ('database_name', 'field_name', 'field_data_type', 'description')
+    resource_class = RawDataDictionaryResource
+
+admin.site.register(RawDataDictionary, RawDataDictionaryAdmin)
+
+# 17
+class InternalLinksResource(resources.ModelResource):
+    class Meta:
+        model = InternalLinks
+
+class InternalLinksAdmin(ImportExportModelAdmin):
+    list_display = ('name', 'link', 'description')
+    resource_class = InternalLinksResource
+
+admin.site.register(InternalLinks, InternalLinksAdmin)
+
+# 18
+class IdeasResource(resources.ModelResource):
+    class Meta:
+        model = Ideas
+
+class IdeasAdmin(ImportExportModelAdmin):
+    list_display = ('date', 'suggested_by', 'title', 'entry_type')
+    resource_class = IdeasResource
+
+admin.site.register(Ideas, IdeasAdmin)

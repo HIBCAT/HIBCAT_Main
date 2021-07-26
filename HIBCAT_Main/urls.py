@@ -14,6 +14,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import RedirectView, TemplateView
 
 urlpatterns = [
@@ -31,6 +32,18 @@ urlpatterns = [
              template_name='ibhi/about.html'),
          name='about_urlpattern'
          ),
+
+    # Login Page
+    path('login/',
+         LoginView.as_view(
+             template_name='ibhi/login.html'),
+         name='login_urlpattern'),
+
+    # Logout Page
+
+    path('logout/',
+         LogoutView.as_view(),
+         name='logout_urlpattern'),
 
     path('admin/', admin.site.urls),
     path('', include('ibhi.urls')),

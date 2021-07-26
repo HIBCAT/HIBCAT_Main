@@ -161,6 +161,54 @@ class ClineCenter(models.Model):
 
         super(ClineCenter, self).save()
 
+class ResearchPapers(models.Model):
+
+    MEDIA_TYPE_CHOICES = [
+        ('Research Paper', 'Research Paper'),
+        ('Video', 'Video'),
+        ('Web Article', 'Web Article'),
+        ('Visualization', 'Visualization'),
+        ('Programming Related', 'Programming Related'),
+        ('Other', 'Other'),
+    ]
+
+    date = models.DateField(null=True, blank=True, verbose_name="Date of Addition")
+    added_by_person = models.TextField(null=True, blank=True, verbose_name="Suggested By")
+    entry_type = models.CharField(max_length=50, choices=MEDIA_TYPE_CHOICES, default='Research Paper', verbose_name="Entry Type")
+    title = models.TextField(null=True, blank=True, verbose_name="Title")
+    link = models.TextField(null=True, blank=True, verbose_name="Link")
+    description = models.TextField(null=True, blank=True, verbose_name="Description")
+
+
+class APIDataDictionary(models.Model):
+    api_name = models.TextField(null=True, blank=True, verbose_name="Api Name")
+    field_name = models.TextField(null=True, blank=True, verbose_name="Field Name")
+    field_data_type = models.TextField(null=True, blank=True, verbose_name="Field's Data Type")
+    description = models.TextField(null=True, blank=True, verbose_name="Description")
+
+class RawDataDictionary(models.Model):
+    database_name = models.TextField(null=True, blank=True, verbose_name="Database Name")
+    field_name = models.TextField(null=True, blank=True, verbose_name="Field Name")
+    field_data_type = models.TextField(null=True, blank=True, verbose_name="Field's Data Type")
+    description = models.TextField(null=True, blank=True, verbose_name="Description")
+
+class InternalLinks(models.Model):
+    name = models.TextField(null=True, blank=True, verbose_name="Link Name")
+    link = models.TextField(null=True, blank=True, verbose_name="Link")
+    description = models.TextField(null=True, blank=True, verbose_name="Link Description")
+
+class Ideas(models.Model):
+
+    MEDIA_TYPE_CHOICES = [
+        ('New Feature Idea', 'New Feature Idea'),
+        ('Programming Related', 'Programming Related'),
+        ('Improvement Suggestions', 'Improvement Suggestions'),
+        ('Other', 'Other'),
+    ]
+    date = models.DateField(null=True, blank=True, verbose_name="Date of Suggestion")
+    suggested_by = models.TextField(null=True, blank=True, verbose_name="Suggested By")
+    title = models.TextField(null=True, blank=True, verbose_name="Description")
+    entry_type = models.CharField(max_length=50, choices=MEDIA_TYPE_CHOICES, default='New Feature Idea', verbose_name="Entry Type")
 
 class YahooStockData(models.Model):
     date = models.DateField(null=True, blank=True, verbose_name="Date")

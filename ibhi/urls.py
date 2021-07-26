@@ -18,7 +18,11 @@ from django.urls import path
 from ibhi.views import (BwVegaAdInvestmentVis, AdInvestmentView,
                         BwNewsExplorerVis, NewsExplorerView,
                         BwNetSentimentExplorerVis, NetSentimentExplorerView,
-                        BwSentimentTrendVis, SentimentTrendView, WordCloudView)
+                        BwSentimentTrendVis, SentimentTrendView, WordCloudView,
+
+                        ResearchPapersList, APIDataDictionaryList,
+                        RawDataDictionaryList, InternalLinksList, IdeasList
+                        )
 
 
 # The name parameter (like 'report_urlpattern)
@@ -30,13 +34,21 @@ urlpatterns = [
 
     # API urls
 
-    path('ad_investment.csv', BwVegaAdInvestmentVis.as_view()),
+    path('ad_investment.csv',
+         BwVegaAdInvestmentVis.as_view(),
+         name='ad_investment_api'),
 
-    path('news_explorer.csv', BwNewsExplorerVis.as_view()),
+    path('news_explorer.csv',
+         BwNewsExplorerVis.as_view(),
+         name='news_explorer_api'),
 
-    path('net_sentiment_explorer.csv', BwNetSentimentExplorerVis.as_view()),
+    path('net_sentiment_explorer.csv',
+         BwNetSentimentExplorerVis.as_view(),
+         name='net_sentiment_explorer_api'),
 
-    path('sentiment_trend.csv', BwSentimentTrendVis.as_view()),
+    path('sentiment_trend.csv',
+         BwSentimentTrendVis.as_view(),
+         name='sentiment_trend_api'),
 
     # Visualization urls
 
@@ -59,6 +71,23 @@ urlpatterns = [
     path('word_cloud/',
          WordCloudView.as_view(),
          name='word_cloud_urlpattern'),
+
+    # Reserach Tab Urls
+
+    path('researchpapers/', ResearchPapersList.as_view(),
+         name='ibhi_researchpapers_list_urlpattern'),
+
+    path('apidatadictionary/', APIDataDictionaryList.as_view(),
+         name='ibhi_apidatadictionary_list_urlpattern'),
+
+    path('rawdatadictionary/', RawDataDictionaryList.as_view(),
+         name='ibhi_rawdatadictionary_list_urlpattern'),
+
+    path('internallinks/', InternalLinksList.as_view(),
+         name='ibhi_internallinks_list_urlpattern'),
+
+    path('ideas/', IdeasList.as_view(),
+         name='ibhi_ideas_list_urlpattern'),
 
 
 ]

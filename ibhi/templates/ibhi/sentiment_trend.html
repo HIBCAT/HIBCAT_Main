@@ -13,13 +13,18 @@
 
     <!-- This will contain the visualizations from the analyzed data-->
 
-    <section class="jumbotron text-center" style="background: #fdab95">
+    <section class="jumbotron text-center" style="background: #ffffff">
         <div class="container">
-            <h1 class="jumbotron-heading">Another Heading</h1>
-            <p class="lead text-muted">Another content for the bottom</p>
+            <h1 class="jumbotron-heading">Sentiment Trend</h1>
+            <p class="lead text-muted">Detailed weighted volumetric average of public's sentiment trend</p>
             <p>
-
+                Detailed version of the "Net Sentiment Explorer" with trends in positive, neutral, and negative post types.
+                <br>
+                The visuals also contains the three months moving average to further evaluate the general trend.
             </p>
+            <li>
+                Please click and drag the desired area in the first graph.
+            </li>
         </div>
     </section>
 
@@ -83,7 +88,7 @@
                             "x": {
                                 "field": "date",
                                 "type": "temporal",
-                                "title": "Standardized Volume of Daily Posts: Orange: News Media | Blue: Social Media | Date"
+                                "title": "Standardized Volume of Daily Posts: Orange: Earned Media | Blue: Shared Media | Date"
                             },
                             "y": {
                                 "field": "values", "type": "quantitative",
@@ -161,7 +166,7 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "News Media Signals | Green: Positive | Red: Negative | Grey: Neutral | Blue: Volume"}
+                                        "axis": {"title": "Earned Media Signals | Green: Positive | Red: Negative | Grey: Neutral | Blue: Volume"}
                                     },
                                     "y": {"field": "values", "type": "quantitative", "title": "Post Volume"}
                                 }
@@ -291,7 +296,7 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "News Media Posts Volume | Green: Positive | Grey: 3-Month Moving Average"}
+                                        "axis": {"title": "Earned Media Posts Volume | Green: Positive | Grey: 3-Month Moving Average"}
                                     },
                                     "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
                                 }
@@ -362,7 +367,7 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "News Media Posts Volume | Blue: Neutral | Grey: 3-Month Moving Average"}
+                                        "axis": {"title": "Earned Media Posts Volume | Blue: Neutral | Grey: 3-Month Moving Average"}
                                     },
                                     "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
                                 }
@@ -433,7 +438,7 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "News Media Posts Volume | Red: Negative | Grey: 3-Month Moving Average"}
+                                        "axis": {"title": "Earned Media Posts Volume | Red: Negative | Grey: 3-Month Moving Average"}
                                     },
                                     "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
                                 }
@@ -504,7 +509,7 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "News Media Posts Volume | Blue: Total Volume | Grey: 3-Month Moving Average"}
+                                        "axis": {"title": "Earned Media Posts Volume | Blue: Total Volume | Grey: 3-Month Moving Average"}
                                     },
                                     "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
                                 }
@@ -575,9 +580,9 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "Scale: 0 to 100 | Grey: Social Media | Green: News Media"}
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Shared Media | Green: Earned Media"}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
                                 }
 
                             },
@@ -604,7 +609,7 @@
                                         "scale": {"domain": {"selection": "brush"}},
                                         "axis": {"title": ""}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
                                 }
 
                             }
@@ -646,9 +651,9 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "Scale: 0 to 100 | Grey: Social Media | Blue: News Media"}
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Shared Media | Blue: Earned Media"}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
                                 }
 
                             },
@@ -675,7 +680,7 @@
                                         "scale": {"domain": {"selection": "brush"}},
                                         "axis": {"title": ""}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
                                 }
 
                             }
@@ -717,9 +722,9 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "Scale: 0 to 100 | Grey: Social Media | Red: News Media"}
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Shared Media | Red: Earned Media"}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
                                 }
 
                             },
@@ -746,7 +751,7 @@
                                         "scale": {"domain": {"selection": "brush"}},
                                         "axis": {"title": ""}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
                                 }
 
                             }
@@ -788,9 +793,9 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "Scale: 0 to 100 | Grey: Social Media | Blue: News Media"}
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Shared Media | Blue: Earned Media"}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
                                 }
 
                             },
@@ -817,7 +822,7 @@
                                         "scale": {"domain": {"selection": "brush"}},
                                         "axis": {"title": ""}
                                     },
-                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Social Media & News Media"}
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
                                 }
 
                             }
@@ -860,7 +865,7 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "Social Media Signals | Green: Positive | Red: Negative | Grey: Neutral | Blue: Volume"}
+                                        "axis": {"title": "Shared Media Signals | Green: Positive | Red: Negative | Grey: Neutral | Blue: Volume"}
                                     },
                                     "y": {"field": "values", "type": "quantitative", "title": "Post Volume"}
                                 }
@@ -991,7 +996,7 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "Social Media Posts Volume | Green: Positive | Grey: 3-Month Moving Average"}
+                                        "axis": {"title": "Shared Media Posts Volume | Green: Positive | Grey: 3-Month Moving Average"}
                                     },
                                     "y": {
                                         "field": "values",
@@ -1096,7 +1101,7 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "Social Media Posts Volume | Blue: Neutral | Grey: 3-Month Moving Average"}
+                                        "axis": {"title": "Shared Media Posts Volume | Blue: Neutral | Grey: 3-Month Moving Average"}
                                     },
                                     "y": {
                                         "field": "values",
@@ -1143,7 +1148,7 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "Social Media Posts Volume | Red: Negative | Grey: 3-Month Moving Average"}
+                                        "axis": {"title": "Shared Media Posts Volume | Red: Negative | Grey: 3-Month Moving Average"}
                                     },
                                     "y": {
                                         "field": "values",
@@ -1217,7 +1222,7 @@
                                         "field": "date",
                                         "type": "temporal",
                                         "scale": {"domain": {"selection": "brush"}},
-                                        "axis": {"title": "Social Media Posts Volume | Blue: Total Volume | Grey: 3-Month Moving Average"}
+                                        "axis": {"title": "Shared Media Posts Volume | Blue: Total Volume | Grey: 3-Month Moving Average"}
                                     },
                                     "y": {
                                         "field": "values",
