@@ -32,7 +32,7 @@
                 {% for list in internallinks_list %}
                     <tr>
                         <td>{{ list.name }}</td>
-                        <td>{{ list.link }}</td>
+                        <td><a href="{{ list.link }}" target="_blank" rel="noopener noreferrer">Click Here</a></td>
                         <td>{{ list.description }}</td>
 
                     </tr>
