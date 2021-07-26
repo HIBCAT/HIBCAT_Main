@@ -28,12 +28,13 @@ SECRET_KEY = 'xi2z#m(1=i5bp93y*^l-iqu(ei9#$kh+ac=)z=4=m5y!^jlq7k'
 # If DEBUG = TRUE, then it will not check the
 # allowed host list in the ALLOWED_HOSTS
 
-## When Debug = True
-
+# Development
+# # When Debug = True
 # DEBUG = True
 # ALLOWED_HOSTS = []
 
-## When Debug = False
+# Production
+# When Debug = False
 DEBUG = False
 ALLOWED_HOSTS = ['18.218.151.244']
 
@@ -143,3 +144,6 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000000
 
 # Uncomment for the production environment
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+LOGIN_REDIRECT_URL = 'about_urlpattern'
+LOGOUT_REDIRECT_URL = 'login_urlpattern'

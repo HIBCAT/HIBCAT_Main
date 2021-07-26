@@ -1,0 +1,108 @@
+<!--I am inheriting this template into the parent template base.html-->
+{% extends 'ibhi/base.html' %}
+
+{% block title %}
+    Research Papers
+{% endblock %}
+
+
+{% block content %}
+
+    <!--This will contain the header div-->
+    {% block content-header %}
+
+        <div class="database-headers">
+            <h3> Database Name: Research Papers</h3>
+        </div>
+
+
+    {% endblock %}
+    <!--This will contain the table-->
+    {% block content-table %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Date of Addition</th>
+                    <th scope="col">Suggested By</th>
+                    <th scope="col">Entry Type</th>
+                    <th scope="col" class='table-name-view'>Title</th>
+                    <th scope="col">Link</th>
+                    <th scope="col" class='table-name-view'>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for research_list in researchpapers_list %}
+                    <tr>
+                        <td>{{ research_list.date }}</td>
+                        <td>{{ research_list.added_by_person }}</td>
+                        <td>{{ research_list.entry_type }}</td>
+                        <td>{{ research_list.title }}</td>
+
+                        <!-- Using target "_blank" to open the link in the new tab-->
+                        <!-- Using rel "noreferrer" to avoid reverse tab-nabbing to
+                        avoid exploitation of brower's default behaviour with "_blank" to gain
+                        partial access to the page through window.object API -->
+
+                        <td><a href="{{ research_list.link }}" target="_blank" rel="noopener noreferrer">Click Here</a></td>
+                        <td>{{ research_list.description }}</td>
+                    </tr>
+                {% empty %}
+                    <li><em>No data present in the database. Please enter some data.</em></li>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+    {% endblock %}
+
+    {% block pagination %}
+
+        <div class="database-headers-pagination">
+
+{% if is_paginated %}
+<div class="row">
+    <div class="twelve columns">
+        <ul class="pagination">
+            {% if first_page_url %}
+                <li class="pagination-number">
+                    <a href="{{ first_page_url }}">
+                        First</a>
+                </li>
+            {% endif %}
+            {% if previous_page_url %}
+                <li class="pagination-number">
+                    <a href="{{ previous_page_url }}">
+                        Previous</a>
+                </li>
+            {% endif %}
+            <li class="pagination-number">
+                Page {{ page_obj.number }}
+                of {{ paginator.num_pages }}
+            </li>
+            {% if next_page_url %}
+                <li class="pagination-number">
+                    <a href="{{ next_page_url }}">
+                        Next</a>
+                </li>
+            {% endif %}
+            {% if last_page_url %}
+                <li class="pagination-number">
+                    <a href="{{ last_page_url }}">
+                        Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+
+</div>
+
+
+    {% endblock %}
+
+
+{% endblock %}
+

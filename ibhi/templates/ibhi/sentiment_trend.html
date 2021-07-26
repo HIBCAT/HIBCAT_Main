@@ -1,0 +1,1293 @@
+{% extends 'ibhi/base.html' %}
+
+{% block title %}
+    Report
+{% endblock %}
+
+{% block content %}
+
+    <!--This will contain the header div-->
+    {% block content-header %}
+
+    {% endblock %}
+
+    <!-- This will contain the visualizations from the analyzed data-->
+
+    <section class="jumbotron text-center" style="background: #ffffff">
+        <div class="container">
+            <h1 class="jumbotron-heading">Sentiment Trend</h1>
+            <p class="lead text-muted">Detailed weighted volumetric average of public's sentiment trend</p>
+            <p>
+                Detailed version of the "Net Sentiment Explorer" with trends in positive, neutral, and negative post types.
+                <br>
+                The visuals also contains the three months moving average to further evaluate the general trend.
+            </p>
+            <li>
+                Please click and drag the desired area in the first graph.
+            </li>
+        </div>
+    </section>
+
+    <section class="jumbotron text-center" style="background: #ffffff">
+
+        {% block visual %}
+
+            <!-- Container for the visualization -->
+            <div id="sentiment_trend_visual"></div>
+            
+        {% endblock %}
+    </section>
+
+
+
+
+
+    <!--This will contain the table-->
+    {% block content-table %}
+
+    {% endblock %}
+
+{% endblock %}
+
+{% block script %}
+
+
+        var vlSpecSentimentTrendVis = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+        "data": {"url": "http://18.218.151.244:8000/sentiment_trend.csv"},
+
+        "transform": [{
+            "window": [{"op": "row_number", "as": "row_number"}]
+        }],
+        "vconcat": [
+            <!--Graph 1-->
+            {
+                "layer": [
+                    <!--Event Details-->
+                    <!--Main 1-->
+                    {
+                        "title": {"text": "Step 1: Please click and drag inside the first graph's area", "fontSize": 15, "anchor": "start"},
+                        "width": 1500,
+                        "height": 100,
+                        "mark": {
+                            "type": "line",
+                            "strokeWidth": 1.5,
+                            "tooltip": true,
+                            "color": "#000080"
+
+                        },
+                        "transform": [
+                            {
+                                "filter": {
+                                    "field": "attributes",
+                                    "oneOf": ["bw_3ma_volume_std_0_100"]
+                                }
+                            }
+                        ],
+                        "encoding": {
+                            "x": {
+                                "field": "date",
+                                "type": "temporal",
+                                "title": "Standardized Volume of Daily Posts: Orange: Earned Media | Blue: Shared Media | Date"
+                            },
+                            "y": {
+                                "field": "values", "type": "quantitative",
+                                "axis": {
+                                    "tickCount": 3, "grid": false,
+                                    "title": "Standardized Volume"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "width": 1500,
+                        "height": 100,
+                        "mark": {
+                            "type": "line",
+                            "strokeWidth": 1.5,
+
+                            "tooltip": true,
+                            "color": "#e84a27",
+                        },
+                        "transform": [
+                            {
+                                "filter": {
+                                    "field": "attributes",
+                                    "oneOf": ["cc_3ma_volume_std_0_100"]
+                                }
+                            }
+                        ],
+                        "selection": {
+                            "brush": {"type": "interval", "encodings": ["x"]}
+                        },
+                        "encoding": {
+                            "x": {
+                                "field": "date",
+                                "type": "temporal",
+                            },
+                            "y": {
+                                "field": "values", "type": "quantitative",
+                                "axis": {"tickCount": 3, "grid": false}
+                            },
+                        }
+                    }
+                ]
+            },
+
+            <!--Graph 3-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#008000"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Earned Media Signals | Green: Positive | Red: Negative | Grey: Neutral | Blue: Volume"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Post Volume"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#DC143C"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
+                            },
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 8-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Earned Media Posts Volume | Green: Positive | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#008000"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 9-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Earned Media Posts Volume | Blue: Neutral | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 10-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Earned Media Posts Volume | Red: Negative | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#DC143C"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 11-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Earned Media Posts Volume | Blue: Total Volume | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume, 3-Month Moving Average"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 12-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_positive_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Shared Media | Green: Earned Media"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#008000"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_positive_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 13-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_neutral_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Shared Media | Blue: Earned Media"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_neutral_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 14-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_negative_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Shared Media | Red: Earned Media"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#DC143C"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_negative_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
+                                }
+
+                            }
+
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 15-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_volume_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Scale: 0 to 100 | Grey: Shared Media | Blue: Earned Media"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["cc_3ma_volume_std_0_100"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Standardized Volume, Shared Media & Earned Media"}
+                                }
+
+                            }
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 2-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#008000"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Shared Media Signals | Green: Positive | Red: Negative | Grey: Neutral | Blue: Volume"}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Post Volume"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#DC143C"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line",
+                                    "strokeWidth": 1.5,
+                                    "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": ""}
+                                }
+
+                            },
+
+
+                        ]
+                    }
+                ]
+            },
+
+
+            <!--Graph 4-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Shared Media Posts Volume | Green: Positive | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#008000"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_positive"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            }
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 5-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume"}
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_neutral"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Shared Media Posts Volume | Blue: Neutral | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            }
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 6-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Shared Media Posts Volume | Red: Negative | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#DC143C"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_negative"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {"field": "values", "type": "quantitative", "title": "Volume"}
+                                }
+
+                            }
+
+
+                        ]
+                    }
+                ]
+            },
+
+            <!--Graph 7-->
+            {
+                "layer": [
+                    <!--Event Details-->
+
+                    <!--Main 4-->
+                    {
+                        "layer": [
+
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#95A5A6"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_3ma_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": "Shared Media Posts Volume | Blue: Total Volume | Grey: 3-Month Moving Average"}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            },
+                            {
+                                "width": 1500,
+                                "height": 400,
+                                "mark": {
+                                    "type": "line", "strokeWidth": 1.5, "interpolate": "monotone",
+                                    "tooltip": true,
+                                    "color": "#0000FF"
+                                },
+                                "transform": [
+                                    {
+                                        "filter": {
+                                            "field": "attributes",
+                                            "oneOf": ["bw_volume"]
+                                        }
+                                    }
+                                ],
+                                "encoding": {
+                                    "x": {
+                                        "field": "date",
+                                        "type": "temporal",
+                                        "scale": {"domain": {"selection": "brush"}},
+                                        "axis": {"title": ""}
+                                    },
+                                    "y": {
+                                        "field": "values",
+                                        "type": "quantitative",
+                                        "title": "Volume, 3-Month Moving Average"
+                                    }
+                                }
+
+                            }
+
+
+                        ]
+                    }
+                ]
+            },
+
+
+        ],
+
+        "resolve": {"legend": {"color": "independent"}}
+    };
+
+
+
+
+
+
+    // Embed the visualization in the container with id `vis`
+    vegaEmbed('#sentiment_trend_visual', vlSpecSentimentTrendVis, {'actions': true});
+
+
+
+
+{% endblock %}
+
+
+

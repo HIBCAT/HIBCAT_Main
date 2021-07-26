@@ -1,0 +1,189 @@
+{% extends 'ibhi/base.html' %}
+
+{% block title %}
+    Report
+{% endblock %}
+
+{% block content %}
+
+    <!--This will contain the header div-->
+    {% block content-header %}
+
+    {% endblock %}
+
+    <!-- This will contain the visualizations from the analyzed data-->
+
+    <section class="jumbotron text-center" style="background: #ffffff">
+        <div class="container">
+            <h1 class="jumbotron-heading">News Article Explorer</h1>
+            <p class="lead text-muted">Quick news headline explorer based on specific dates</p>
+            <p>
+            Visually scan through the earned media trends on a particular date. <br>
+                Get a quick idea about the event type pertaining on a day of high activity in the earned media.
+                <li>
+            Click and drag desired area in the first graph.
+        </li>
+            <li>
+                Then click and drag the desired area in the second graph.
+            </li>
+            </p>
+        </div>
+    </section>
+
+
+        {% block visual %}
+
+            <!-- Container for the visualization -->
+            <div class="container-fluid" id="news_explorer_visual"></div>
+
+        {% endblock %}
+
+
+
+
+
+    <!--This will contain the table-->
+    {% block content-table %}
+
+    {% endblock %}
+
+{% endblock %}
+
+{% block script %}
+
+
+        var vlSpecNewsExplorer = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "description": "Drag a rectangular brush to show (first 100) selected points in a table.",
+        "data": {"url": "http://18.218.151.244:8000/news_explorer.csv"},
+        "transform": [{
+            "window": [{"op": "row_number", "as": "row_number"}]
+        }],
+
+        "vconcat": [
+
+            {
+                "title": {"text": "Step 1: Please click and drag inside the first graph's area", "fontSize": 15, "anchor": "start"},
+                "width": 1550,
+                "height": 100,
+                "mark": {"type": "line", "tooltip": true, "color": "#e84a27"},
+                "selection": {"brush_volume": {"type": "interval", "encodings": ["x"]}},
+                "encoding": {
+                    "x": {
+                        "field": "publication_date_only",
+                        "type": "temporal",
+                        "title": "       Volume of Daily Posts (Orange: Earned Media)"
+                    },
+                    "y": {
+                        "field": "cc_volume",
+                        "type": "quantitative",
+                        "axis": {"tickCount": 3, "grid": false}
+                    }
+                }
+            },
+
+            {
+                "title": {"text": "Step 2: Please click and drag inside the second graph's area", "fontSize": 15, "anchor": "start"},
+
+                "width": 1550,
+                "height": 500,
+                "params": [{
+                    "name": "brush",
+                    "select": "interval"
+                }],
+                "mark": {"type": "circle", "tooltip": true, "clip": true},
+                "encoding": {
+                    "x": {
+                        "field": "publication_date_only", "type": "temporal", "title": "Date",
+                        "scale": {"domain": {"selection": "brush_volume"}},
+                    },
+                    "y": {"field": "bing_liu_pos", "type": "quantitative", "aggregate": "count"},
+                    "size": {"value": 150},
+                    "color": {
+                        "condition": {
+                            "param": "brush",
+                            "field": "bing_liu_net_sentiment",
+                            "type": "ordinal",
+                            "title": "Net Sentiment"
+                        },
+                        "value": "lightgray"
+                    }
+                }
+            },
+
+
+            {
+
+                "transform": [
+                    {"filter": {"param": "brush"}},
+                    {"window": [{"op": "rank", "as": "rank"}]},
+                    {"filter": {"field": "rank", "lt": 100}}
+                ],
+
+
+                "hconcat": [
+
+
+                    {
+                        "width": 90,
+                        "title": "Date",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "publication_date_only", "type": "temporal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    },
+
+
+
+                    {
+                        "width": 60,
+                        "title": "% Positive",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "bing_liu_pos", "type": "nominal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    },
+                    {
+                        "width": 60,
+                        "title": "% Negative",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "bing_liu_neg", "type": "nominal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    },
+
+                     {
+                        "width": 1450,
+                        "title": "News Headline",
+                        "mark": "text",
+                        "encoding": {
+                            "text": {"field": "title", "type": "nominal"},
+                            "y": {"field": "row_number", "type": "ordinal", "axis": null}
+                        }
+                    }
+
+
+                ]
+            }
+
+        ],
+        "resolve": {"legend": {"color": "independent"}}
+    };
+
+
+
+
+
+
+        // Embed the visualization in the container with id `vis`
+    vegaEmbed('#news_explorer_visual', vlSpecNewsExplorer, {'actions': true});
+
+
+
+{% endblock %}
+
+
+

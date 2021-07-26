@@ -1,3 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView
+from .utils import PageLinksMixin
+
+
 from django.shortcuts import render
 from django.http.response import HttpResponse
 from django.template import loader
@@ -5,12 +13,19 @@ from django.views import View
 import pandas as pd
 from rest_pandas import PandasSimpleView
 from functools import reduce
+import os
+from sklearn.feature_extraction.text import TfidfVectorizer
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
 
 from .models import (BwActivityTime, BwActivityDay, BwGeography,
                      BwVolume, BwSentiments, BwNetSentiment,
                      BwEmotions, Gender, BwContentSources,
                      ClineCenter, YahooStockData, ShortInterest,
-                     CCEventTimeline)
+                     CCEventTimeline,
+                     ResearchPapers, APIDataDictionary,
+                     RawDataDictionary, InternalLinks, Ideas
+                     )
 
 #
 #feature_1_bw = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral','negative', 'net_sentiment','volume', 'brand'))
@@ -19,7 +34,7 @@ from .models import (BwActivityTime, BwActivityDay, BwGeography,
 # feature_1_tl = pd.DataFrame(CCEventTimeline.objects.all().values('date', 'end_date', 'event_type', 'description', 'brand'))
 
 # Feature 3
-class BwVegaVisual3(PandasSimpleView):
+class BwNewsExplorerVis(PandasSimpleView):
 
     def date_df(self, brand_name):
 
@@ -75,7 +90,7 @@ class BwVegaVisual3(PandasSimpleView):
         brands = pd.DataFrame(ClineCenter.objects.all().values('brand'))
 
         for brand_name in brands['brand'].unique():
-            df1 = BwVegaVisual3.date_df(self, brand_name)
+            df1 = BwNewsExplorerVis.date_df(self, brand_name)
             final_df = pd.concat([final_df, df1])
             final_df.reset_index(inplace=True, drop=True)
 
@@ -91,14 +106,14 @@ class BwVegaVisual3(PandasSimpleView):
         return final_df_03
 
     def write_data(self):
-        return BwVegaVisual3.merged_data(self)
+        return BwNewsExplorerVis.merged_data(self)
 
 
     def get_data(self, request, *args, **kwargs):
-        return BwVegaVisual3.write_data(self)
+        return BwNewsExplorerVis.write_data(self)
 
 # Feature 1
-class BwVegaVisual1(PandasSimpleView):
+class BwNetSentimentExplorerVis(PandasSimpleView):
 
     def brand_watch_df(self, brand_name):
         brandwatch_01 = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral',
@@ -418,9 +433,9 @@ class BwVegaVisual1(PandasSimpleView):
         brands = pd.DataFrame(ClineCenter.objects.all().values('brand'))
 
         for brand_name in brands['brand'].unique():
-            df1 = BwVegaVisual1.brand_watch_df(self, brand_name)
-            df2 = BwVegaVisual1.cline_center_df(self, brand_name)
-            # df3 = BwVegaVisual1.timeline_df(self, brand_name)
+            df1 = BwNetSentimentExplorerVis.brand_watch_df(self, brand_name)
+            df2 = BwNetSentimentExplorerVis.cline_center_df(self, brand_name)
+            # df3 = BwNetSentimentExplorerVis.timeline_df(self, brand_name)
             # df3 needs to be added in the next line
             final_df = pd.concat([final_df, df1, df2])
             final_df.reset_index(inplace=True, drop=True)
@@ -431,13 +446,13 @@ class BwVegaVisual1(PandasSimpleView):
 
     def write_data(self):
         # Now below is the full code for the part one of the Feature one:
-        return BwVegaVisual1.merged_data(self)
+        return BwNetSentimentExplorerVis.merged_data(self)
 
     def get_data(self, request, *args, **kwargs):
-        return BwVegaVisual1.write_data(self)
+        return BwNetSentimentExplorerVis.write_data(self)
 
 # Feature 2
-class BwVegaVisual2(PandasSimpleView):
+class BwSentimentTrendVis(PandasSimpleView):
 
     def bw_cc_df(self, brand_name):
 
@@ -613,7 +628,7 @@ class BwVegaVisual2(PandasSimpleView):
         brands = pd.DataFrame(ClineCenter.objects.all().values('brand'))
 
         for brand_name in brands['brand'].unique():
-            df1 = BwVegaVisual2.bw_cc_df(self, brand_name)
+            df1 = BwSentimentTrendVis.bw_cc_df(self, brand_name)
             final_df = pd.concat([final_df, df1])
             final_df.reset_index(inplace=True, drop=True)
 
@@ -621,13 +636,13 @@ class BwVegaVisual2(PandasSimpleView):
 
 
     def write_data(self):
-        return BwVegaVisual2.merged_data(self)
+        return BwSentimentTrendVis.merged_data(self)
 
     def get_data(self, request, *args, **kwargs):
-        return BwVegaVisual2.write_data(self)
+        return BwSentimentTrendVis.write_data(self)
 
 # Feature 4
-class BwVegaVisual4(PandasSimpleView):
+class BwVegaAdInvestmentVis(PandasSimpleView):
 
     def recovery_cost(self):
 
@@ -668,19 +683,153 @@ class BwVegaVisual4(PandasSimpleView):
 
 
     def write_data(self):
-        return BwVegaVisual4.recovery_cost(self)
+        return BwVegaAdInvestmentVis.recovery_cost(self)
 
     def get_data(self, request, *args, **kwargs):
-        return BwVegaVisual4.write_data(self)
+        return BwVegaAdInvestmentVis.write_data(self)
 
 
-class FluidLayoutView(View):
+class FeatureWordCloud(PandasSimpleView):
+
+    def AggregateDailyUniqueEntity(df):
+        '''
+        Process a dataframe to aggregate the extracted entities onto daily levels, making entities for each day unique
+        '''
+        # convert NaN to empty string
+        df.fillna('', inplace=True)
+
+        # aggregate entities on daily level (if one entity appears in more than one reports on a day, only count it once)
+        # concatenate the string
+        df_daily = df[['publication_date_only']]
+        df_daily['extracted_organizations'] = df.groupby(['publication_date_only'])['extracted_organizations'].transform(lambda x: '|'.join(x))
+        df_daily['extracted_people'] = df.groupby(['publication_date_only'])['extracted_people'].transform(lambda x: '|'.join(x))
+
+        # drop duplicate data
+        df_daily = df_daily.drop_duplicates()
+
+        return (df_daily)
+
+    def KeepUniqueEntity(string):
+        with_repetition = string.split("|")
+        unique_list = list(set(with_repetition))
+        return ("|".join(unique_list))
+
+    def WordCloudGenerator(aggregation="article", use_idf=False, NER_type="organization"):
+
+        data = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'extracted_organizations', 'extracted_people'))
+
+        ################################## aggregation (optional) ##########################################
+        # aggregate the entities onto daily level if specified,
+        # with **AggregateDailyUniqueEntity** and **KeepUniqueEntity** externally defined
+        # this may take some time
+        if aggregation == "daily" or use_idf:
+            data = FeatureWordCloud.AggregateDailyUniqueEntity(data)
+            if aggregation == "daily":  # only keep unique list of entities every day
+                data['extracted_organizations'].apply(FeatureWordCloud.KeepUniqueEntity)
+                data['extracted_people'].apply(FeatureWordCloud.KeepUniqueEntity)
+
+        ################################### create word frequency dictionary #################################
+
+        # create a dictionary for the entities and their count
+        ## combine the non-null rows into a string for the selected entity type
+        if NER_type == "organization":
+            entity_string = "|".join(data.extracted_organizations.dropna())
+            if use_idf:
+                corpus = list(data.extracted_organizations.dropna())
+        elif NER_type == "people":
+            entity_string = "|".join(data.extracted_people.dropna())
+            if use_idf:
+                corpus = list(data.extracted_people.dropna())
+        elif NER_type == "all":
+            entity_string = "|".join(pd.concat([data.extracted_organizations.dropna(),
+                                                data.extracted_people.dropna()]))
+            if use_idf:
+                corpus = list(data.extracted_organizations.dropna()) + list(data.extracted_people.dropna())
+
+        else:
+            print("Please check Named Entity type.")
+            return
+
+        ## split the string into a list
+        entity_list = entity_string.split("|")
+        ## frequency dictionary
+        word_freq = dict()
+        for i in entity_list:
+            word_freq[i] = word_freq.get(i, 0) + 1
+
+        ######################################## create visualization#################################
+        wordcloud = WordCloud(max_font_size=50, max_words=100, background_color="white").generate_from_frequencies(word_freq)
+
+        plt.imshow(wordcloud, interpolation="bilinear")
+        plt.axis("off")
+        plt.savefig("ibhi/media/wordcloud/wordcloud_test.svg", format="svg", dpi=1000)
+
+FeatureWordCloud.WordCloudGenerator("daily", "organization")
+
+class AdInvestmentView(View):
 
     def get(self, request):
         return render(request,
-                      'ibhi/02_report.html',
+                      'ibhi/ad_investment.html',
                       {}
                       )
+
+class NewsExplorerView(View):
+
+    def get(self, request):
+        return render(request,
+                      'ibhi/news_explorer.html',
+                      {}
+                      )
+
+class NetSentimentExplorerView(View):
+
+    def get(self, request):
+        return render(request,
+                      'ibhi/net_sentiment_explorer.html',
+                      {}
+                      )
+
+class SentimentTrendView(View):
+
+    def get(self, request):
+        return render(request,
+                      'ibhi/sentiment_trend.html',
+                      {}
+                      )
+
+class WordCloudView(View):
+
+    def get(self, request):
+        return render(request,
+                      'ibhi/word_cloud.html',
+                      {}
+                      )
+
+class ResearchPapersList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
+    paginate_by = 2
+    model = ResearchPapers
+    permission_required = 'ibhi.view_researchpapers'
+
+class APIDataDictionaryList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
+    paginate_by = 2
+    model = APIDataDictionary
+    permission_required = 'ibhi.view_apidatadictionary'
+
+class RawDataDictionaryList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
+    paginate_by = 2
+    model = RawDataDictionary
+    permission_required = 'ibhi.view_rawdatadictionary'
+
+class InternalLinksList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
+    paginate_by = 2
+    model = InternalLinks
+    permission_required = 'ibhi.view_internallinks'
+
+class IdeasList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
+    paginate_by = 2
+    model = Ideas
+    permission_required = 'ibhi.view_ideas'
 
 
 

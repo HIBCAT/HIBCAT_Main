@@ -1,0 +1,480 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
+    <!--Vega-lite v4.json-->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.17.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.17.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.12.2"></script>
+
+    <!--Vega-lite v5.json-->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'ibhi/assets/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'ibhi/assets/css/bootstrap-grid.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'ibhi/assets/css/bootstrap-reboot.css' %}">
+
+    <style type="text/css" media="screen">
+
+        .vega-actions a {
+            margin-right: 50px;
+        }
+
+        .pagination-number {
+            margin-right: 1em;
+            margin-left: 1em;
+        }
+
+        .delete-confirmation-objects {
+            width: 1100px;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            margin-right: 5em;
+            margin-left: 5em;
+            padding: 2em;
+            background-color: #fdfdff;
+            border-radius: 0.5em;
+            box-shadow: 2px 3px 7px 2px rgba(0, 0, 0, 0.02);
+        }
+
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: auto;
+            line-height: 25px;
+            background-color: #343a40;
+            text-align: center;
+            text-decoration-color: white;
+
+        }
+
+        .table-responsive {
+            width: 1100px;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            margin-right: 5em;
+            margin-left: 5em;
+            padding: 2em;
+            background-color: #fdfdff;
+            border-radius: 0.5em;
+            box-shadow: 2px 3px 7px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        td, tr, th {
+            border-style: groove;
+        }
+
+        .table-name-view {
+            width: 200px;
+            height: 10px;
+            text-align: center;
+        }
+
+        .table-detail-list-view {
+            width: 200px;
+            height: auto;
+            text-align: center;
+        }
+
+
+        .database-headers {
+            width: 1100px;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            margin-right: 5em;
+            margin-left: 5em;
+            padding: 2em;
+            background-color: #fdfdff;
+            border-radius: 0.5em;
+            box-shadow: 2px 3px 7px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .database-headers-pagination {
+            width: 1100px;
+            height: 150px;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            margin-right: 5em;
+            margin-left: 5em;
+            padding: 0.5em;
+            border-radius: 0.5em;
+            box-shadow: 2px 3px 7px 2px rgba(0, 0, 0, 0.02);
+        }
+
+
+        body {
+            background-color: #f0f0f2;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+    </style>
+
+    <title>
+
+        {% block title %}
+
+        {% endblock %}
+
+    </title>
+
+</head>
+
+
+<body>
+
+
+
+<div>
+    <!--I designed the nav bar over here-->
+    <header>
+
+        <!--# 2.2 Adding the collapsable menu-->
+        <!--This is the collapsible top menu-->
+        <div class="pos-f-t">
+            <div class="collapse" id="navbarToggleExternalContent">
+                <!--Add all the menu items inside this container to which will be visible once reveal button is clicked-->
+                <div class="bg-light p-4"> <!--Changing the class to bg-light p-4 for ligher background-->
+
+
+                    <!--# 2.3 Adding another kind of nav-bar-->
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-bwi-analytics-tab" data-toggle="pill" href="#pills-bwi-analytics" role="tab"
+                               aria-controls="pills-profile" aria-selected="false">Analytics</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-bwi-core-research-tab" data-toggle="pill" href="#pills-bwi-core-research"
+                               role="tab"
+                               aria-controls="pills-contact" aria-selected="false">Research</a>
+                        </li>
+                        <li class="nav-item">
+                            <!--id will act as name of this particular menu-->
+                            <!--href will act as the connecting point for sub-data-->
+                            <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-home"
+                               role="tab"
+                               aria-controls="pills-home" aria-selected="true">Home</a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <!--This div contains the design for all the level 2 navbar submenu-->
+
+
+                        <!--HIBCAT tab display items-->
+                        <div class="tab-pane fade show active" id="pills-bwi-analytics" role="tabpanel" aria-labelledby="pills-bwi-analytics-tab">
+
+                            <!--# 2.5-->
+                            <!--HIBCAT tab display items-->
+                            <div class="card-deck">
+
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Ad Investment Estimate</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Beta Release: July 16, 2021</h6>
+                                        <p class="card-text">Estimated investment required to overcome the impact of negative public sentiment on brands.</p>
+                                        <li>
+                                            <a href="{% url 'ad_investment_urlpattern' %}" target="_blank" rel="noopener noreferrer" class="card-link">Visuals</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'ad_investment_api' %}" target="_blank" rel="noopener noreferrer" class="card-link">Analyzed Data</a>
+                                        </li>
+
+                                    </div>
+                                </div>
+
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">News Explorer</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Beta Release: July 16, 2021</h6>
+                                        <p class="card-text">Interactive visualization feature to explore news trends on a certain date.</p>
+                                        <li>
+                                            <a href="{% url 'news_explorer_urlpattern' %}" target="_blank" rel="noopener noreferrer" class="card-link">Visuals</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'news_explorer_api' %}" target="_blank" rel="noopener noreferrer" class="card-link">Analyzed Data</a>
+                                        </li>
+                                    </div>
+                                </div>
+
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Net Sentiment Explorer</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Beta Release: July 16, 2021</h6>
+                                        <p class="card-text">Weighted volumetric net public sentiment trend for a brand across a given time frame.</p>
+                                        <li>
+                                            <a href="{% url 'net_sentiment_explorer_urlpattern' %}" target="_blank" rel="noopener noreferrer" class="card-link">Visuals</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'net_sentiment_explorer_api' %}" target="_blank" rel="noopener noreferrer" class="card-link">Analyzed Data</a>
+                                        </li>
+                                    </div>
+                                </div>
+
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sentiment Trends</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Beta Release: July 16, 2021</h6>
+                                        <p class="card-text">Weighted volumetric and detailed sentiment trend for a brand across a given time frame</p>
+                                        <li>
+                                            <a href="{% url 'sentiment_trend_urlpattern' %}" target="_blank" rel="noopener noreferrer" class="card-link">Visuals</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'sentiment_trend_api' %}" target="_blank" rel="noopener noreferrer" class="card-link">Analyzed Data</a>
+                                        </li>
+                                    </div>
+                                </div>
+
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Word Cloud</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Beta Release: July 16, 2021</h6>
+                                        <p class="card-text">Word cloud of the most occuring words in the earned media.</p>
+                                        <li>
+                                            <a href="{% url 'word_cloud_urlpattern' %}" target="_blank" rel="noopener noreferrer" class="card-link">Visuals</a>
+                                        </li>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!--Research tab display items-->
+                        <div class="tab-pane fade" id="pills-bwi-core-research" role="tabpanel"
+                             aria-labelledby="pills-bwi-core-research-tab">
+
+                            <div class="card-deck">
+
+                                <!--# 2.7-->
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Materials</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Resources for project comprehension</h6>
+                                        <p class="card-text">More details about project related links and, data dictionary</p>
+
+                                        <!--Making table to display links properly-->
+
+                                        {% if perms.ibhi.view_researchpapers %}
+                                            <li>
+                                                <a href="{% url 'ibhi_researchpapers_list_urlpattern' %}"
+                                                   class="card-link">Research papers and articles</a>
+
+                                            </li>
+                                        {% endif %}
+
+                                        {% if perms.ibhi.view_rawdatadictionar %}
+                                            <li><a href="{% url 'ibhi_rawdatadictionary_list_urlpattern' %}"
+                                                   class="card-link">Raw Data Dictionary</a></li>
+                                        {% endif %}
+
+
+                                        {% if perms.ibhi.view_apidatadictionary %}
+                                            <li><a href="{% url 'ibhi_apidatadictionary_list_urlpattern' %}"
+                                                   class="card-link">API Data Dictionary</a></li>
+                                        {% endif %}
+
+
+                                    </div>
+                                </div>
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Internals</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Important resources for core team</h6>
+                                        <p class="card-text">Below details hidden from other visitors</p>
+
+                                        <!--Making table to display links properly-->
+
+                                        {% if perms.ibhi.view_internallinks %}
+                                            <li>
+                                                <a href="{% url 'ibhi_internallinks_list_urlpattern' %}"
+                                                   class="card-link">Important Links</a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% if perms.ibhi.view_ideas %}
+                                            <li>
+                                                <a href="{% url 'ibhi_ideas_list_urlpattern' %}"
+                                                   class="card-link">Future project ideas</a>
+                                            </li>
+                                        {% endif %}
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!--Home tab display items-->
+                        <div class="tab-pane fade" id="pills-home" role="tabpanel"
+                             aria-labelledby="pills-home-tab">
+                            <!--# 2.4-->
+                            <!--div with class 'card-deck' arranges multiple cards with equal space-->
+                            <!--Put as many cards as you want in it-->
+                            <div class="card-deck">
+
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Beta Release</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">July 16, 2021</h6>
+                                        <p class="card-text">The project consists of two parts.
+                                        <li>Analytics : Real time data processing, and visualization dashboard</li>
+                                        <li>Research: Research paper and other important links related to the project
+                                        </li>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="card text-center">
+                                    <div class="card-header">
+                                        Featured
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">HIBCAT Prototype Project</h5>
+                                        <!--Enter the link for about.html-->
+                                        <a href="{% url 'about_urlpattern' %}" class="btn btn-primary">About Us</a>
+                                    </div>
+                                    <div class="card-footer text-muted">
+                                        Updated: July 16, 2021
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <!--This is the dark navbar which when clicked on menu button, reveals/collapses-->
+        <nav class="navbar navbar-dark bg-dark">
+            {% if user.is_authenticated %}
+                <!--Add  url 'logout_urlpattern' -->
+                <a href="{% url 'logout_urlpattern' %}">
+                    <button class="btn btn-primary" type="submit">Log Out, {{ user.get_username }}</button>
+                </a>
+            {% else %}
+                <!--Add  url 'login_urlpattern' -->
+                <a href="{% url 'login_urlpattern' %}">
+                    <button class="btn btn-primary" type="submit">Log In</button>
+                </a>
+
+            {% endif %}
+
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </nav>
+
+
+    </header>
+
+
+    <!--2.9 Designing the space for the main content of the page-->
+    <main>
+        {% block content %}
+
+            <!--This will contain the header div-->
+            {% block content-header %}
+
+            {% endblock %}
+
+            <!-- This will contain the visualizations from the analyzed data-->
+            {% block visual %}
+
+            {% endblock %}
+
+            <!--This will contain the table-->
+            {% block content-table %}
+
+            {% endblock %}
+
+            {% block pagination %}
+
+
+
+            {% endblock %}
+
+        {% endblock %}
+
+    <script>
+
+        {% block script %}
+
+
+
+        {% endblock %}
+
+    </script>
+
+    </main>
+
+
+
+
+
+
+</div>
+
+
+<footer class="footer mt-auto py-3">
+    <div class="container">
+        <span class="text-muted"
+              style="text-align: center">University of Illinois at Urbana-Champaign | College of Media | 2021</span>
+    </div>
+</footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
+

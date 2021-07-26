@@ -1,0 +1,288 @@
+{% extends 'ibhi/base.html' %}
+
+{% block title %}
+    Report
+{% endblock %}
+
+{% block content %}
+
+    <!--This will contain the header div-->
+    {% block content-header %}
+
+    {% endblock %}
+
+    <!-- This will contain the visualizations from the analyzed data-->
+
+    <section class="jumbotron text-center" style="background: #ffffff">
+        <div class="container">
+            <h1 class="jumbotron-heading">Ad Investment Estimate</h1>
+            <p class="lead text-muted">According to the theory of Negative Bias, it takes five positive statements to overcome the impact of one negative statement.</p>
+            <p>
+                To generate this graph, a year worth of data about public reach per dollar was collected through an instagram account.
+                The shared media data was further used as base to estimate the quantitative data of negative reactions.
+                And thus, the dollar amount to reach five times public views than the total negative public reaction was calculated.
+            </p>
+            <p>
+                Data Collection Time Frame: One Year (May 2020 till May 2021)
+            </p>
+
+        </div>
+    </section>
+
+    <section class="jumbotron text-center" style="background: #ffffff">
+
+        {% block visual %}
+
+            <!-- Container for the visualization -->
+            <div id="ad_investment_visual"></div>
+
+        {% endblock %}
+
+
+    </section>
+
+
+
+    <!--This will contain the table-->
+    {% block content-table %}
+
+    {% endblock %}
+
+{% endblock %}
+
+{% block script %}
+
+
+    var vlSpecAdInvestment = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "data": {"url": "http://18.218.151.244:8000/ad_investment.csv"},
+    "title": {
+    "text": "Daily AD Investment Required To Overcome the Negative Sentiment Against the Brand ",
+    "fontSize": 15,
+    "anchor": "middle"
+    },
+
+    "transform": [{"window": [{"op": "row_number", "as": "row_number"}]}],
+    "vconcat": [
+    {
+    "hconcat": [
+
+    {
+    "mark": {"type": "bar", "size": 150},
+    "title": "Brands (Select One)",
+    "encoding": {
+    "color": {
+    "condition": {
+    "type": "nominal",
+    "field": "brand",
+    "legend": null,
+    "selection": "brand_legend"
+    },
+    "value": "lightgray"
+    },
+    "y": {
+    "type": "nominal", "field":
+    "brand", "title": null
+    }
+    },
+    "selection": {
+    "brand_legend": {
+    "type": "multi",
+    "encodings": ["color"],
+    "on": "click",
+    "toggle": "event.shiftKey",
+    "resolve": "global",
+    "empty": "all"
+    }
+    }
+    },
+
+    {
+    "layer": [
+    {
+    "width": 1320,
+    "height": 100,
+    "mark": {
+    "type": "line",
+    "strokeWidth": 1.5,
+    "tooltip": true,
+    "color": "#000080"
+    },
+    "transform": [
+    {"filter": {"selection": "brand_legend"}}
+
+    ],
+    "selection": {
+    "brush": {"type": "interval", "encodings": ["x"]},
+    "brand_legend": {
+    "type": "multi",
+    "encodings": ["color"],
+    "on": "click",
+    "toggle": "event.shiftKey",
+    "resolve": "global",
+    "empty": "all"
+    }
+    },
+    "encoding": {
+    "x": {
+    "field": "date",
+    "type": "temporal",
+    "title": "       Daily Shared Media Posts"
+    },
+    "y": {
+    "title": "Volume",
+    "field": "bw_volume",
+    "type": "quantitative",
+    "axis": {"tickCount": 3, "grid": false}
+    }
+    }
+    }
+    ]
+    }
+
+
+    ]
+    },
+
+    {
+    "layer": [
+
+    {
+    "layer": [
+
+    {
+    "width": 1500,
+    "height": 200,
+    "mark": {
+    "type": "line",
+    "strokeWidth": 1.5,
+    "tooltip": true,
+    "color": "#008000"
+    },
+    "transform": [
+    {"filter": {"selection": "brand_legend"}},
+    {"filter": {"selection": "brush"}}
+
+    ],
+
+    "encoding": {
+    "x": {
+    "field": "date",
+    "type": "temporal",
+    "title": "       Post Type | Green: Positive | Grey: Neutral | Red: Negative "
+    },
+    "y": {
+    "field": "bw_positive",
+    "title": null,
+    "type": "quantitative",
+    "axis": {"tickCount": 3, "grid": false}
+    }
+    }
+    },
+
+    {
+    "width": 1500,
+    "height": 200,
+    "mark": {
+    "type": "line",
+    "strokeWidth": 1.5,
+    "tooltip": true,
+    "color": "#DC143C"
+    },
+    "transform": [
+    {"filter": {"selection": "brand_legend"}},
+    {"filter": {"selection": "brush"}}
+
+    ],
+
+    "encoding": {
+    "x": {
+    "field": "date",
+    "type": "temporal",
+    "title": "       Post Type | Green: Positive | Grey: Neutral | Red: Negative "
+    },
+    "y": {
+    "field": "bw_negative",
+    "title": null,
+    "type": "quantitative",
+    "axis": {"tickCount": 3, "grid": false}
+    }
+    }
+    },
+    {
+    "width": 1500,
+    "height": 200,
+    "mark": {
+    "type": "line",
+    "strokeWidth": 1.5,
+    "tooltip": true,
+    "color": "#95A5A6"
+    },
+    "transform": [
+    {"filter": {"selection": "brand_legend"}},
+    {"filter": {"selection": "brush"}}
+
+    ],
+
+    "encoding": {
+    "x": {
+    "field": "date",
+    "type": "temporal",
+    "title": "       Post Type | Green: Positive | Grey: Neutral | Red: Negative "
+    },
+    "y": {
+    "field": "bw_neutral",
+    "title": null,
+    "type": "quantitative",
+    "axis": {"tickCount": 3, "grid": false}
+    }
+    }
+    }
+    ]
+    }
+
+    ]
+    },
+
+    {
+    "width": 1500,
+    "height": 400,
+    "mark": {
+    "type": "line",
+    "strokeWidth": 1.5,
+    "tooltip": true,
+    "color": "#000080"
+    },
+    "transform": [
+    {"filter": {"selection": "brand_legend"}},
+    {"filter": {"selection": "brush"}}
+
+    ],
+    "encoding": {
+    "x": {
+    "field": "date",
+    "type": "temporal",
+    "title": "       Daily Promotional Investment To Overcome Negative Sentiment"
+    },
+    "y": {
+
+    "field": "investment_estimate",
+    "title": "Daily AD Investment in USD",
+    "type": "quantitative",
+    "axis": {"tickCount": 3, "grid": false}
+    }
+    }
+    }
+    ]
+    };
+
+
+
+    vegaEmbed('#ad_investment_visual', vlSpecAdInvestment, {'actions': true});
+
+
+
+{% endblock %}
+
+
+
