@@ -1,12 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 from .utils import PageLinksMixin
+from .forms import ArcherExplorerForm
 
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
 from django.template import loader
 from django.views import View
@@ -26,6 +27,8 @@ from .models import (BwActivityTime, BwActivityDay, BwGeography,
                      ResearchPapers, APIDataDictionary,
                      RawDataDictionary, InternalLinks, Ideas
                      )
+
+
 
 #
 #feature_1_bw = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral','negative', 'net_sentiment','volume', 'brand'))
@@ -831,5 +834,48 @@ class IdeasList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, Lis
     model = Ideas
     permission_required = 'ibhi.view_ideas'
 
+final_url = ''
+raw_df = pd.DataFrame()
+# archer_explorer_list = ''
+# Archer API
+def archer_explorer(request):
+    global final_url
+    global raw_df
+    # global archer_explorer_list
 
+
+    if request.method == 'POST':
+        query1 = ArcherExplorerForm(request.POST)
+        if query1.is_valid():
+            query2 = query1.cleaned_data['api_key']
+            query3 = query1.cleaned_data['query']
+            query4 = query1.cleaned_data['rows']
+
+            query3 = query3.replace(" ", "%20")
+            query3 = query3.replace("\'", "%22")
+            query3 = query3.replace("\"", "%22")
+
+            url1 = f'https://archerapi.clinecenter.illinois.edu/select?fl=title,publisher,aid'
+            content = '&q=content:'+query3
+            rows = '&rows='+query4
+
+            title_global = '&fq=title:global&fq=publisher:%22The%20Associated%20Press%22'
+
+            api_key = '&key=' + query2
+
+            final_url = url1 + content + rows + title_global + api_key + '&wt=csv'
+            print(final_url)
+            raw_df = pd.read_csv(final_url)
+
+            print(raw_df)
+            #archer_explorer_list = raw_df.to_html(index=False)
+            #print(archer_explorer_list)
+
+
+
+    query = ArcherExplorerForm()
+    return render(request, 'ibhi/archer_explorer.html',
+                  {'query': query,
+                   'archer_explorer_list':raw_df,
+                   'final_url': final_url},)
 

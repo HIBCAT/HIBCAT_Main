@@ -19,6 +19,7 @@ from ibhi.views import (BwVegaAdInvestmentVis, AdInvestmentView,
                         BwNewsExplorerVis, NewsExplorerView,
                         BwNetSentimentExplorerVis, NetSentimentExplorerView,
                         BwSentimentTrendVis, SentimentTrendView, WordCloudView,
+                        archer_explorer,
 
                         ResearchPapersList, APIDataDictionaryList,
                         RawDataDictionaryList, InternalLinksList, IdeasList
@@ -32,7 +33,7 @@ from ibhi.views import (BwVegaAdInvestmentVis, AdInvestmentView,
 
 urlpatterns = [
 
-    # API urls
+    # Amazon Web Services API urls
 
     path('ad_investment.csv',
          BwVegaAdInvestmentVis.as_view(),
@@ -71,6 +72,11 @@ urlpatterns = [
     path('word_cloud/',
          WordCloudView.as_view(),
          name='word_cloud_urlpattern'),
+
+    # Archer API
+    path('archer/',
+         archer_explorer,
+         name='archer_explorer_urlpattern'),
 
     # Reserach Tab Urls
 
