@@ -1,0 +1,110 @@
+<!--I am inheriting this template into the parent template base.html-->
+{% extends 'ibhi/base.html' %}
+
+{% block title %}
+    Archer Explorer
+{% endblock %}
+
+
+{% block content %}
+
+    <!--This will contain the header div-->
+    {% block content-header %}
+
+        <div class="database-headers" style="width: 90%; text-align: center">
+            <h3>Archer Explorer</h3>
+        </div>
+
+        <div class="database-headers" style="width: 90%;">
+            <h6>
+                Step 1: Please click to generate the API key.
+                <br>
+                Step 2: Paste the generated API key.
+            </h6>
+
+            <a href="https://archerapi.clinecenter.illinois.edu/getkey" target="_blank" rel="noopener noreferrer" class="card-link">
+                <button class="btn btn-primary">
+                    Get API Key
+                </button>
+            </a>
+
+        </div>
+
+        <div class="database-headers" style="width: 90%;">
+            <form method="post">
+                {% csrf_token %}
+                <h6>API Key: {{ query.api_key }}</h6>
+                <br>
+                <h6>Rows (upto 500k): {{ query.rows }}</h6>
+                <br>
+                <h6>Query: {{ query.query }}</h6>
+                <br>
+                <button type="submit" class="btn btn-primary">
+                    Submit
+                </button>
+            </form>
+
+            <br>
+
+
+        </div>
+
+
+    {% endblock %}
+    <!--This will contain the table-->
+
+
+
+    {% block content-table %}
+
+        <div class="table-responsive" style="width: 90%; margin-bottom: 75px">
+            <a href="{% url 'export_csv_archer_urlpattern' %}" class="card-link">
+                <button class="btn btn-primary">
+                    Download CSV
+                </button>
+            </a>
+
+
+
+
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">title</th>
+                    <th scope="col">publication_date</th>
+                    <th scope="col">url</th>
+
+
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for list in archer_explorer_list.itertuples %}
+
+                    <tr>
+                        <td>{{ list.title }}</td>
+                        <td>{{ list.publication_date }}</td>
+                        <td><a href="{{ list.url }}" target="_blank" rel="noopener noreferrer" >Click Here</a></td>
+
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+    {% endblock %}
+
+
+
+
+
+
+
+{% endblock %}
+

@@ -165,7 +165,11 @@
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 
                         <li class="nav-item">
-                            <a class="nav-link active" id="pills-bwi-analytics-tab" data-toggle="pill" href="#pills-bwi-analytics" role="tab"
+                            <a class="nav-link active" id="pills-bwi-archer-tab" data-toggle="pill" href="#pills-bwi-archer" role="tab"
+                               aria-controls="pills-profile" aria-selected="false">Archer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-bwi-analytics-tab" data-toggle="pill" href="#pills-bwi-analytics" role="tab"
                                aria-controls="pills-profile" aria-selected="false">Analytics</a>
                         </li>
                         <li class="nav-item">
@@ -185,9 +189,32 @@
                     <div class="tab-content" id="pills-tabContent">
                         <!--This div contains the design for all the level 2 navbar submenu-->
 
+                        <!-- Archer tab display items-->
+                        <div class="tab-pane fade show active" id="pills-bwi-archer" role="tabpanel" aria-labelledby="pills-bwi-archer-tab">
+
+                            <!--# 2.5-->
+                            <!--HIBCAT tab display items-->
+                            <div class="card-deck">
+
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Archer News Explorer</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Beta Release: November 10, 2021</h6>
+                                        <p class="card-text">News explorer to return upto a sample of 500k news articles in a given time range.</p>
+                                        <li>
+                                            <a href="{% url 'archer_explorer_urlpattern' %}" target="_blank" rel="noopener noreferrer" class="card-link">News Explorer</a>
+                                        </li>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
 
                         <!--HIBCAT tab display items-->
-                        <div class="tab-pane fade show active" id="pills-bwi-analytics" role="tabpanel" aria-labelledby="pills-bwi-analytics-tab">
+                        <div class="tab-pane fade" id="pills-bwi-analytics" role="tabpanel" aria-labelledby="pills-bwi-analytics-tab">
 
                             <!--# 2.5-->
                             <!--HIBCAT tab display items-->
