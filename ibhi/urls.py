@@ -19,7 +19,8 @@ from ibhi.views import (BwVegaAdInvestmentVis, AdInvestmentView,
                         BwNewsExplorerVis, NewsExplorerView,
                         BwNetSentimentExplorerVis, NetSentimentExplorerView,
                         BwSentimentTrendVis, SentimentTrendView, WordCloudView,
-                        archer_explorer,
+
+                        archer_explorer, export_csv_archer,
 
                         ResearchPapersList, APIDataDictionaryList,
                         RawDataDictionaryList, InternalLinksList, IdeasList
@@ -77,6 +78,10 @@ urlpatterns = [
     path('archer/',
          archer_explorer,
          name='archer_explorer_urlpattern'),
+
+    path('export_csv_archer/',
+         export_csv_archer,
+         name='export_csv_archer_urlpattern'),
 
     # Reserach Tab Urls
 

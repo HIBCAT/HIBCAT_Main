@@ -12,7 +12,9 @@ from django.http.response import HttpResponse
 from django.template import loader
 from django.views import View
 import pandas as pd
+import datetime
 from rest_pandas import PandasSimpleView
+import csv
 from functools import reduce
 import os
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -28,13 +30,6 @@ from .models import (BwActivityTime, BwActivityDay, BwGeography,
                      RawDataDictionary, InternalLinks, Ideas
                      )
 
-
-
-#
-#feature_1_bw = pd.DataFrame(BwSentiments.objects.all().values('days', 'positive', 'neutral','negative', 'net_sentiment','volume', 'brand'))
-#feature_1_cc = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'bing_liu_net_sentiment', 'brand'))
-#feature_1_cc_2 = pd.DataFrame(ClineCenter.objects.all().values('publication_date_only', 'title', 'brand'))
-# feature_1_tl = pd.DataFrame(CCEventTimeline.objects.all().values('date', 'end_date', 'event_type', 'description', 'brand'))
 
 # Feature 3
 class BwNewsExplorerVis(PandasSimpleView):
@@ -767,7 +762,16 @@ class FeatureWordCloud(PandasSimpleView):
         plt.axis("off")
         plt.savefig("ibhi/media/wordcloud/wordcloud_test.svg", format="svg", dpi=1000)
 
-FeatureWordCloud.WordCloudGenerator("daily", "organization")
+# Remove the comment if you want to generate the word cloud
+# FeatureWordCloud.WordCloudGenerator("daily", "organization")
+
+class WordCloudView(View):
+
+    def get(self, request):
+        return render(request,
+                      'ibhi/word_cloud.html',
+                      {}
+                      )
 
 class AdInvestmentView(View):
 
@@ -798,14 +802,6 @@ class SentimentTrendView(View):
     def get(self, request):
         return render(request,
                       'ibhi/sentiment_trend.html',
-                      {}
-                      )
-
-class WordCloudView(View):
-
-    def get(self, request):
-        return render(request,
-                      'ibhi/word_cloud.html',
                       {}
                       )
 
@@ -855,11 +851,18 @@ def archer_explorer(request):
             query3 = query3.replace("\'", "%22")
             query3 = query3.replace("\"", "%22")
 
-            url1 = f'https://archerapi.clinecenter.illinois.edu/select?fl=title,publisher,aid'
+            query3 = query3.replace("(", "\(")
+            query3 = query3.replace(")", "\)")
+
+            query3 = query3.replace("or", "OR")
+            query3 = query3.replace("and", "AND")
+
+
+            url1 = f'https://archerapi.clinecenter.illinois.edu/select?fl=aid,publication_date,ingest_date,source_name,url,title,title_length,content,content_length,publisher,other_metadata,extracted_people,extracted_people_text,extracted_locations,extracted_locations_text,extracted_organizations,extracted_organizations_text,country,geolocation_original,geolocation_locations,geolocation_locations_text,geolocation,geolocation_featureids,geolocation_probabilities,anew_arousal,anew_dominance,anew_valence,bing_liu_neg,bing_liu_pos,dal_activation,dal_imagery,dal_pleasantness,inquirer_neg,inquirer_pos,lexicoder_pos,lexicoder_neg,mf_moralitygeneral,mf_authorityvice,mf_authorityvirtue,mf_fairnessvice,mf_fairnessvirtue,mf_harmvice,mf_harmvirtue,mf_ingroupvice,mf_ingroupvirtue,mf_purityvice,mf_purityvirtue,pronouns,status'
             content = '&q=content:'+query3
             rows = '&rows='+query4
 
-            title_global = '&fq=title:global&fq=publisher:%22The%20Associated%20Press%22'
+            title_global = '&fq=title:global'
 
             api_key = '&key=' + query2
 
@@ -867,15 +870,77 @@ def archer_explorer(request):
             print(final_url)
             raw_df = pd.read_csv(final_url)
 
-            print(raw_df)
-            #archer_explorer_list = raw_df.to_html(index=False)
-            #print(archer_explorer_list)
-
-
-
     query = ArcherExplorerForm()
     return render(request, 'ibhi/archer_explorer.html',
                   {'query': query,
-                   'archer_explorer_list':raw_df,
+                   'archer_explorer_list':raw_df.head(25),
                    'final_url': final_url},)
+
+
+def export_csv_archer(request):
+    global raw_df
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="%s.csv"' % str(datetime.datetime.now())
+
+    column_names = ['aid', 'publication_date', 'ingest_date', 'source_name', 'url',
+
+                    'title', 'title_length', 'content', 'content_length', 'publisher',
+
+                    'other_metadata', 'extracted_people', 'extracted_people_text', 'extracted_locations',
+                    'extracted_locations_text',
+
+                    'extracted_organizations', 'extracted_organizations_text', 'country', 'geolocation_original',
+                    'geolocation_locations',
+
+                    'geolocation_locations_text', 'geolocation', 'geolocation_featureids',
+                    'geolocation_probabilities', 'anew_arousal',
+
+                    'anew_dominance', 'anew_valence', 'bing_liu_neg', 'bing_liu_pos', 'dal_activation',
+
+                    'dal_imagery', 'dal_pleasantness', 'inquirer_neg', 'inquirer_pos', 'lexicoder_neg',
+                    'lexicoder_pos',
+
+                    'mf_moralitygeneral', 'mf_authorityvice', 'mf_authorityvirtue', 'mf_fairnessvice',
+                    'mf_fairnessvirtue', 'mf_harmvice',
+
+                    'mf_harmvirtue', 'mf_ingroupvice', 'mf_ingroupvirtue', 'mf_purityvice', 'mf_purityvirtue',
+                    'pronouns', 'status']
+
+
+
+    writer = csv.writer(response)
+    writer.writerow(column_names)
+
+
+
+
+    for index, row in raw_df.iterrows():
+        writer.writerow([row['aid'], row['publication_date'], row['ingest_date'], row['source_name'], row['url'],
+
+                row['title'], row['title_length'], row['content'], row['content_length'], row['publisher'],
+
+                row['other_metadata'], row['extracted_people'], row['extracted_people_text'], row['extracted_locations'],
+                row['extracted_locations_text'],
+
+                row['extracted_organizations'], row['extracted_organizations_text'], row['country'], row['geolocation_original'],
+                row['geolocation_locations'],
+
+                row['geolocation_locations_text'], row['geolocation'], row['geolocation_featureids'],
+                row['geolocation_probabilities'], row['anew_arousal'],
+
+                row['anew_dominance'], row['anew_valence'], row['bing_liu_neg'], row['bing_liu_pos'], row['dal_activation'],
+
+                row['dal_imagery'], row['dal_pleasantness'], row['inquirer_neg'], row['inquirer_pos'], row['lexicoder_neg'],
+                row['lexicoder_pos'],
+
+                row['mf_moralitygeneral'], row['mf_authorityvice'], row['mf_authorityvirtue'], row['mf_fairnessvice'],
+                row['mf_fairnessvirtue'], row['mf_harmvice'],
+
+                row['mf_harmvirtue'], row['mf_ingroupvice'], row['mf_ingroupvirtue'], row['mf_purityvice'], row['mf_purityvirtue'],
+                row['pronouns'], row['status']])
+
+    return response
+
+
 
