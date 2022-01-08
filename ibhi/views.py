@@ -15,6 +15,7 @@ import pandas as pd
 import datetime
 from rest_pandas import PandasSimpleView
 import csv
+import urllib.parse
 from functools import reduce
 import os
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -839,36 +840,47 @@ def archer_explorer(request):
     global raw_df
     # global archer_explorer_list
 
-
     if request.method == 'POST':
         query1 = ArcherExplorerForm(request.POST)
         if query1.is_valid():
             query2 = query1.cleaned_data['api_key']
             query3 = query1.cleaned_data['query']
+            query3 = urllib.parse.quote(query3.encode('utf8'))
             query4 = query1.cleaned_data['rows']
+            query5 = query1.cleaned_data['start_date_field']
+            query6 = query1.cleaned_data['end_date_field']
 
-            query3 = query3.replace(" ", "%20")
-            query3 = query3.replace("\'", "%22")
-            query3 = query3.replace("\"", "%22")
-
-            query3 = query3.replace("(", "\(")
-            query3 = query3.replace(")", "\)")
-
-            query3 = query3.replace("or", "OR")
-            query3 = query3.replace("and", "AND")
-
+            if query5 < query6:
+                start_date = str(query5)+'T00:00:00Z'
+                end_date = str(query6)+'T00:00:00Z'
+            else:
+                start_date = str(query6)+'T00:00:00Z'
+                end_date = str(query5)+'T00:00:00Z'
 
             url1 = f'https://archerapi.clinecenter.illinois.edu/select?fl=aid,publication_date,ingest_date,source_name,url,title,title_length,content,content_length,publisher,other_metadata,extracted_people,extracted_people_text,extracted_locations,extracted_locations_text,extracted_organizations,extracted_organizations_text,country,geolocation_original,geolocation_locations,geolocation_locations_text,geolocation,geolocation_featureids,geolocation_probabilities,anew_arousal,anew_dominance,anew_valence,bing_liu_neg,bing_liu_pos,dal_activation,dal_imagery,dal_pleasantness,inquirer_neg,inquirer_pos,lexicoder_pos,lexicoder_neg,mf_moralitygeneral,mf_authorityvice,mf_authorityvirtue,mf_fairnessvice,mf_fairnessvirtue,mf_harmvice,mf_harmvirtue,mf_ingroupvice,mf_ingroupvirtue,mf_purityvice,mf_purityvirtue,pronouns,status'
-            content = '&q=content:'+query3
+            publication_date = f'%20AND%20publication_date:[{start_date}%20TO%20{end_date}]'
+
+            content = f'&q=(content:{query3}{publication_date})'
             rows = '&rows='+query4
-
-            title_global = '&fq=title:global'
-
             api_key = '&key=' + query2
 
-            final_url = url1 + content + rows + title_global + api_key + '&wt=csv'
+            print(publication_date)
+            print(content)
+            final_url = url1 + content + rows + api_key + '&wt=csv'
             print(final_url)
-            raw_df = pd.read_csv(final_url)
+
+            # re-running the code until success
+            flag = True
+            loop = 1
+            while flag:
+                print(f'Loop number:{loop}')
+                loop += 1
+                try:
+                    raw_df = pd.concat([x for x in pd.read_csv(final_url, chunksize=10000, iterator=True, engine='c')])
+                    flag = False
+                except BaseException as error:
+                    # Catching any kind of exception and printing it's type
+                    print(f'Type of exception occured:{error}\nNow running:')
 
     query = ArcherExplorerForm()
     return render(request, 'ibhi/archer_explorer.html',
